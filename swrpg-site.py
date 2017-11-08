@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from flask import Flask, render_template, Markup, request, redirect, url_for
+from flask import Flask, Markup, request, redirect, url_for, render_template
 from bson.objectid import ObjectId
 import os
 import custom_filters
@@ -39,7 +39,10 @@ def gear():
     entries = []
     for gear in db.gear.find({}):
         entry = [Markup("<a href=\"./{0}\">{1}</a>".format(gear["_id"], gear["name"])),
-                 gear["price"], gear["encumbrance"], gear["rarity"], gear["index"]]
+                 custom_filters.format_price_table(gear["price"], gear["restricted"]),
+                 gear["encumbrance"],
+                 gear["rarity"],
+                 gear["index"]]
         entries.append(entry)
 
     return render_template("table.html", title="Items", header=["Item", "Price", "Encumbrance", "Rarity", "Index"],

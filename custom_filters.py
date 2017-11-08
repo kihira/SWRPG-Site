@@ -25,6 +25,15 @@ def format_number(s):
     return s
 
 
+def format_price_table(price, restricted):
+    s = ""
+    if restricted:
+        s += "(R) "
+    s += format_number(price)
+    return s
+
+
 def register():
     FILTERS["symbol"] = symbol
     FILTERS["formatnum"] = format_number
+    FILTERS["formatprice"] = format_price_table
