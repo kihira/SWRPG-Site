@@ -10,24 +10,28 @@
 </body>
 </html>
 
-{% macro table(ttitle, headers, entries) -%}
-    <table class="item-table">
-        <caption>{{ title }}</caption>
+{% macro table(ttitle, headers, entries, class="") -%}
+    <table class="item-table {{ class }}">
+        <caption>{{ ttitle }}</caption>
         <thead>
         <tr>
-            {% for entry in headers %}
-                <td>{{ entry }}</td>
-            {% endfor %}
+            {%- block table_header scoped %}
+                {% for entry in headers %}
+                    <td>{{ entry }}</td>
+                {% endfor %}
+            {% endblock -%}
         </tr>
         </thead>
         <tbody>
-        {% for entry in entries %}
-            <tr>
-                {% for value in entry %}
-                    <td>{{ value }}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
+        {%- block table_entries scoped %}
+            {% for entry in entries %}
+                <tr>
+                    {% for value in entry %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        {% endblock -%}
         </tbody>
     </table>
 {%- endmacro %}

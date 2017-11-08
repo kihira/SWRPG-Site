@@ -46,7 +46,7 @@ def gear():
         entries.append(entry)
 
     return render_template("table.html", title="Items", header=["Item", "Price", "Encumbrance", "Rarity", "Index"],
-                           entries=entries)
+                           entries=entries, clazz="gear")
 
 
 @app.route("/gear/<object_id>")
