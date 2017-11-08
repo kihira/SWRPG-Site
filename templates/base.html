@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+</head>
+<body>
+{% block content %}{% endblock %}
+</body>
+</html>
+
+{% macro table(ttitle, headers, entries) -%}
+    <table class="item-table">
+        <caption>{{ title }}</caption>
+        <thead>
+        <tr>
+            {% for entry in headers %}
+                <td>{{ entry }}</td>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for entry in entries %}
+            <tr>
+                {% for value in entry %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{%- endmacro %}
+
+{% macro list(values) -%}
+    {% for value in values %}
+        {{ value }}{% if loop.last %}.{% else %}, {% endif %}
+    {% endfor %}
+{%- endmacro %}
+
+{% macro parse(text) -%}
+    {{ text|replace("[BOOST]","<span class='symbol boost'></span>")|safe }}
+{%- endmacro %}
