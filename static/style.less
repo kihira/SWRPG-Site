@@ -62,13 +62,15 @@ h1 {
 
 .item-block {
   width: 383px;
-  text-align: justify;
-  .hyphens();
   line-height: 1.1em;
 
-  p + p,
-  p p {
-    text-indent: 15px;
+  p {
+    text-align: justify;
+    .hyphens();
+
+    + p {
+      text-indent: 15px;
+    }
   }
 }
 
@@ -182,11 +184,6 @@ h1 {
   background: #384d3e;
 }
 
-.table-group-header {
-  font-family: @itc-symbol;
-  font-size: 8pt;
-}
-
 table.item-table {
   border-collapse: collapse;
 
@@ -197,6 +194,13 @@ table.item-table {
   td {
     border: 1px solid grey;
     padding: 5px 10px 5px 5px;
+
+    // Category header
+    &[colspan="10"] {
+      background: black;
+      color: white;
+      font-weight: bold;
+    }
   }
 
   thead {

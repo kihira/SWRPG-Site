@@ -38,21 +38,17 @@ def skills():
 def gear():
     entries = []
     for gear in db.gear.find({}):
-        entry = [Markup("<a href=\"./{0}\">{1}</a>".format(gear["_id"], gear["name"])),
-                 custom_filters.format_price_table(gear["price"], gear["restricted"]),
-                 gear["encumbrance"],
-                 gear["rarity"],
-                 gear["index"]]
-        entries.append(entry)
+        gear["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(gear["_id"], gear["name"]))
+        gear["price"] = custom_filters.format_price_table(gear["price"], gear["restricted"])
+        entries.append(gear)
 
     return render_template("table.html", title="Items", header=["Item", "Price", "Encumbrance", "Rarity", "Index"],
-                           entries=entries, clazz="gear")
+                           fields=["name", "price", "encumbrance", "rarity"], entries=entries, clazz="gear")
 
 
 @app.route("/gear/<object_id>")
 def gear1(object_id):
     gear = db.gear.find({"_id": ObjectId(object_id)})[0]
-    print(gear)
 
     return render_template("item.html", title=gear["name"], item=gear)
 
@@ -96,4 +92,3 @@ def strip_array(array):
     for i in range(len(array)):
         array[i] = array[i].strip()
     return array
-

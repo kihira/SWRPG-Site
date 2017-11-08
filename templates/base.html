@@ -10,7 +10,7 @@
 </body>
 </html>
 
-{% macro table(ttitle, headers, entries, class="") -%}
+{% macro table(ttitle, headers, fields, entries, class="") -%}
     <table class="item-table {{ class }}">
         <caption>{{ ttitle }}</caption>
         <thead>
@@ -24,15 +24,22 @@
         </thead>
         <tbody>
         {%- block table_entries scoped %}
+            {% set category = [] %}
             {% for entry in entries %}
+                {% if entry.category and entry.category != category[-1] %}
+                    {% if category.append(entry.category) %}{% endif %}
+                    <!-- Hack as you can't set stuff inside scopes -->
+                    <tr>
+                        <td colspan="10">{{ entry.category }}</td>
+                    </tr>
+                {% endif %}
                 <tr>
-                    {% for value in entry %}
-                        {% if loop.last %}
-                            <td>{{ value|formatindex }}</td>
-                        {% else %}
-                            <td>{{ value }}</td>
-                        {% endif %}
+                    {% for field in fields %}
+                        <td>{{ entry[field] }}</td>
                     {% endfor %}
+                    {% if entry.index %}
+                        <td>{{ entry.index|formatindex }}</td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         {% endblock -%}
