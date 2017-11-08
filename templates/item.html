@@ -3,14 +3,16 @@
 {% block content %}
     <div class="item-block">
         <h4>{{ item.name }}</h4>
-        {% if item.description %}
-            <p>{{ item.description|symbol }}</p>
-        {% endif %}
-        {% if item.models %}
-            <p>
-            <b>Models Include:</b>
-            {{ base.list(item.models) }}
-            </p>
-        {% endif %}
+        {% block item_block %}
+            {% if item.description %}
+                <p>{{ item.description|symbol }}</p>
+            {% endif %}
+            {% if item.models %}
+                <p>
+                    <b>Models Include:</b>
+                    {{ base.list(item.models) }}
+                </p>
+            {% endif %}
+        {% endblock %}
     </div>
 {% endblock %}
