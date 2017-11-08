@@ -27,7 +27,11 @@
             {% for entry in entries %}
                 <tr>
                     {% for value in entry %}
-                        <td>{{ value }}</td>
+                        {% if loop.last %}
+                            <td>{{ value|formatindex }}</td>
+                        {% else %}
+                            <td>{{ value }}</td>
+                        {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}

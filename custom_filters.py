@@ -33,7 +33,15 @@ def format_price_table(price, restricted):
     return s
 
 
+def format_index(arr):
+    out = ""
+    for index in arr:
+        out += "<a href=\"/books/{0}\">{0}:{1}</a>, ".format(index.split(":")[0], index.split(":")[1])
+    return out[:-2]
+
+
 def register():
     FILTERS["symbol"] = symbol
     FILTERS["formatnum"] = format_number
     FILTERS["formatprice"] = format_price_table
+    FILTERS["formatindex"] = format_index
