@@ -37,8 +37,12 @@ h5 {
   color: #23869e;
 }
 
+.item-heading,
 h4 {
-  .item-heading();
+  font-family: @elektra;
+  font-size: 1.2em;
+  color: @darkgold;
+  text-align: right;
 }
 
 h3 {
@@ -68,7 +72,7 @@ h1 {
     text-align: justify;
     .hyphens();
 
-    + p {
+    + p:not(:last-child) {
       text-indent: 15px;
     }
   }
@@ -161,34 +165,14 @@ h1 {
   color: @darkred;
 }
 
-.item-heading {
-  font-family: @elektra;
-  font-size: 1.2em;
-  color: @darkgold;
-  text-align: right;
-}
-
-.table-header {
-  font-family: @teuton-normal;
-  font-size: 12pt;
-  color: @darkgreen;
-  text-transform: capitalize;
-  text-align: left;
-}
-
-.table-subheader {
-  font-family: @teuton-normal;
-  font-size: 12pt;
-  color: white;
-  text-align: left;
-  background: #384d3e;
-}
-
 table.item-table {
   border-collapse: collapse;
 
   caption {
-    .table-header();
+    font-family: @teuton-normal;
+    font-size: 12pt;
+    color: @darkgreen;
+    text-transform: capitalize;
   }
 
   td {
@@ -204,8 +188,10 @@ table.item-table {
   }
 
   thead {
-    .table-subheader();
+    font-family: @teuton-normal;
+    font-size: 12pt;
     color: white;
+    background: #384d3e;
     white-space: nowrap;
   }
 
