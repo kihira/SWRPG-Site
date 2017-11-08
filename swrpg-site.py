@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from flask import Flask, render_template, Markup, request, redirect, url_for
 from bson.objectid import ObjectId
 import os
-import jinja2
+import custom_filters
 
 app = Flask(__name__)
 app.jinja_options = {
@@ -11,6 +11,9 @@ app.jinja_options = {
 }
 client = MongoClient(os.environ['DB_CONN'])
 db = client.starwars
+
+# Register custom filters
+custom_filters.register()
 
 
 @app.route("/")
@@ -91,21 +94,3 @@ def strip_array(array):
         array[i] = array[i].strip()
     return array
 
-
-symbols = {
-    "BOOST": "boost",
-    "SETBACK": "setback",
-    "ABILITY": "ability",
-    "PROFICIENCY": "proficiency",
-    "DIFFICULTY": "difficulty",
-    "CHALLENGE": "challenge"
-}
-
-
-def symbol(s):
-    for (key, value) in symbols.items():
-        s = s.replace("[{0}]".format(key), "<span class=\"symbol {0}\"></span>".format(value))
-    return s
-
-
-jinja2.filters.FILTERS["symbol"] = symbol
