@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from flask import Flask, Markup, request, redirect, url_for, render_template
+from flask import Flask, Markup, request, redirect, url_for, render_template, send_from_directory
 from bson.objectid import ObjectId
 import os
 import custom_filters
@@ -14,6 +14,12 @@ db = client.starwars
 
 # Register custom filters
 custom_filters.register()
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, "static", "img"),
+                               "favicon.ico", mimetype="image/vnd.microsoft.icon")
 
 
 @app.route("/")
