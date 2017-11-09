@@ -34,20 +34,20 @@ def favicon512():
 
 
 @app.route('/safari-pinned-tab.svg')
-def favicon512():
+def favicon_safari():
     return send_from_directory(os.path.join(app.root_path, "static", "icons"), "safari-pinned-tab.svg")
 
 
 @app.route('/mstile-150x150.png')
-def favicon512():
+def favicon150():
     return send_from_directory(os.path.join(app.root_path, "static", "icons"), "mstile-150x150.png")
 
 
 @app.route('/manifest.json')
-def favicon512():
+def favicon_manifest():
     return send_from_directory(os.path.join(app.root_path, "static", "icons"), "manifest.json")
 
 
 @app.route('/browserconfig.xml')
-def favicon512():
+def favicon_config():
     return send_from_directory(os.path.join(app.root_path, "static", "icons"), "browserconfig.xml")
