@@ -23,7 +23,7 @@ def main_page():
 
 
 @app.route("/skills/")
-def skills():
+def all_skills():
     entries = []
     for skill in db.skills.find({}):
         entry = [Markup("<a href=\"./{0}\">{0}</a>".format(skill["_id"])),
@@ -35,7 +35,7 @@ def skills():
 
 
 @app.route("/gear/")
-def gear():
+def all_gear():
     entries = []
     for gear in db.gear.find({}):
         gear["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(gear["_id"], gear["name"]))
@@ -47,7 +47,7 @@ def gear():
 
 
 @app.route("/gear/<object_id>")
-def gear1(object_id):
+def gear_item(object_id):
     gear = db.gear.find({"_id": ObjectId(object_id)})[0]
 
     return render_template("item.html", title=gear["name"], item=gear)
