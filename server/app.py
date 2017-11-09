@@ -5,5 +5,3 @@ app.jinja_options = {
     "extensions": ['jinja2.ext.autoescape', 'jinja2.ext.with_'],
     "autoescape": False
 }
-
-from . import handlers

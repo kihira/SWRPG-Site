@@ -1,6 +1,6 @@
 from flask import Markup, request, redirect, url_for, render_template
 from bson.objectid import ObjectId
-from . import custom_filters
+from . import custom_filters, handlers
 from .app import app
 from .db import db
 
