@@ -1,8 +1,7 @@
-from flask import Markup, request, redirect, url_for, render_template
-from bson.objectid import ObjectId
-from . import custom_filters, handlers
+from flask import request, redirect, url_for, render_template
 from .app import app
 from .db import db
+from . import custom_filters, handlers
 
 # Register custom filters
 custom_filters.register()
@@ -12,37 +11,6 @@ custom_filters.register()
 def main_page():
     return render_template("table.html", title="Hello", header=["First", "Second"],
                            entries=[["1", "2"]])
-
-
-@app.route("/skills/")
-def all_skills():
-    entries = []
-    for skill in db.skills.find({}):
-        entry = [Markup("<a href=\"./{0}\">{0}</a>".format(skill["_id"])),
-                 skill["characteristic"], skill["type"], skill["index"]]
-        entries.append(entry)
-
-    return render_template("table.html", title="Skills", header=["Skill", "Characteristic", "Type", "Index"],
-                           entries=entries)
-
-
-@app.route("/gear/")
-def all_gear():
-    entries = []
-    for gear in db.gear.find({}):
-        gear["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(gear["_id"], gear["name"]))
-        gear["price"] = custom_filters.format_price_table(gear["price"], gear["restricted"])
-        entries.append(gear)
-
-    return render_template("table.html", title="Items", header=["Item", "Price", "Encumbrance", "Rarity", "Index"],
-                           fields=["name", "price", "encumbrance", "rarity"], entries=entries, clazz="gear")
-
-
-@app.route("/gear/<object_id>")
-def gear_item(object_id):
-    gear = db.gear.find({"_id": ObjectId(object_id)})[0]
-
-    return render_template("item.html", title=gear["name"], item=gear)
 
 
 @app.route("/add-planet", methods=['GET', 'POST'])
