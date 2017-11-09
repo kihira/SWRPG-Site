@@ -1,0 +1,255 @@
+@font-face {
+    font-family: 'Teuton Mager';
+    src: local('Teuton Mager'), local('TeutonMager');
+}
+
+@font-face {
+    font-family: 'Teuton Hell';
+    src: local('Teuton Hell'), local('TeutonHell');
+}
+
+@font-face {
+    font-family: 'Elektra';
+    font-weight: bold;
+    src: url("fonts/ElektraMediumPro-Bold.otf");
+}
+
+@font-face {
+    font-family: 'ITCSymbol';
+    src: local('ITC Symbol Std'), local('ITC Symbol Std Book'), local('ITCSymbolStd-Book');
+}
+
+@font-face {
+    font-family: 'ITCSymbol';
+    font-weight: bold;
+    src: url("fonts/itc-symbol-std-bold.otf");
+}
+
+@font-face {
+    font-family: "EotE Symbol";
+    src: url("fonts/EotESymbol-Regular-PLUS.otf");
+}
+
+html {
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    font-family: "ITCSymbol", "Lucida Grande", Helvetica, Arial, serif;
+    font-size: 1em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: "Elektra", "Ubuntu", sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+h5 {
+    font-size: 1.15em;
+    color: #23869e;
+}
+
+.item-heading,
+h4 {
+    font-family: "Elektra", "Ubuntu", sans-serif;
+    font-size: 1.2em;
+    color: #a48e3b;
+    text-align: right;
+}
+
+h3 {
+    font-size: 1.5em;
+    color: #6e272d;
+}
+
+h2 {
+    font-size: 2.1em;
+    color: #384d3e;
+}
+
+h1 {
+    font-size: 3.9em;
+    color: black;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #a48e3b;
+    word-wrap: break-word;
+}
+
+.item-block {
+    width: 383px;
+    line-height: 1.1em;
+}
+
+.item-block p {
+    text-align: justify;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+
+.item-block p + p:not(:last-child) {
+    text-indent: 15px;
+}
+
+.symbol {
+    font-family: "EotE Symbol";
+    font-size: 1em;
+}
+
+.symbol.threat::before {
+    content: "t";
+}
+
+.symbol.advantage::before {
+    content: "a";
+}
+
+.symbol.success::before {
+    content: "s";
+}
+
+.symbol.triumph::before {
+    content: "x";
+}
+
+.symbol.failure::before {
+    content: "f";
+}
+
+.symbol.despair::before {
+    content: "y";
+}
+
+.symbol.force-pip::before {
+    content: "Y";
+}
+
+.symbol.force-dark::before {
+    content: "z";
+}
+
+.symbol.force-light::before {
+    content: "z";
+    color: white;
+}
+
+.symbol.boost::before {
+    content: "b";
+    color: #72ccdb;
+    -webkit-text-stroke: 1px black;
+}
+
+.symbol.ability::before {
+    content: "d";
+    color: #3fac49;
+    -webkit-text-stroke: 1px black;
+}
+
+.symbol.proficiency::before {
+    content: "c";
+    color: #fff100;
+    -webkit-text-stroke: 1px black;
+}
+
+.symbol.setback::before {
+    content: "b";
+    color: black;
+    -webkit-text-stroke: 1px black;
+}
+
+.symbol.difficulty::before {
+    content: "d";
+    color: #522480;
+    -webkit-text-stroke: 1px black;
+}
+
+.symbol.challenge::before {
+    content: "c";
+    color: #d1232a;
+    -webkit-text-stroke: 1px black;
+}
+
+.symbol.force::before {
+    content: "c";
+    color: white;
+    -webkit-text-stroke: 1px black;
+}
+
+.section-header {
+    font-family: "Elektra", "Ubuntu", sans-serif;
+    font-size: 24pt;
+    color: #384d3e;
+}
+
+.planet-header {
+    font-family: "Elektra", "Ubuntu", sans-serif;
+    font-size: 24pt;
+    color: white;
+}
+
+.topic-heading {
+    font-family: "Elektra", "Ubuntu", sans-serif;
+    font-size: 16pt;
+    color: #6e272d;
+}
+
+table.item-table {
+    border-collapse: collapse;
+}
+
+table.item-table caption {
+    font-family: "Teuton Normal", "Ubuntu", sans-serif;
+    font-size: 12pt;
+    color: #384d3e;
+    text-transform: capitalize;
+}
+
+table.item-table td {
+    border: 1px solid grey;
+    padding: 5px 10px 5px 5px;
+}
+
+table.item-table td[colspan="10"] {
+    background: black;
+    color: white;
+    font-weight: bold;
+}
+
+table.item-table thead {
+    font-family: "Teuton Normal", "Ubuntu", sans-serif;
+    font-size: 12pt;
+    color: white;
+    background: #384d3e;
+    white-space: nowrap;
+}
+
+table.item-table tbody {
+    background: #ececec;
+    font-family: "ITCSymbol", "Lucida Grande", Helvetica, Arial, serif;
+    font-size: 14px;
+}
+
+table.item-table tbody tr:nth-child(even) {
+    background: #bfbdba;
+}
+
+table.item-table tbody tr:nth-child(odd) {
+    background: #ececec;
+}
+
+table.item-table a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+table.item-table.gear tbody tr td:nth-child(2),
+table.item-table.gear tbody tr td:nth-child(3),
+table.item-table.gear tbody tr td:nth-child(4) {
+    text-align: right;
+}

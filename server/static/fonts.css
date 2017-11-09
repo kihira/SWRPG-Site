@@ -1,0 +1,31 @@
+@font-face {
+    font-family: 'Teuton Mager';
+    src: local('Teuton Mager'), local('TeutonMager');
+}
+
+@font-face {
+    font-family: 'Teuton Hell';
+    src: local('Teuton Hell'), local('TeutonHell');
+}
+
+@font-face {
+    font-family: 'Elektra';
+    font-weight: bold;
+    src: url("fonts/ElektraMediumPro-Bold.otf");
+}
+
+@font-face {
+    font-family: 'ITCSymbol';
+    src: local('ITC Symbol Std'), local('ITC Symbol Std Book'), local('ITCSymbolStd-Book');
+}
+
+@font-face {
+    font-family: 'ITCSymbol';
+    font-weight: bold;
+    src: url("fonts/itc-symbol-std-bold.otf");
+}
+
+@font-face {
+    font-family: "EotE Symbol";
+    src: url("fonts/EotESymbol-Regular-PLUS.otf");
+}

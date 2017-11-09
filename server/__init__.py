@@ -1,25 +1,11 @@
-from pymongo import MongoClient
-from flask import Flask, Markup, request, redirect, url_for, render_template, send_from_directory
+from flask import Markup, request, redirect, url_for, render_template
 from bson.objectid import ObjectId
-import os
-import custom_filters
-
-app = Flask(__name__)
-app.jinja_options = {
-    "extensions": ['jinja2.ext.autoescape', 'jinja2.ext.with_'],
-    "autoescape": False
-}
-client = MongoClient(os.environ['DB_CONN'])
-db = client.starwars
+from . import custom_filters
+from .app import app
+from .db import db
 
 # Register custom filters
 custom_filters.register()
-
-
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, "static", "img"),
-                               "favicon.ico", mimetype="image/vnd.microsoft.icon")
 
 
 @app.route("/")
