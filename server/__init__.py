@@ -1,7 +1,7 @@
 from flask import request, redirect, url_for, render_template
-from .app import app
-from .db import db
-from . import custom_filters, handlers
+from server.app import app
+from server.db import db
+from server import custom_filters, handlers
 
 # Register custom filters
 custom_filters.register()
