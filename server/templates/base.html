@@ -62,6 +62,8 @@
     {% endfor %}
 {%- endmacro %}
 
-{% macro parse(text) -%}
-    {{ text|replace("[BOOST]","<span class='symbol boost'></span>")|safe }}
+{% macro narrative(text) -%}
+    <div class="narrative">
+        {{ text }}
+    </div>
 {%- endmacro %}
