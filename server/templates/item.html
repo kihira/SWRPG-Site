@@ -4,6 +4,11 @@
     <div class="item-block">
         <h4>{{ item.name }}</h4>
         {% block item_block %}
+            <div style="line-height: 1.2em;">
+                <b>Price:</b> {{ item.price|formatprice(item.restricted) }}<br>
+                <b>Rarity:</b> {{ item.rarity }}<br>
+                <b>Encumbrance:</b> {{ item.encumbrance }}<br>
+            </div>
             {% if item.description %}
                 <p>{{ item.description|symbol }}</p>
             {% endif %}
@@ -11,6 +16,12 @@
                 <p>
                     <b>Models Include:</b>
                     {{ base.list(item.models) }}
+                </p>
+            {% endif %}
+            {% if item.index %}
+                <p>
+                    <b>Index:</b>
+                    {{ item.index|formatindex }}
                 </p>
             {% endif %}
         {% endblock %}

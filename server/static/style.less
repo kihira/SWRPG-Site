@@ -26,6 +26,14 @@ body {
   font-size: 1em;
 }
 
+a {
+  color: inherit;
+  text-decoration: inherit;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 h1, h2, h3, h4, h5 {
   font-family: @elektra;
   font-weight: bold;
@@ -220,11 +228,6 @@ table.item-table {
         background: @odd-row;
       }
     }
-  }
-
-  a {
-    color: inherit;
-    text-decoration: inherit;
   }
 
   &.gear tbody tr td {
