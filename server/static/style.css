@@ -80,6 +80,17 @@ h1 {
 .item-block p + p:not(:last-child) {
     text-indent: 15px;
 }
+
+.narrative {
+    border: 10px solid transparent;
+    -webkit-border-image: url("/static/img/narrative-border.svg") 10 10 fill repeat;
+    -moz-border-image: url("/static/img/narrative-border.svg") 10 10 fill repeat;
+    -o-border-image: url("/static/img/narrative-border.svg") 10 10 fill repeat;
+    border-image: url("/static/img/narrative-border.svg") 10 10 fill repeat;
+    font-style: italic;
+    color: #a48e3b;
+    padding: 10px;
+}
 .symbol {
     font-family: "EotE Symbol";
     font-size: 1em;
@@ -188,7 +199,6 @@ table.item-table thead {
     background: #384d3e;
     white-space: nowrap;
 }
-
 table.item-table thead td {
     padding: 2px 5px;
 }

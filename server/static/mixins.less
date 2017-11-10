@@ -4,3 +4,10 @@
   -ms-hyphens: auto;
   hyphens: auto;
 }
+
+.border-image(@url, @width, @height, @repeat:repeat) {
+  -webkit-border-image: url(@url) @width @height fill @repeat;
+  -moz-border-image: url(@url) @width @height fill @repeat;
+  -o-border-image: url(@url) @width @height fill @repeat;
+  border-image: url(@url) @width @height fill @repeat;
+}
