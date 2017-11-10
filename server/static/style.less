@@ -79,8 +79,33 @@ h1 {
     text-align: justify;
     .hyphens();
 
-    + p:not(:last-child) {
+    + p {
       text-indent: 15px;
+    }
+    &.no-indent { // todo not keen on this method, put more stuff in divs?
+      text-indent: 0 !important;
+    }
+  }
+}
+
+.stat {
+  background: url("/static/img/stat-background-clear.svg") top center no-repeat;
+  background-size: contain;
+  width: calc(341px / 2.8); // todo better way of calculating?
+  height: calc(170px / 2.8);
+  display: inline-block;
+
+  div {
+    text-align: center;
+    &:first-of-type {
+      padding-top: 5px;
+      font-size: 0.8em;
+      text-transform: uppercase;
+      color: white;
+    }
+    &:last-of-type {
+      height: 60%;
+      padding-top: 6px;
     }
   }
 }

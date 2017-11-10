@@ -31,6 +31,15 @@ body {
     font-family: "ITCSymbol", "Lucida Grande", Helvetica, Arial, serif;
     font-size: 1em;
 }
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+a:hover {
+    text-decoration: underline;
+}
 h1,
 h2,
 h3,
@@ -77,10 +86,38 @@ h1 {
     -ms-hyphens: auto;
     hyphens: auto;
 }
-.item-block p + p:not(:last-child) {
+
+.item-block p + p {
     text-indent: 15px;
 }
 
+.item-block p.no-indent {
+    text-indent: 0 !important;
+}
+
+.stat {
+    background: url("/static/img/stat-background-clear.svg") top center no-repeat;
+    background-size: contain;
+    width: calc(121.78571429px);
+    height: calc(60.71428571px);
+    display: inline-block;
+}
+
+.stat div {
+    text-align: center;
+}
+
+.stat div:first-of-type {
+    padding-top: 5px;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    color: white;
+}
+
+.stat div:last-of-type {
+    height: 60%;
+    padding-top: 6px;
+}
 .narrative {
     border: 10px solid transparent;
     -webkit-border-image: url("/static/img/narrative-border.svg") 10 10 fill repeat;
@@ -212,10 +249,6 @@ table.item-table tbody tr:nth-child(even) {
 }
 table.item-table tbody tr:nth-child(odd) {
     background: #ececec;
-}
-table.item-table a {
-    color: inherit;
-    text-decoration: inherit;
 }
 table.item-table.gear tbody tr td:nth-child(2),
 table.item-table.gear tbody tr td:nth-child(3),
