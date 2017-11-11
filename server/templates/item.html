@@ -4,12 +4,7 @@
     <div class="item-block">
         <h4>{{ item.name }}</h4>
         {% block item_block %}
-            {#            <div style="line-height: 1.2em;">
-                <b>Price:</b> {{ item.price|formatprice(item.restricted) }}<br>
-                <b>Rarity:</b> {{ item.rarity }}<br>
-                <b>Encumbrance:</b> {{ item.encumbrance }}<br>
-            </div>#}
-            <div class="stat">
+{#            <div class="stat">
                 <div>Price</div>
                 <div>{{ item.price|formatprice(item.restricted) }}</div>
             </div>
@@ -20,7 +15,7 @@
             <div class="stat">
                 <div>Encumb</div>
                 <div>{{ item.encumbrance }}</div>
-            </div>
+            </div>#}
             {% if item.description %}
                 <p>{{ item.description|symbol }}</p>
             {% endif %}

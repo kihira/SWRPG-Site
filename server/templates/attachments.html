@@ -3,20 +3,11 @@
 {% block item_block %}
     {{ super() }}
     <p class="no-indent">
-        {% if item.modifiers %}
-            <p class="no-indent">
-            <b>Base Modifications:</b> {{ item.modifiers }}
-            </p>
-        {% endif %}
-        {% if item.modification_options %}
-            <p class="no-indent">
-            <b>Modification Options:</b> {{ base.list(item.modification_options) }}
-            </p>
-        {% endif %}
-        {% if item.hardpoints %}
-            <p class="no-indent">
-            <b>Hard Points Required:</b> {{ item.hardpoints }}
-            </p>
-        {% endif %}
+        <b>Base Modifications:</b> {{ item.modifiers|symbol }}
+        <br>
+        <b>Modification Options:</b> {{ base.list(item.modification_options) }}
     </p>
+    <b>Hard Points Required:</b> {{ item.hardpoints }}<br>
+    <b>Price:</b> {{ item.price|formatprice(item.restricted) }}<br>
+    <b>Rarity:</b> {{ item.rarity }}<br>
 {% endblock %}
