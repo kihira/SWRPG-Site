@@ -1,1 +1,1 @@
-from . import favicon, gear, skills, attachments
+from . import favicon, gear, skills, attachments, armor

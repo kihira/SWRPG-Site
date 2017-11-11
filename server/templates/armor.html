@@ -1,0 +1,23 @@
+{% extends "item.html" %}
+{% import "base.html" as base %}
+{% block item_block %}
+    <div class="stat">
+        <div>Defense</div>
+        <div>{{ item.defense }}</div>
+    </div>
+    <div class="stat">
+        <div>Soak</div>
+        <div>{{ item.soak }}</div>
+    </div>
+    <div class="stat">
+        <div>Hard Points</div>
+        <div>{{ item.hardpoints }}</div>
+    </div>
+    {{ super() }}
+{#    <b>Defense:</b> {{ item.defense }}<br>
+    <b>Soak:</b> {{ item.soak }}<br>
+    <b>Hard Points:</b> {{ item.hardpoints }}<br>#}
+    <b>Encumbrance:</b> {{ item.encumbrance }}<br>
+    <b>Price:</b> {{ item.price|formatprice(item.restricted) }}<br>
+    <b>Rarity:</b> {{ item.rarity }}<br>
+{% endblock %}
