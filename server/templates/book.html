@@ -6,7 +6,9 @@
         {% block item_block %}
             {{ super() }}
             <b>SKU:</b> {{ item.key }}<br>
-            <b>ISBN:</b> {{ item.isbn }}<br>
+            {% if item.isbn %}
+                <b>ISBN:</b> {{ item.isbn }}<br>
+            {%  endif %}
             {% if item.ffg_url %}
                 <b>FFG:</b> <a href="{{ item.ffg_url }}">Product Page</a><br>
             {% endif %}
