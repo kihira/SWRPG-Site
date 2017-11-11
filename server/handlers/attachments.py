@@ -15,7 +15,7 @@ def all_attachments():
 
     return render_template("table.html", title="Attachments", header=["Attachment", "Price", "Encumbrance",
                                                                       "HP Required", "Rarity"],
-                           fields=["name", "price", "encumbrance", "hardpoints", "rarity"], entries=entries, clazz="attachment")
+                           fields=["name", "price", "encumbrance", "hardpoints", "rarity"], entries=entries)
 
 
 @app.route("/attachments/<object_id>")

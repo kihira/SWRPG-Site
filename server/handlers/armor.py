@@ -16,7 +16,7 @@ def all_armor():
     return render_template("table.html", title="Armor",
                            header=["Type", "Defense", "Soak", "Price", "Encumbrance", "Hard Points", "Rarity"],
                            fields=["name", "defense", "soak", "price", "encumbrance", "hardpoints", "rarity"],
-                           entries=entries, clazz="armor")
+                           entries=entries)
 
 
 @app.route("/armor/<object_id>")

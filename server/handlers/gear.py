@@ -14,7 +14,7 @@ def all_gear():
         entries.append(gear)
 
     return render_template("table.html", title="Items", header=["Item", "Price", "Encumbrance", "Rarity"],
-                           fields=["name", "price", "encumbrance", "rarity"], entries=entries, clazz="gear")
+                           fields=["name", "price", "encumbrance", "rarity"], entries=entries)
 
 
 @app.route("/gear/<object_id>")

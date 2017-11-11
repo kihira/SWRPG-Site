@@ -214,15 +214,16 @@ table.item-table {
 
   caption {
     font-family: @teuton-normal;
-    font-size: 16pt;
+    font-size: 1.5em;
     color: @darkgreen;
     text-transform: uppercase;
     text-align: left;
+    padding-bottom: 3px;
   }
 
   td {
     border: 1px solid grey;
-    padding: 5px 10px 5px 5px;
+    padding: 3px 10px 3px 5px;
 
     // Category header
     &[colspan="10"] {
@@ -234,20 +235,19 @@ table.item-table {
 
   thead {
     font-family: @teuton-normal;
-    font-size: 12pt;
+    font-size: 1.3em;
     color: white;
     background: #384d3e;
     white-space: nowrap;
 
     td {
-      padding: 2px 5px;
+      padding: 3px 12px 3px 5px;
     }
   }
 
   tbody {
     background: #ececec;
-    font-family: @itc-symbol;
-    font-size: 14px;
+    font-size: 0.9em;
 
     tr {
       &:nth-child(even) {
@@ -259,14 +259,6 @@ table.item-table {
       td:not(:first-child) {
         text-align: right;
       }
-    }
-  }
-
-  &.gear tbody tr td {
-    &:nth-child(2),
-    &:nth-child(3),
-    &:nth-child(4) {
-      text-align: right;
     }
   }
 }
