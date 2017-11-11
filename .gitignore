@@ -25,6 +25,9 @@ venv/
 # Mongo Explorer plugin:
 .idea/**/mongoSettings.xml
 
-# auto generated css
 server/static/*.css
 server/static/fonts/
+.idea/
+__pycache__/
+*.css
+*.otf
