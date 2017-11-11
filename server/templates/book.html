@@ -1,0 +1,15 @@
+{% extends "item.html" %}
+{% import "base.html" as base %}
+{% block content %}
+    <div class="item-block">
+        <h4>{{ item.system }}: {{ item.name }}</h4>
+        {% block item_block %}
+            {{ super() }}
+            <b>SKU:</b> {{ item.key }}<br>
+            <b>ISBN:</b> {{ item.isbn }}<br>
+            {% if item.ffg_url %}
+                <b>FFG:</b> <a href="{{ item.ffg_url }}">Product Page</a><br>
+            {% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}

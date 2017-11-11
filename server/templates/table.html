@@ -1,5 +1,5 @@
 {% extends "base.html" %}
 {% import "base.html" as base %}
 {% block content %}
-    {{ base.table(title, header, fields, entries) }}
+    {{ base.table(title, header, fields, entries, has_index|default(true)) }}
 {% endblock %}

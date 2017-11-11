@@ -19,7 +19,7 @@
 </body>
 </html>
 
-{% macro table(ttitle, headers, fields, entries) -%}
+{% macro table(ttitle, headers, fields, entries, has_index=True) -%}
     <table class="item-table">
         <caption>{{ ttitle }}</caption>
         <thead>
@@ -28,7 +28,9 @@
                 {% for entry in headers %}
                     <td>{{ entry }}</td>
                 {% endfor %}
-                <td>Index</td>
+                {% if has_index %}
+                    <td>Index</td>
+                {% endif %}
             {% endblock -%}
         </tr>
         </thead>
