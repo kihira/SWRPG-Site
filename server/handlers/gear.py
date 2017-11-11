@@ -13,7 +13,7 @@ def all_gear():
         gear["price"] = custom_filters.format_price_table(gear["price"], gear["restricted"])
         entries.append(gear)
 
-    return render_template("table.html", title="Items", header=["Item", "Price", "Encumbrance", "Rarity", "Index"],
+    return render_template("table.html", title="Items", header=["Item", "Price", "Encumbrance", "Rarity"],
                            fields=["name", "price", "encumbrance", "rarity"], entries=entries, clazz="gear")
 
 

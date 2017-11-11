@@ -30,12 +30,12 @@
                     {{ base.list(item.models) }}
                 </p>
             {% endif %}
-            {% if item.index %}
-                <p class="no-indent">
-                    <b>Index:</b>
-                    {{ item.index|formatindex }}
-                </p>
-            {% endif %}
         {% endblock %}
+        {% if item.index %}
+            <p class="no-indent">
+                <b>Index:</b>
+                {{ item.index|formatindex }}
+            </p>
+        {% endif %}
     </div>
 {% endblock %}

@@ -1,0 +1,22 @@
+{% extends "item.html" %}
+{% import "base.html" as base %}
+{% block item_block %}
+    {{ super() }}
+    <p class="no-indent">
+        {% if item.modifiers %}
+            <p class="no-indent">
+            <b>Base Modifications:</b> {{ item.modifiers }}
+            </p>
+        {% endif %}
+        {% if item.modification_options %}
+            <p class="no-indent">
+            <b>Modification Options:</b> {{ base.list(item.modification_options) }}
+            </p>
+        {% endif %}
+        {% if item.hardpoints %}
+            <p class="no-indent">
+            <b>Hard Points Required:</b> {{ item.hardpoints }}
+            </p>
+        {% endif %}
+    </p>
+{% endblock %}
