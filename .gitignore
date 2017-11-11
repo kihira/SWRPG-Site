@@ -26,4 +26,5 @@ venv/
 .idea/**/mongoSettings.xml
 
 # auto generated css
-static/*.css
+server/static/*.css
+server/static/fonts/
