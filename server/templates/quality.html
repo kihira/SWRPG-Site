@@ -7,5 +7,11 @@
             {{ super() }}
             <b>Ranked:</b> {{ item.ranked }}<br>
         {% endblock %}
+            {% if item.index %}
+            <p class="no-indent">
+                <b>Index:</b>
+                {{ item.index|formatindex }}
+            </p>
+        {% endif %}
     </div>
 {% endblock %}

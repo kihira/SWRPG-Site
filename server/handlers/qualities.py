@@ -1,5 +1,6 @@
 from server.app import app
 from server.db import db
+from server import custom_filters
 from flask import Markup, render_template
 
 
@@ -10,6 +11,7 @@ def all_qualities():
         quality["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(quality["_id"],
                                                                     quality["_id"].replace("_", " ").title()))
         quality["ranked"] = "Yes" if quality["ranked"] else "No"
+        quality["description"] = custom_filters.symbol(quality["description"])
         entries.append(quality)
 
     return render_template("table.html", title="Qualities", header=["Quality", "Active", "Ranked", "Effect"],

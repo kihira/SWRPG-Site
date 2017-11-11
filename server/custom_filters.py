@@ -6,7 +6,9 @@ symbols = {
     "ABILITY": "ability",
     "PROFICIENCY": "proficiency",
     "DIFFICULTY": "difficulty",
-    "CHALLENGE": "challenge"
+    "CHALLENGE": "challenge",
+    "ADVANTAGE": "advantage",
+    "THREAT": "threat"
 }
 
 
