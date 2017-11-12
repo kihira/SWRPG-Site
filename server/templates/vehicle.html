@@ -1,0 +1,17 @@
+{% extends "item.html" %}
+{% import "base.html" as base %}
+{% block item_block %}
+    {{ super() }}
+    <b>Vehicle Type/Model:</b> {{ item.category }}/{{ item.model }}<br>
+    <b>Manufacturer:</b> {{ item.manufacturer }}<br>
+    {% if item.altitude and item.altitude > 0 %}
+        <b>Maximum Altitude:</b> {{ item.altitude|altitude }}<br>
+    {% endif %}
+    <b>Sensor Range:</b> {{ item.sensor }}<br>
+    <b>Crew:</b> {{ base.list(item.crew) }}<br>
+    <b>Encumbrance Capacity:</b> {{ item.encumbrance }}<br>
+    <b>Passenger Capacity:</b> {{ item.passengers }}<br>
+    <b>Cost/Rarity:</b> {{ item.price|formatprice(item.restricted) }}/{{ item.rarity }}<br>
+    <b>Customization Hard Points:</b> {{ item.hardpoints }}<br>
+    <b>Weapons:</b> {{ item.weapons|none }}<br>
+{% endblock %}

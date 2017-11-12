@@ -54,9 +54,25 @@ def format_specials(arr):
     return out[:-2]
 
 
+def format_none(s):
+    if type(s) == int and s == 0:
+        return "None"
+    return s
+
+
+def format_altitude(s):
+    if s >= 1000:
+        return str(s)[:-3] + " kilometers"
+    if s == 1:
+        return str(s) + " meter"
+    return str(s) + " meters"
+
+
 def register():
     FILTERS["symbol"] = symbol
     FILTERS["formatnum"] = format_number
     FILTERS["formatprice"] = format_price_table
     FILTERS["formatindex"] = format_index
     FILTERS["special"] = format_specials
+    FILTERS["none"] = format_none
+    FILTERS["altitude"] = format_altitude
