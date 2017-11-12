@@ -5,6 +5,7 @@ from flask import Markup, render_template
 from bson import ObjectId
 
 
+@app.route("/armour/")
 @app.route("/armor/")
 def all_armor():
     entries = []
@@ -19,6 +20,7 @@ def all_armor():
                            entries=entries)
 
 
+@app.route("/armour/<object_id>")
 @app.route("/armor/<object_id>")
 def armor_item(object_id):
     armor = db.armor.find({"_id": ObjectId(object_id)})[0]
