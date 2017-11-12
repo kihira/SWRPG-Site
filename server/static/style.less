@@ -13,7 +13,7 @@
 @ability: rgb(63, 172, 73);
 @proficiency: rgb(255, 241, 0);
 
-@teuton-normal: "Teuton Normal", "Ubuntu", sans-serif;
+@teuton-normal: "Teuton Mager", "Ubuntu", sans-serif;
 @itc-symbol: "ITCSymbol", "Lucida Grande", Helvetica, Arial, serif;
 @elektra: "Elektra", "Ubuntu", sans-serif;
 
@@ -73,7 +73,7 @@ h1 {
 }
 
 .item-block {
-  width: 390px;
+  width: 410px;
   line-height: 1.1em;
 
   p {
@@ -90,8 +90,7 @@ h1 {
 }
 
 .stat {
-  background: url("/static/img/stat-background-clear.svg") top center no-repeat;
-  background-size: contain;
+  .background("/static/img/stat-background-clear.svg");
   width: calc(341px / 2.8); // todo better way of calculating?
   height: calc(170px / 2.8);
   display: inline-block;
@@ -111,6 +110,93 @@ h1 {
       padding-top: 7px;
       font-size: 1.6em;
     }
+  }
+}
+
+.vehicle {
+  .background("/static/img/ship-stat.svg");
+  background-size: 100% auto;
+  width: 100%;
+  height: 100px;
+  padding: 0;
+  margin: 0;
+  font-family: @teuton-normal;
+  text-align: center;
+
+  &-attr {
+    float: left;
+    width: 55%;
+    &-defense {
+      width: 63% !important;
+      font-size: 0;
+      &-stat {
+        position: relative;
+        display: inline-block;
+        top: 43%;
+        width: 25%;
+        font-size: 20px;
+      }
+    }
+    &-stat {
+      height: 9.6vw;
+      max-height: 39px;
+      display: inline-block;
+      position: relative;
+      float: left;
+      width: 36%;
+    }
+    &-title {
+      font-style: italic;
+      top: 1%;
+      font-size: 8.5px !important;
+    }
+    &-value {
+      .absolute-width();
+      bottom: 13%;
+      font-size: 20px;
+    }
+    &-armor {
+      float: right !important;
+      width: 36%;
+    }
+    &-strain {
+      float: right !important;
+      margin-top: 1%;
+    }
+    &-hull {
+      margin-top: 1%;
+      margin-left: 17.5%
+    }
+  }
+
+  &-stat {
+    float: left;
+    width: 45%;
+
+    &-block {
+      width: 33%;
+      height: 62px;
+      position: relative;
+      display: inline-block;
+
+      &-value {
+        .absolute-width();
+        top: 24%;
+        font-size: 25px;
+        text-align: center;
+      }
+      &-title {
+        bottom: 0;
+      }
+    }
+  }
+
+  .title {
+    .absolute-width();
+    text-align: center;
+    color: white;
+    text-transform: uppercase;
+    font-size: 10px;
   }
 }
 

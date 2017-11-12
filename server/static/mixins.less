@@ -11,3 +11,15 @@
   -o-border-image: url(@url) @width @height fill @repeat;
   border-image: url(@url) @width @height fill @repeat;
 }
+
+.background(@url) {
+  background: url(@url) top center no-repeat;
+  -webkit-background-size: contain;
+  background-size: contain;
+}
+
+.absolute-width() {
+    left: 0;
+    right: 0;
+    position: absolute;
+}

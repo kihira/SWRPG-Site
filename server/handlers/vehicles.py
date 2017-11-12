@@ -16,6 +16,8 @@ def all_vehicles():
             vehicle["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(vehicle["_id"], vehicle["name"]))
             vehicle["price"] = custom_filters.format_price_table(vehicle["price"], vehicle["restricted"])
             vehicle["crew"] = len(vehicle["crew"])
+            if type(vehicle["weapons"]) == list:
+                vehicle["weapons"] = len(vehicle["weapons"])
 
             entries.append(vehicle)
 

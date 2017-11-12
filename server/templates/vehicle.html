@@ -2,6 +2,41 @@
 {% import "base.html" as base %}
 {% block item_block %}
     {{ super() }}
+    <div class="vehicle">
+        <div class="vehicle-stat">
+            <div class="vehicle-stat-block">
+                <div class="vehicle-stat-block-value">{{ item.silhouette }}</div>
+                <div class="vehicle-stat-block-title title">Silhouette</div>
+            </div><div class="vehicle-stat-block">
+            <div class="vehicle-stat-block-value">{{ item.speed }}</div>
+            <div class="vehicle-stat-block-title title">Speed</div>
+        </div><div class="vehicle-stat-block">
+            <div class="vehicle-stat-block-value">{% if item.handling > 0 %}+{% else %}-{% endif %}{{ item.handling }}</div>
+            <div class="vehicle-stat-block-title title">Handling</div>
+        </div>
+        </div>
+        <div class="vehicle-attr">
+            <div class="vehicle-attr-defense vehicle-attr-stat">
+                <div class="vehicle-attr-title title">Def: Fore/Port/Starboard/Aft</div>
+                <div class="vehicle-attr-defense-stat">{{ item.defense.fore }}</div>
+                <div class="vehicle-attr-defense-stat">{{ item.defense.port|default("-") }}</div>
+                <div class="vehicle-attr-defense-stat">{{ item.defense.starboard|default("-") }}</div>
+                <div class="vehicle-attr-defense-stat">{{ item.defense.aft }}</div>
+            </div>
+            <div class="vehicle-attr-stat vehicle-attr-armor">
+                <div class="title vehicle-attr-title">Armor</div>
+                <div class="vehicle-attr-value">{{ item.armor }}</div>
+            </div>
+            <div class="vehicle-attr-stat vehicle-attr-strain">
+                <div class="vehicle-attr-title title">SS Threshold</div>
+                <div class="vehicle-attr-value">{{ item.strain }}</div>
+            </div>
+            <div class="vehicle-attr-stat vehicle-attr-hull">
+                <div class="vehicle-attr-title title">HT Threshold</div>
+                <div class="vehicle-attr-value">{{ item.hull }}</div>
+            </div>
+        </div>
+    </div>
     <b>Vehicle Type/Model:</b> {{ item.category }}/{{ item.model }}<br>
     <b>Manufacturer:</b> {{ item.manufacturer }}<br>
     {% if item.altitude and item.altitude > 0 %}
