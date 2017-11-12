@@ -38,7 +38,19 @@ def format_price_table(price, restricted):
 def format_index(arr):
     out = ""
     for index in arr:
+        if len(index) == 0:
+            continue
         out += "<a href=\"/books/{0}\">{0}:{1}</a>, ".format(index.split(":")[0], index.split(":")[1])
+    return out[:-2]
+
+
+def format_specials(arr):
+    out = ""
+    for special in arr:
+        out += "<a href=\"/qualities/{0}\">{1}</a>".format(special["special"], special["special"].replace("_", " ").title())
+        if "rank" in special:
+            out += " " + str(special["rank"])
+        out += ", "
     return out[:-2]
 
 
@@ -47,3 +59,4 @@ def register():
     FILTERS["formatnum"] = format_number
     FILTERS["formatprice"] = format_price_table
     FILTERS["formatindex"] = format_index
+    FILTERS["special"] = format_specials

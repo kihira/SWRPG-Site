@@ -22,4 +22,4 @@ def all_qualities():
 def get_quality(quality_id):
     quality = db.qualities.find({"_id": quality_id})[0]
 
-    return render_template("quality.html", title=quality["_id"], item=quality)
+    return render_template("quality.html", title=quality["_id"].title(), item=quality)

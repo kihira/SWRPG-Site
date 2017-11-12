@@ -1,0 +1,29 @@
+{% extends "item.html" %}
+{% import "base.html" as base %}
+{% block item_block %}
+    <div class="stat">
+        <div>Damage</div>
+        <div>{{ item.damage }}</div>
+    </div>
+    <div class="stat">
+        <div>Critical</div>
+        <div>{{ item.critical }}</div>
+    </div>
+    <div class="stat">
+        <div>Hard Points</div>
+        <div>{{ item.hardpoints }}</div>
+    </div>
+    {{ super() }}
+    <p>
+        <b>Skill:</b> {{ item.skill }}<br>
+        <b>Special:</b>
+        {% if item.special %}
+            {{ item.special|special }}<br>
+        {% else %}
+            None<br>
+        {% endif %}
+        <b>Encumbrance:</b> {{ item.encumbrance }}<br>
+        <b>Price:</b> {{ item.price|formatprice(item.restricted) }}<br>
+        <b>Rarity:</b> {{ item.rarity }}<br>
+    </p>
+{% endblock %}
