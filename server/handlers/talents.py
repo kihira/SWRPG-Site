@@ -5,10 +5,12 @@ from flask import Markup, render_template
 
 @app.route("/talents/")
 def all_talents():
+    import pymongo
+
     entries = []
-    for talent in db.talents.find({}):
+    for talent in db.talents.find({}).sort("_id", pymongo.ASCENDING):
         talent["name"] = Markup(
-            "<a href=\"./{0}\">{1}</a>".format(talent["_id"], talent["_id"].replace("_", " ").title()))
+            "<a href=\"./{0}\">{1}</a>".format(talent["_id"], title(talent["_id"])))
         if not talent["activation"]:
             talent["activation"] = "Passive"
         elif type(talent["activation"]) == dict:
@@ -17,7 +19,7 @@ def all_talents():
             talent["activation"] = "Active"
         entries.append(talent)
 
-    return render_template("table.html", title="Items", header=["Talent", "Activation", "Ranked", "Force Sensitive"],
+    return render_template("table.html", title="Talents", header=["Talent", "Activation", "Ranked", "Force Sensitive"],
                            fields=["name", "activation", "ranked", "force"], entries=entries)
 
 
@@ -33,3 +35,21 @@ def to_list(dic):
     for key in dic:
         out += key.replace("_", " ").title() + ", "
     return out[:-2]
+
+
+# todo not keen on having to do this kind of stuff, change the _id to also be capitalised?
+def title(string):
+    result = []
+    prev_letter = ' '
+
+    for ch in string:
+        if ch == "_":
+            result.append(" ")
+        elif not prev_letter.isalpha() and prev_letter != '\'':
+            result.append(ch.upper())
+        else:
+            result.append(ch.lower())
+
+        prev_letter = ch
+
+    return "".join(result)
