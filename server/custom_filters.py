@@ -46,7 +46,7 @@ def skill(match):
         out += 'Formidable (<span class="symbol difficulty">ddddd</span>)'
     else:
         out += diff.title()
-    return f'{out} <a href="/skills/{match.group(2)}">{match.group(2).replace("_", " ").title()}</a></b>'
+    return f'{out} <a href="/skills/{match.group(2)}">{format_title(match.group(2))}</a></b>'
 
 
 def format_number(s):
@@ -54,7 +54,7 @@ def format_number(s):
     if len(s) <= 3:
         return s
     for i in range(len(s)-3, 0, -3):
-        s = s[:i] + "," + s[i:]
+        s = f'{s[:i]},{s[i:]}'
     return s
 
 
@@ -71,16 +71,16 @@ def format_index(arr):
     for index in arr:
         if len(index) == 0:
             continue
-        out += "<a href=\"/books/{0}\">{0}:{1}</a>, ".format(index.split(":")[0], index.split(":")[1])
+        out += f'<a href="/books/{index.split(":")[0]}">{index.split(":")[0]}:{index.split(":")[1]}</a>, '
     return out[:-2]
 
 
 def format_specials(arr):
     out = ""
     for special in arr:
-        out += "<a href=\"/qualities/{0}\">{1}</a>".format(special["special"], special["special"].replace("_", " ").title())
+        out += f'<a href="/qualities/{special["special"]}">{format_title(special["special"])}</a>'
         if "rank" in special:
-            out += " " + str(special["rank"])
+            out += f' {str(special["rank"]))}'
         out += ", "
     return out[:-2]
 
@@ -97,6 +97,10 @@ def format_altitude(s):
     if s == 1:
         return str(s) + " meter"
     return str(s) + " meters"
+
+
+def format_title(s: str):
+    return s.replace("_", " ").title()
 
 
 def register():
