@@ -44,20 +44,20 @@ def all_abilities():
 def get_talent(talent_id):
     talent = db.talents.find({"_id": talent_id})[0]
 
-    return render_template("item.html", title=talent["_id"].replace("_", " ").title(), item=talent)
+    return render_template("item.html", title=talent["_id"].replace("_", " "), item=talent)
 
 
 @app.route("/abilities/<ability_id>")
 def get_ability(ability_id):
     ability = db.abilities.find({"_id": ability_id})[0]
 
-    return render_template("item.html", title=ability["_id"].replace("_", " ").title(), item=ability)
+    return render_template("item.html", title=ability["_id"].replace("_", " "), item=ability)
 
 
 def to_list(dic):
     out = ""
     for key in dic:
-        out += key.replace("_", " ").title() + ", "
+        out += key.replace("_", " ") + ", "
     return out[:-2]
 
 

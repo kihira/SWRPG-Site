@@ -13,7 +13,7 @@ def all_weapons():
         weapon["price"] = custom_filters.format_price_table(weapon["price"], weapon["restricted"])
         weapon["special"] = custom_filters.format_specials(weapon["special"])
         weapon["skill"] = Markup("<a href=\"/skills/{0}\">{1}</a>".format(weapon["skill"],
-                                                                          weapon["skill"].replace("_", " ").title()))
+                                                                          weapon["skill"].replace("_", " ")))
         entries.append(weapon)
 
     return render_template("table.html", title="Weapons",
@@ -25,6 +25,6 @@ def all_weapons():
 def get_weapon(object_id):
     weapon = db.weapons.find({"_id": ObjectId(object_id)})[0]
     weapon["skill"] = Markup("<a href=\"/skills/{0}\">{1}</a>".format(weapon["skill"],
-                                                                      weapon["skill"].replace("_", " ").title()))
+                                                                      weapon["skill"].replace("_", " ")))
 
     return render_template("weapon.html", title=weapon["name"], item=weapon)

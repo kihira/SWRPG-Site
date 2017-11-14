@@ -12,7 +12,7 @@ def all_skills():
     entries = []
     for category in data:
         for skill in category["values"]:
-            skill["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(skill["_id"], skill["_id"].replace("_", " ").title()))
+            skill["name"] = Markup(f'<a href="./{skill["_id"]}">{skill["_id"].replace("_", " ")}</a>')
             entries.append(skill)
 
     return render_template("table.html", title="Skills", header=["Skill", "Characteristic"],
@@ -23,4 +23,4 @@ def all_skills():
 def get_skill(skill_id):
     skill = db.skills.find({"_id": skill_id})[0]
 
-    return render_template("item.html", title=skill["_id"].replace("_", " ").title(), item=skill)
+    return render_template("item.html", title=skill["_id"].replace("_", " "), item=skill)

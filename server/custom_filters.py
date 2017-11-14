@@ -80,7 +80,7 @@ def format_specials(arr):
     for special in arr:
         out += f'<a href="/qualities/{special["special"]}">{format_title(special["special"])}</a>'
         if "rank" in special:
-            out += f' {str(special["rank"]))}'
+            out += f" {str(special['rank'])}"
         out += ", "
     return out[:-2]
 
@@ -100,7 +100,7 @@ def format_altitude(s):
 
 
 def format_title(s: str):
-    return s.replace("_", " ").title()
+    return s.replace("_", " ")
 
 
 def register():
