@@ -14,15 +14,39 @@ symbols = {
     "THREAT": "threat",
     "DESPAIR": "despair",
     "FORCE": "force",
+    "FORCE POINT": "force-pip",
     "LIGHT": "force-light",
     "DARK": "force-dark"
 }
 
 
-def symbol(s):
+def symbol(s: str):
     for (key, value) in symbols.items():
-        s = s.replace("[{0}]".format(key), "<span class=\"symbol {0}\"></span>".format(value))
+        s = s.replace(f"[{key}]", f'<span class="symbol {value}"></span>')
     return s
+
+
+def skill_check(s: str):
+    import re
+    return re.sub(r"\[([A-Z]+):([a-zA-Z]+)\]", skill, s)
+
+
+def skill(match):
+    diff = match.group(1)
+    out = "<b>"
+    if diff == "EASY":
+        out += 'Easy (<span class="symbol difficulty">d</span>)'
+    elif diff == "AVERAGE":
+        out += 'Average (<span class="symbol difficulty">dd</span>)'
+    elif diff == "HARD":
+        out += 'Hard (<span class="symbol difficulty">ddd</span>)'
+    elif diff == "DAUNTING":
+        out += 'Daunting (<span class="symbol difficulty">dddd</span>)'
+    elif diff == "FORMIDABLE":
+        out += 'Formidable (<span class="symbol difficulty">ddddd</span>)'
+    else:
+        out += diff.title()
+    return f'{out} <a href="/skills/{match.group(2)}">{match.group(2).replace("_", " ").title()}</a></b>'
 
 
 def format_number(s):
