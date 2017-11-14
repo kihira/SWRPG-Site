@@ -7,8 +7,15 @@ symbols = {
     "PROFICIENCY": "proficiency",
     "DIFFICULTY": "difficulty",
     "CHALLENGE": "challenge",
+    "SUCCESS": "success",
     "ADVANTAGE": "advantage",
-    "THREAT": "threat"
+    "TRIUMPH": "triumph",
+    "FAILURE": "failure",
+    "THREAT": "threat",
+    "DESPAIR": "despair",
+    "FORCE": "force",
+    "LIGHT": "force-light",
+    "DARK": "force-dark"
 }
 
 
