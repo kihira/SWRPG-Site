@@ -23,11 +23,32 @@ def all_talents():
                            fields=["name", "activation", "ranked", "force"], entries=entries)
 
 
+@app.route("/abilities/")
+def all_abilities():
+    import pymongo
+
+    entries = []
+    for ability in db.abilities.find({}).sort("_id", pymongo.ASCENDING):
+        ability["name"] = Markup(
+            "<a href=\"./{0}\">{1}</a>".format(ability["_id"], title(ability["_id"])))
+        entries.append(ability)
+
+    return render_template("table.html", title="Abilities", header=["Ability"],
+                           fields=["name"], entries=entries)
+
+
 @app.route("/talents/<talent_id>")
 def get_talent(talent_id):
     talent = db.talents.find({"_id": talent_id})[0]
 
     return render_template("item.html", title=talent["_id"].replace("_", " ").title(), item=talent)
+
+
+@app.route("/abilities/<ability_id>")
+def get_ability(ability_id):
+    ability = db.abilities.find({"_id": ability_id})[0]
+
+    return render_template("item.html", title=ability["_id"].replace("_", " ").title(), item=ability)
 
 
 def to_list(dic):
