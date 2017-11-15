@@ -28,7 +28,7 @@ def symbol(s: str):
 
 def skill_check(s: str):
     import re
-    return re.sub(r"\[([A-Z]+):([a-zA-Z]+)\]", skill, s)
+    return re.sub(r"\[([A-Z]+):([a-zA-Z()_]+)\]", skill, s)
 
 
 def skill(match):
@@ -46,7 +46,7 @@ def skill(match):
         out += 'Formidable (<span class="symbol difficulty">ddddd</span>)'
     else:
         out += diff.title()
-    return f'{out} <a href="/skills/{match.group(2)}">{format_title(match.group(2))}</a></b>'
+    return f'{out} <a href="/skills/{match.group(2)}">{format_title(match.group(2))}</a> check</b>'
 
 
 def format_number(s):
