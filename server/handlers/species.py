@@ -13,7 +13,7 @@ def all_species():
             "<a href=\"./{0}\">{1}</a>".format(species["_id"], species["_id"]).replace("_", " "))
         entries.append(species)
 
-    return render_template("table.html", title="Abilities", header=["Ability", "Player"],
+    return render_template("table.html", title="Species", header=["Species", "Player"],
                            fields=["name", "player"], entries=entries)
 
 
