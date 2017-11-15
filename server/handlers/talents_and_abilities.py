@@ -42,7 +42,10 @@ def all_abilities():
 @app.route("/talents/<talent_id>")
 def get_talent(talent_id):
     talent = db.talents.find({"_id": talent_id})[0]
-    talent["description"] = filters.description(talent["description"])
+    if "description" not in talent and "short" in talent:
+        talent["description"] = talent["short"]
+    if "description" in talent:
+        talent["description"] = filters.description(talent["description"])
 
     return render_template("item.html", title=talent["_id"].replace("_", " "), item=talent)
 
