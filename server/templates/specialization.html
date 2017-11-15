@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% import "base.html" as base %}
+{% block content %}
+    <table>
+    {% for row in item.tree.talents %}
+    <tr>
+    {% set cost = 5 * loop.index %}
+        {% for entry in row %}
+        <td>{{ talent(entry.name|title, entry.description, cost) }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
+
+{% macro talent(name, content, cost) %}
+    <div class="talent">
+        <div class="inner">
+            <div class="header">
+                <span>{{ name }}</span>
+            </div>
+            <div class="content">
+                {{ content }}
+            </div>
+        </div>
+        <div class="cost">
+            Cost {{ cost }}
+        </div>
+    </div>
+{%  endmacro %}
