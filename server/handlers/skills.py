@@ -12,7 +12,8 @@ def all_skills():
     entries = []
     for category in data:
         for skill in category["values"]:
-            skill["name"] = Markup(f'<a href="./{skill["_id"]}">{skill["_id"].replace("_", " ")}</a>')
+            name = skill["name"] if "name" in skill else skill["_id"].replace("_", " ")
+            skill["name"] = Markup(f'<a href="./{skill["_id"]}">{name}</a>')
             entries.append(skill)
 
     return render_template("table.html", title="Skills", header=["Skill", "Characteristic"],
