@@ -1,4 +1,4 @@
-from server import custom_filters
+from server import filters
 from server.app import app
 from server.db import db
 from flask import Markup, render_template
@@ -10,7 +10,7 @@ def all_gear():
     entries = []
     for gear in db.gear.find({}):
         gear["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(gear["_id"], gear["name"]))
-        gear["price"] = custom_filters.format_price_table(gear["price"], gear["restricted"])
+        gear["price"] = filters.format_price_table(gear["price"], gear["restricted"])
         entries.append(gear)
 
     return render_template("table.html", title="Items", header=["Item", "Price", "Encumbrance", "Rarity"],

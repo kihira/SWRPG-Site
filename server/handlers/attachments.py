@@ -1,4 +1,4 @@
-from server import custom_filters
+from server import filters
 from server.app import app
 from server.db import db
 from flask import Markup, render_template
@@ -10,7 +10,7 @@ def all_attachments():
     entries = []
     for attachment in db.attachments.find({}):
         attachment["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(attachment["_id"], attachment["name"]))
-        attachment["price"] = custom_filters.format_price_table(attachment["price"], attachment["restricted"])
+        attachment["price"] = filters.format_price_table(attachment["price"], attachment["restricted"])
         entries.append(attachment)
 
     return render_template("table.html", title="Attachments", header=["Attachment", "Price", "Encumbrance",

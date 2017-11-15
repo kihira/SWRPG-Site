@@ -1,4 +1,4 @@
-from server import custom_filters
+from server import filters
 from server.app import app
 from server.db import db
 from flask import Markup, render_template
@@ -11,7 +11,7 @@ def all_armor():
     entries = []
     for armor in db.armor.find({}):
         armor["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(armor["_id"], armor["name"]))
-        armor["price"] = custom_filters.format_price_table(armor["price"], armor["restricted"])
+        armor["price"] = filters.format_price_table(armor["price"], armor["restricted"])
         entries.append(armor)
 
     return render_template("table.html", title="Armor",

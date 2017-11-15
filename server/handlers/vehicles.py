@@ -1,4 +1,4 @@
-from server import custom_filters
+from server import filters
 from server.app import app
 from server.db import db
 from flask import Markup, render_template
@@ -14,7 +14,7 @@ def all_vehicles():
     for category in data:
         for vehicle in category["values"]:
             vehicle["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(vehicle["_id"], vehicle["name"]))
-            vehicle["price"] = custom_filters.format_price_table(vehicle["price"], vehicle["restricted"])
+            vehicle["price"] = filters.format_price_table(vehicle["price"], vehicle["restricted"])
             vehicle["crew"] = len(vehicle["crew"])
             if type(vehicle["weapons"]) == list:
                 vehicle["weapons"] = len(vehicle["weapons"])
@@ -37,7 +37,7 @@ def all_starships():
     for category in data:
         for vehicle in category["values"]:
             vehicle["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(vehicle["_id"], vehicle["name"]))
-            vehicle["price"] = custom_filters.format_price_table(vehicle["price"], vehicle["restricted"])
+            vehicle["price"] = filters.format_price_table(vehicle["price"], vehicle["restricted"])
             vehicle["crew"] = len(vehicle["crew"])
             if type(vehicle["weapons"]) == list:
                 vehicle["weapons"] = len(vehicle["weapons"])

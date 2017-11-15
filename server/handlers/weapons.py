@@ -1,4 +1,4 @@
-from server import custom_filters
+from server import filters
 from server.app import app
 from server.db import db
 from flask import Markup, render_template
@@ -10,8 +10,8 @@ def all_weapons():
     entries = []
     for weapon in db.weapons.find({}):
         weapon["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(weapon["_id"], weapon["name"]))
-        weapon["price"] = custom_filters.format_price_table(weapon["price"], weapon["restricted"])
-        weapon["special"] = custom_filters.format_specials(weapon["special"])
+        weapon["price"] = filters.format_price_table(weapon["price"], weapon["restricted"])
+        weapon["special"] = filters.format_specials(weapon["special"])
         weapon["skill"] = Markup("<a href=\"/skills/{0}\">{1}</a>".format(weapon["skill"],
                                                                           weapon["skill"].replace("_", " ")))
         entries.append(weapon)
