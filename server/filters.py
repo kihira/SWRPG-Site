@@ -123,3 +123,4 @@ def register():
     FILTERS["none"] = format_none
     FILTERS["altitude"] = format_altitude
     FILTERS["title"] = format_title
+    FILTERS["description"] = description

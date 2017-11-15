@@ -74,7 +74,7 @@ h1 {
 }
 
 .talent {
-  width: 240px;
+  width: 200px;
   .inner {
     border-style: solid;
     border-width: 19px 19px 25px;
@@ -85,14 +85,16 @@ h1 {
       top: -13px;
       left: -13px;
       width: 99%;
+      height: 7px;
 
       border: 13px solid;
       .border-image("/static/img/characteristic-header.svg", 13, 13);
 
       span {
         position: relative;
-        top: -12px;
+        top: -8px;
         left: 20px;
+
         font-family: @teuton-normal;
         font-weight: bold;
         text-transform: uppercase;
@@ -104,9 +106,10 @@ h1 {
       position: relative;
       top: -13px;
       left: -13px;
-      width: 100%;
-      padding: 5px 10px 0;
-      font-size: 0.9em;
+      width: 98%;
+      padding: 5px 15px 0;
+      margin-bottom: -12px;
+      font-size: 0.8em;
       text-align: justify;
       .hyphens();
     }

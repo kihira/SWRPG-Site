@@ -6,7 +6,7 @@
     <tr>
     {% set cost = 5 * loop.index %}
         {% for entry in row %}
-        <td>{{ talent(entry.name|title, entry.description, cost) }}</td>
+        <td>{{ talent(entry.name|title, entry.description|default(""), cost) }}</td>
         {% endfor %}
     </tr>
     {% endfor %}
@@ -20,7 +20,7 @@
                 <span>{{ name }}</span>
             </div>
             <div class="content">
-                {{ content }}
+                {{ content|description }}
             </div>
         </div>
         <div class="cost">

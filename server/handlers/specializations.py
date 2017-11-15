@@ -28,7 +28,8 @@ def get_specializations(species_id):
 
     for row in item["tree"]["talents"]:
         for index in range(len(row)):
-            row[index] = talents[row[index]]
+            talent = talents[row[index]]
+            row[index] = talent
             row[index]["name"] = row[index]["_id"]
             if "short" in talent:
                 row[index]["description"] = talent["short"]
