@@ -32,8 +32,7 @@ def all_abilities():
     for ability in db.abilities.find({}).sort("_id", pymongo.ASCENDING):
         ability["name"] = Markup(
             "<a href=\"./{0}\">{1}</a>".format(ability["_id"], title(ability["_id"])))
-        ability["description"] = filters.symbol(ability["description"])
-        ability["description"] = filters.skill_check(ability["description"])
+        ability["description"] = filters.description(ability["description"])
         entries.append(ability)
 
     return render_template("table.html", title="Abilities", header=["Ability", "Description"],
@@ -43,8 +42,7 @@ def all_abilities():
 @app.route("/talents/<talent_id>")
 def get_talent(talent_id):
     talent = db.talents.find({"_id": talent_id})[0]
-    talent["description"] = filters.symbol(talent["description"])
-    talent["description"] = filters.skill_check(talent["description"])
+    talent["description"] = filters.description(talent["description"])
 
     return render_template("item.html", title=talent["_id"].replace("_", " "), item=talent)
 
@@ -52,6 +50,7 @@ def get_talent(talent_id):
 @app.route("/abilities/<ability_id>")
 def get_ability(ability_id):
     ability = db.abilities.find({"_id": ability_id})[0]
+    ability["description"] = filters.description(ability["description"])
 
     return render_template("item.html", title=ability["_id"].replace("_", " "), item=ability)
 

@@ -1,7 +1,7 @@
 from jinja2.filters import FILTERS
 
 __all__ = ["skill_check", "format_price_table", "format_number", "format_altitude", "format_index", "format_none",
-           "format_specials", "format_title"]
+           "format_specials", "format_title", "description"]
 
 symbols = {
     "BOOST": "boost",
@@ -23,8 +23,16 @@ symbols = {
 }
 
 
+def description(s: str):
+    """Simple function that does all the filtering it needs to for most descriptions"""
+    s = symbol(s)
+    s = skill_check(s)
+    return s
+
+
 def symbol(s: str):
     for (key, value) in symbols.items():
+        # todo optimise? use something similar to re.sub
         s = s.replace(f"[{key}]", f'<span class="symbol {value}"></span>')
     return s
 
