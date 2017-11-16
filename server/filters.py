@@ -1,6 +1,7 @@
 from jinja2.filters import FILTERS
+import re
 
-__all__ = ["skill_check", "format_price_table", "format_number", "format_altitude", "format_index", "format_none",
+__all__ = ["format_price_table", "format_number", "format_altitude", "format_index", "format_none",
            "format_specials", "format_title", "description"]
 
 symbols = {
@@ -22,27 +23,31 @@ symbols = {
     "DARK": "force-dark"
 }
 
+skill_check_regex = re.compile(r"\[SKILL:([A-Z]+):([a-zA-Z()_]+)\]")
+diff_skill_regex = re.compile(r"\[([A-Z]+):([a-zA-Z()_]+)\]")
+diff_regex = re.compile(r"\[DIFF:([A-Z]+)\]")
+
 
 def description(s: str):
     """Simple function that does all the filtering it needs to for most descriptions"""
-    s = symbol(s)
-    s = skill_check(s)
-    return s
-
-
-def symbol(s: str):
     for (key, value) in symbols.items():
         # todo optimise? use something similar to re.sub
         s = s.replace(f"[{key}]", f'<span class="symbol {value}"></span>')
+    s = re.sub(skill_check_regex, check, s)
+    s = re.sub(diff_skill_regex, diff_skill, s)
+    s = re.sub(diff_regex, diff_skill, s)
     return s
 
 
-def skill_check(s: str):
-    import re
-    return re.sub(r"\[([A-Z]+):([a-zA-Z()_]+)\]", skill, s)
+def check(match):
+    return f"{diff_skill(match)}<b> check</b>"
 
 
-def skill(match):
+def diff_skill(match):
+    return f'{difficulty(match)} <b><a href="/skills/{match.group(2)}">{format_title(match.group(2))}</a></b>'
+
+
+def difficulty(match):
     diff = match.group(1)
     out = "<b>"
     if diff == "EASY":
@@ -57,7 +62,7 @@ def skill(match):
         out += 'Formidable (<span class="symbol difficulty">ddddd</span>)'
     else:
         out += diff.title()
-    return f'{out} <a href="/skills/{match.group(2)}">{format_title(match.group(2))}</a> check</b>'
+    return f'{out}</b>'
 
 
 def format_number(s):
@@ -115,7 +120,6 @@ def format_title(s: str):
 
 
 def register():
-    FILTERS["symbol"] = symbol
     FILTERS["formatnum"] = format_number
     FILTERS["formatprice"] = format_price_table
     FILTERS["formatindex"] = format_index
