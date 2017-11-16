@@ -47,7 +47,11 @@ def get_talent(talent_id):
     if "description" in talent:
         talent["description"] = filters.description(talent["description"])
 
-    return render_template("item.html", title=talent["_id"].replace("_", " "), item=talent)
+    # todo is there a better way to do this? seems messy
+    talent["trees"] = [s["_id"].replace("_", " ") for s in db.specializations.find(
+        {"tree.talents": {"$elemMatch": {"$elemMatch": {"$in": [talent_id]}}}}, {"_id": 1})]
+
+    return render_template("talents.html", title=talent["_id"].replace("_", " "), item=talent)
 
 
 @app.route("/abilities/<ability_id>")
