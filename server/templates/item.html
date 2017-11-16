@@ -4,19 +4,7 @@
     <div class="item-block">
         <h4>{{ item.name|default(title) }}</h4>
         {% block item_block %}
-{#            <div class="stat">
-                <div>Price</div>
-                <div>{{ item.price|formatprice(item.restricted) }}</div>
-            </div>
-            <div class="stat">
-                <div>Rarity</div>
-                <div>{{ item.rarity }}</div>
-            </div>
-            <div class="stat">
-                <div>Encumb</div>
-                <div>{{ item.encumbrance }}</div>
-            </div>#}
-            {% if item.description %}
+            {% if item.description|default(description) %}
                 <p>{{ item.description|symbol }}</p>
             {% endif %}
             {% if item.models %}
@@ -26,6 +14,11 @@
                 </p>
             {% endif %}
         {% endblock %}
+        {% if fields %}
+            {% for field in fields %}
+                <b>{{ field|title }}</b> {{ base.list(item[field]) }}
+            {% endfor %}
+        {% endif %}
         {% if item.index %}
             <p class="no-indent">
                 <b>Index:</b>

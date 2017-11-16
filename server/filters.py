@@ -1,6 +1,7 @@
 from jinja2.filters import FILTERS
+import re
 
-__all__ = ["skill_check", "format_price_table", "format_number", "format_altitude", "format_index", "format_none",
+__all__ = ["format_price_table", "format_number", "format_altitude", "format_index", "format_none",
            "format_specials", "format_title", "description"]
 
 symbols = {
@@ -22,42 +23,33 @@ symbols = {
     "DARK": "force-dark"
 }
 
+diff = {
+    "SIMPLE": "Simple (-)",
+    "EASY": 'Easy (<span class="symbol difficulty">d</span>)',
+    "AVERAGE": 'Average (<span class="symbol difficulty">dd</span>)',
+    "HARD": 'Hard (<span class="symbol difficulty">ddd</span>)',
+    "DAUNTING": 'Daunting (<span class="symbol difficulty">dddd</span>)',
+    "FORMIDABLE": 'Formidable (<span class="symbol difficulty">ddddd</span>)'
+}
+
+check_regex = re.compile(r"\[CHECK:([A-Z]+):([a-zA-Z()_]+)\]")
+diff_skill_regex = re.compile(r"\[([A-Z]+):([a-zA-Z()_]+)\]")
+diff_regex = re.compile(r"\[DIFF:([A-Z]+)\]")
+
 
 def description(s: str):
     """Simple function that does all the filtering it needs to for most descriptions"""
-    s = symbol(s)
-    s = skill_check(s)
-    return s
-
-
-def symbol(s: str):
     for (key, value) in symbols.items():
         # todo optimise? use something similar to re.sub
         s = s.replace(f"[{key}]", f'<span class="symbol {value}"></span>')
+    s = re.sub(check_regex, lambda match: f"<b>{diff[match.group(1)]} {format_skill(match.group(2))} check</b>", s)
+    s = re.sub(diff_skill_regex, lambda match: f'<b>{diff[match.group(1)]} {format_skill(match.group(2))}</b>', s)
+    s = re.sub(diff_regex, lambda match: f'<b>{diff[match.group(1)]}</b>', s)
     return s
 
 
-def skill_check(s: str):
-    import re
-    return re.sub(r"\[([A-Z]+):([a-zA-Z()_]+)\]", skill, s)
-
-
-def skill(match):
-    diff = match.group(1)
-    out = "<b>"
-    if diff == "EASY":
-        out += 'Easy (<span class="symbol difficulty">d</span>)'
-    elif diff == "AVERAGE":
-        out += 'Average (<span class="symbol difficulty">dd</span>)'
-    elif diff == "HARD":
-        out += 'Hard (<span class="symbol difficulty">ddd</span>)'
-    elif diff == "DAUNTING":
-        out += 'Daunting (<span class="symbol difficulty">dddd</span>)'
-    elif diff == "FORMIDABLE":
-        out += 'Formidable (<span class="symbol difficulty">ddddd</span>)'
-    else:
-        out += diff.title()
-    return f'{out} <a href="/skills/{match.group(2)}">{format_title(match.group(2))}</a> check</b>'
+def format_skill(skill):
+    return f'<a href="/skills/{skill}">{format_title(skill)}</a>'
 
 
 def format_number(s):
@@ -115,7 +107,6 @@ def format_title(s: str):
 
 
 def register():
-    FILTERS["symbol"] = symbol
     FILTERS["formatnum"] = format_number
     FILTERS["formatprice"] = format_price_table
     FILTERS["formatindex"] = format_index
