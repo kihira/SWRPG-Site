@@ -73,61 +73,68 @@ h1 {
   word-wrap: break-word;
 }
 
-.talent {
-  width: 200px;
-  .inner {
-    border-style: solid;
-    border-width: 19px 19px 25px;
-    .border-image("/static/img/characteristic.svg", 19 19, 25);
+table.talent {
+  margin-left:auto;
+  margin-right:auto;
+  tr td {
+    width: 200px;
+    vertical-align: top;
+    padding: 0 20px;
 
-    .header {
-      position: relative;
-      top: -13px;
-      left: -13px;
-      width: 99%;
-      height: 7px;
+    .inner {
+      border-style: solid;
+      border-width: 19px 19px 25px;
+      .border-image("/static/img/characteristic.svg", 19 19, 25);
 
-      border: 13px solid;
-      .border-image("/static/img/characteristic-header.svg", 13, 13);
-
-      span {
+      .header {
         position: relative;
-        top: -8px;
-        left: 20px;
+        top: -13px;
+        left: -13px;
+        width: 99%;
+        height: 7px;
 
-        font-family: @teuton-normal;
-        font-weight: bold;
-        text-transform: uppercase;
-        color: white;
+        border: 13px solid;
+        .border-image("/static/img/characteristic-header.svg", 13, 13);
+
+        span {
+          position: relative;
+          top: -8px;
+          left: 20px;
+
+          font-family: @teuton-normal;
+          font-weight: bold;
+          text-transform: uppercase;
+          color: white;
+        }
+      }
+
+      .content {
+        position: relative;
+        top: -13px;
+        left: -13px;
+        width: 98%;
+        padding: 5px 15px 0;
+        margin-bottom: -12px;
+        font-size: 0.8em;
+        text-align: justify;
+        .hyphens();
       }
     }
-
-    .content {
+    .cost {
+      float: right;
       position: relative;
-      top: -13px;
-      left: -13px;
-      width: 98%;
-      padding: 5px 15px 0;
-      margin-bottom: -12px;
-      font-size: 0.8em;
-      text-align: justify;
-      .hyphens();
+      right: 18px;
+      bottom: 16px;
+      width: 92px;
+      height: 21px;
+      padding-top: 2px;
+      .background("/static/img/characteristic-cost.svg");
+      text-align: center;
+      color: white;
+      font-family: @teuton-normal;
+      text-transform: uppercase;
+      font-size: 0.9em;
     }
-  }
-  .cost {
-    float: right;
-    position: relative;
-    right: 18px;
-    bottom: 16px;
-    width: 92px;
-    height: 21px;
-    padding-top: 2px;
-    .background("/static/img/characteristic-cost.svg");
-    text-align: center;
-    color: white;
-    font-family: @teuton-normal;
-    text-transform: uppercase;
-    font-size: 0.9em;
   }
 }
 
