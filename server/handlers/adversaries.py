@@ -1,14 +1,13 @@
 from server.app import app
 from server.db import db
 from flask import Markup, render_template
+import pymongo
 
 
-@app.route("/adversaries/")
-def all_adversaries():
-    import pymongo
-
+def process_items(items):
     entries = []
-    for item in db.adversaries.find({}).sort("_id", pymongo.ASCENDING):
+
+    for item in items:
         item["name"] = Markup(f"<a href='./{item['_id']}'>{item['name']}</a>")
 
         skills = ""
@@ -33,10 +32,27 @@ def all_adversaries():
         item["abilities"] = abilities[:-2]
 
         entries.append(item)
+    return entries
 
+
+@app.route("/adversaries/")
+def all_adversaries():
     return render_template("table.html", title="Adversaries",
                            header=["Name", "Type", "Skills", "Talents", "Abilities", "Equipment"],
-                           fields=["name", "level", "skills", "talents", "abilities", "equipment"], entries=entries)
+                           fields=["name", "level", "skills", "talents", "abilities", "equipment"],
+                           entries=process_items(db.adversaries.find({}).sort("name", pymongo.ASCENDING)))
+
+
+@app.route("/adversaries/imperials")
+def get_imperials():
+    # todo this should probably use a tag system instead of regex search
+    return render_template("table.html", title="Adversaries",
+                           header=["Name", "Type", "Skills", "Talents", "Abilities", "Equipment"],
+                           fields=["name", "level", "skills", "talents", "abilities", "equipment"],
+                           entries=process_items(db.adversaries
+                                                 .find({"$or": [{"name": {"$regex": "Imperial"}},
+                                                                {"tags": "imperial"}]})
+                                                 .sort("name", pymongo.ASCENDING)))
 
 
 @app.route("/adversaries/<object_id>")
