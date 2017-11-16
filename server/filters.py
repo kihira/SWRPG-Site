@@ -23,7 +23,16 @@ symbols = {
     "DARK": "force-dark"
 }
 
-skill_check_regex = re.compile(r"\[SKILL:([A-Z]+):([a-zA-Z()_]+)\]")
+diff = {
+    "SIMPLE": "Simple (-)",
+    "EASY": 'Easy (<span class="symbol difficulty">d</span>)',
+    "AVERAGE": 'Average (<span class="symbol difficulty">dd</span>)',
+    "HARD": 'Hard (<span class="symbol difficulty">ddd</span>)',
+    "DAUNTING": 'Daunting (<span class="symbol difficulty">dddd</span>)',
+    "FORMIDABLE": 'Formidable (<span class="symbol difficulty">ddddd</span>)'
+}
+
+check_regex = re.compile(r"\[CHECK:([A-Z]+):([a-zA-Z()_]+)\]")
 diff_skill_regex = re.compile(r"\[([A-Z]+):([a-zA-Z()_]+)\]")
 diff_regex = re.compile(r"\[DIFF:([A-Z]+)\]")
 
@@ -33,36 +42,14 @@ def description(s: str):
     for (key, value) in symbols.items():
         # todo optimise? use something similar to re.sub
         s = s.replace(f"[{key}]", f'<span class="symbol {value}"></span>')
-    s = re.sub(skill_check_regex, check, s)
-    s = re.sub(diff_skill_regex, diff_skill, s)
-    s = re.sub(diff_regex, diff_skill, s)
+    s = re.sub(check_regex, lambda match: f"<b>{diff[match.group(1)]} {format_skill(match.group(2))} check</b>", s)
+    s = re.sub(diff_skill_regex, lambda match: f'<b>{diff[match.group(1)]} {format_skill(match.group(2))}</b>', s)
+    s = re.sub(diff_regex, lambda match: f'<b>{diff[match.group(1)]}</b>', s)
     return s
 
 
-def check(match):
-    return f"{diff_skill(match)}<b> check</b>"
-
-
-def diff_skill(match):
-    return f'{difficulty(match)} <b><a href="/skills/{match.group(2)}">{format_title(match.group(2))}</a></b>'
-
-
-def difficulty(match):
-    diff = match.group(1)
-    out = "<b>"
-    if diff == "EASY":
-        out += 'Easy (<span class="symbol difficulty">d</span>)'
-    elif diff == "AVERAGE":
-        out += 'Average (<span class="symbol difficulty">dd</span>)'
-    elif diff == "HARD":
-        out += 'Hard (<span class="symbol difficulty">ddd</span>)'
-    elif diff == "DAUNTING":
-        out += 'Daunting (<span class="symbol difficulty">dddd</span>)'
-    elif diff == "FORMIDABLE":
-        out += 'Formidable (<span class="symbol difficulty">ddddd</span>)'
-    else:
-        out += diff.title()
-    return f'{out}</b>'
+def format_skill(skill):
+    return f'<a href="/skills/{skill}">{format_title(skill)}</a>'
 
 
 def format_number(s):
