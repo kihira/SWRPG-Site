@@ -4,7 +4,7 @@
     <div class="item-block">
         <h4>{{ item.name|default(title) }}</h4>
         {% block item_block %}
-            {% if item.description %}
+            {% if item.description|default(description) %}
                 <p>{{ item.description|symbol }}</p>
             {% endif %}
             {% if item.models %}

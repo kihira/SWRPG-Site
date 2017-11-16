@@ -1,6 +1,7 @@
 {% extends "item.html" %}
 {% import "base.html" as base %}
 {% block item_block %}
+    {% if not item.description and item.short %}{% set description = item.short %}{% endif %}
     <b>Activation:</b> {{ item.activation }}<br>
     <b>Ranked:</b> {% if item.ranked %}Yes{% else %}No{% endif %}<br>
     <b>Trees:</b> {{ base.list(item.trees) }}<br>
