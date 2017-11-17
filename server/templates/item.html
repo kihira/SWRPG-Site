@@ -5,7 +5,7 @@
         <h4>{{ item.name|default(title) }}</h4>
         {% block item_block %}
             {% if item.description|default(description) %}
-                <p>{{ item.description|symbol }}</p>
+                <p>{{ item.description|description }}</p>
             {% endif %}
             {% if item.models %}
                 <p class="no-indent">
