@@ -1,0 +1,16 @@
+{% extends "item.html" %}
+{% import "base.html" as base %}
+{% block item_block %}
+    {{ super() }}
+    <div class="adversary">
+        <div class="characteristics">
+            <div class="block">{{ item.characteristics.brawn }}</div><div class="block">{{ item.characteristics.agility }}</div><div class="block">{{ item.characteristics.intellect }}</div><div class="block">{{ item.characteristics.cunning }}</div><div class="block">{{ item.characteristics.willpower }}</div><div class="block">{{ item.characteristics.presence }}</div>
+        </div>
+        <div class="stats">
+        </div>
+    </div>
+    <b>Skills{% if item.level == "Minion" %} (group only){% endif %}:</b> {{ base.list(item.skills)|none }}<br>
+    <b>Talents:</b> {{ base.list(item.talents)|none }}<br>
+    <b>Abilities:</b> {{ base.list(item.abilities)|none }}<br>
+    <b>Equipment:</b> {{ item.equipment|none }}<br>
+{% endblock %}

@@ -179,6 +179,25 @@ table.talent {
   }
 }
 
+.adversary {
+  text-align: center;
+  font-family: @teuton-normal;
+  .characteristics {
+    .background("/static/img/characteristics.svg");
+    width: 100%;
+    height: 61px;
+    .block {
+      &:first-of-type {
+        padding-left: 0px;
+      }
+      display: inline-block;
+      width: 16.3%;
+      padding-top: 15px;
+      font-size: 1.5em;
+    }
+  }
+}
+
 .vehicle {
   .background("/static/img/ship-stat.svg");
   background-size: 100% auto;

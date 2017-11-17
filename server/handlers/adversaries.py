@@ -60,4 +60,4 @@ def get_adversary(object_id):
     from bson import ObjectId
     item = db.adversaries.find({"_id": ObjectId(object_id)})[0]
 
-    return render_template("item.html", title=item["name"], item=item)
+    return render_template("adversary.html", title=item["name"], item=item)
