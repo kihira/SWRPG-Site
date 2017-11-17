@@ -59,5 +59,11 @@ def get_imperials():
 def get_adversary(object_id):
     from bson import ObjectId
     item = db.adversaries.find({"_id": ObjectId(object_id)})[0]
+    if item["level"] == "Minion":
+        item["skills"] = [f'<a href="/skills/{skill}">{skill.replace("_", " ")}</a>'
+                          for skill in item["skills"]]
+    else:
+        item["skills"] = [f'<a href="/skills/{skill["id"]}">{skill["id"].replace("_", " ")}</a> {skill["value"]}'
+                          for skill in item["skills"]]
 
     return render_template("adversary.html", title=item["name"], item=item)

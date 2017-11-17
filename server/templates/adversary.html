@@ -21,7 +21,28 @@
         </div>
     </div>
     <b>Skills{% if item.level == "Minion" %} (group only){% endif %}:</b> {{ base.list(item.skills)|none }}<br>
-    <b>Talents:</b> {{ base.list(item.talents)|none }}<br>
-    <b>Abilities:</b> {{ base.list(item.abilities)|none }}<br>
+    <b>Talents:</b>
+    {% if not item.talents or item.talents.length == 0 %}
+        None.
+    {% else %}
+        {% for talent in item.talents %}
+            {%- if "id" in talent -%}
+                <a href="/talents/{{ talent.id }}">{{ talent.id|replace("_"," ") }}</a> {{ talent.value }}
+            {%- else -%}
+                <a href="/talents/{{ talent }}">{{ talent|replace("_"," ") }}</a>
+            {%- endif -%}
+            {{ seperator(loop.last) }}
+        {% endfor %}
+    {% endif %}
+    <br>
+    <b>Abilities:</b>
+    {% for ability in item.abilities %}
+        <a href="/abilities/{{ ability }}">{{ ability|replace("_"," ") }}</a>{{ seperator(loop.last) }}
+    {% endfor %}
+    <br>
     <b>Equipment:</b> {{ item.equipment|none }}<br>
 {% endblock %}
+
+{%- macro seperator(last) -%}
+    {% if last %}.{% else %},{% endif %}
+{% endmacro %}
