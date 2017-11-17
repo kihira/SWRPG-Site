@@ -180,8 +180,10 @@ table.talent {
 }
 
 .adversary {
+  padding-bottom: 5px;
   text-align: center;
   font-family: @teuton-normal;
+  text-transform: uppercase;
 
   .characteristics {
     .background("/static/img/characteristics.svg");
@@ -194,6 +196,40 @@ table.talent {
       width: 16.3%;
       padding-top: 15px;
       font-size: 1.5em;
+
+      div {
+        position: relative;
+        bottom: -11px;
+        font-size: 0.4em;
+        color: white;
+      }
+    }
+  }
+  .stats {
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 5px;
+    height: 40px;
+    width: 90%;
+    padding-left: 5%;
+
+    .block {
+      width: 86px;
+      .background("/static/img/stat.svg");
+
+      span {
+        position: relative;
+        top: -2px;
+        font-size: 0.55em;
+        font-style: italic;
+        color: white;
+      }
+
+      div {
+        position: relative;
+        bottom: 3px;
+        font-size: 1.4em;
+      }
     }
   }
 }
