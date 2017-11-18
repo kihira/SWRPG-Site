@@ -1,7 +1,7 @@
 from server.app import app
 from server.db import db
 from server import filters
-from flask import render_template
+from flask import render_template, request
 
 
 @app.route("/talents/")
@@ -10,26 +10,12 @@ def all_talents():
 
     entries = []
     for item in db.talents.find({}).sort("_id", pymongo.ASCENDING):
-        item["name"] = f"<a href='./{item['_id']}'>{title(item['_id'])}</a>"
+        item["name"] = f"<a href='./{item['_id']}'>{item['_id'].replace('_', ' ')}</a>"
         item["activation"] = activation(item["activation"])
         entries.append(item)
 
     return render_template("table.html", title="Talents", header=["Talent", "Activation", "Ranked", "Force Sensitive"],
                            fields=["name", "activation", "ranked", "force"], entries=entries)
-
-
-@app.route("/abilities/")
-def all_abilities():
-    import pymongo
-
-    entries = []
-    for item in db.abilities.find({}).sort("_id", pymongo.ASCENDING):
-        item["name"] = f"<a href='./{item['_id']}'>{title(item['_id'])}</a>"
-        item["description"] = filters.description(item["description"])
-        entries.append(item)
-
-    return render_template("table.html", title="Abilities", header=["Ability", "Description"],
-                           fields=["name", "description"], entries=entries)
 
 
 @app.route("/talents/<talent_id>")
@@ -42,6 +28,36 @@ def get_talent(talent_id):
         {"tree.talents": {"$elemMatch": {"$elemMatch": {"$in": [talent_id]}}}}, {"_id": 1})]
 
     return render_template("talent.html", title=item["_id"].replace("_", " "), item=item)
+
+
+# todo auth
+@app.route("/talents/<talent_id>/edit", methods=['GET', 'POST'])
+def edit_talent(talent_id):
+    if request.method == "POST":
+        print(request.form)
+        db.talents.update_one({"_id": talent_id}, {"$set": {
+            "ranked": request.form["ranked"] if "ranked" in request.form else False,
+            "short": request.form["short"].replace("\r\n", " ").replace("\n", " "),
+            "description": request.form["description"].replace("\r\n", " ").replace("\n", " ")
+        }})
+    item = db.talents.find({"_id": talent_id})[0]
+    item["activation"] = activation(item["activation"])
+
+    return render_template("edit/talent.html", title=item["_id"].replace("_", " "), item=item)
+
+
+@app.route("/abilities/")
+def all_abilities():
+    import pymongo
+
+    entries = []
+    for item in db.abilities.find({}).sort("_id", pymongo.ASCENDING):
+        item["name"] = f"<a href='./{item['_id']}'>{item['_id'].replace('_', ' ')}</a>"
+        item["description"] = filters.description(item["description"])
+        entries.append(item)
+
+    return render_template("table.html", title="Abilities", header=["Ability", "Description"],
+                           fields=["name", "description"], entries=entries)
 
 
 @app.route("/abilities/<ability_id>")
@@ -66,21 +82,3 @@ def to_list(dic):
     for key in dic:
         out += key.replace("_", " ") + ", "
     return out[:-2]
-
-
-# todo not keen on having to do this kind of stuff, change the _id to also be capitalised?
-def title(string):
-    result = []
-    prev_letter = ' '
-
-    for ch in string:
-        if ch == "_":
-            result.append(" ")
-        elif not prev_letter.isalpha() and prev_letter != '\'':
-            result.append(ch.upper())
-        else:
-            result.append(ch.lower())
-
-        prev_letter = ch
-
-    return "".join(result)

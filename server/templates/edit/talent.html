@@ -1,0 +1,27 @@
+{% extends "talent.html" %}
+{% block content %}
+    {{ super() }}
+    <form method="post">
+        <label>
+            ID:
+            <input type="text" disabled value="{{ item._id }}" style="background: white;">
+        </label>
+        <br>
+        <label>
+            Ranked:
+            <input type="checkbox" name="ranked" {% if item.ranked %}checked="checked"{% endif %}>
+        </label>
+        <br>
+        <label>
+            Short Description:
+            <textarea name="short" cols="50" rows="5" style="background: white;">{{ item.short }}</textarea>
+        </label>
+        <br>
+        <label>
+            Long Description:
+            <textarea name="description" cols="50" rows="5" style="background: white;">{{ item.description }}</textarea>
+        </label>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
