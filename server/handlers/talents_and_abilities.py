@@ -12,6 +12,8 @@ def all_talents():
     for item in db.talents.find({}).sort("_id", pymongo.ASCENDING):
         item["name"] = f'<a href="./{item["_id"]}">{item["_id"].replace("_", " ")}</a>'
         item["activation"] = activation(item["activation"])
+        if "short" in item:
+            item["short"] = filters.description(item["short"])
         entries.append(item)
 
     return render_template("table.html", title="Talents",
