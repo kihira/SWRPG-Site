@@ -1,5 +1,4 @@
 {% extends "item.html" %}
-{% import "base.html" as base %}
 {% block item_block %}
     <div class="stat">
         <div>Damage</div>
@@ -16,12 +15,7 @@
     {{ super() }}
     <p>
         <b>Skill:</b> {{ item.skill }}<br>
-        <b>Special:</b>
-        {% if item.special %}
-            {{ item.special|special }}<br>
-        {% else %}
-            None<br>
-        {% endif %}
+        <b>Special:</b> {{ item.special|link_list("qualities") }}.<br>
         <b>Encumbrance:</b> {{ item.encumbrance }}<br>
         <b>Price:</b> {{ item.price|formatprice(item.restricted) }}<br>
         <b>Rarity:</b> {{ item.rarity }}<br>

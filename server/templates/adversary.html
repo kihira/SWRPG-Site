@@ -1,5 +1,4 @@
 {% extends "item.html" %}
-{% import "base.html" as base %}
 {% block item_block %}
     {{ super() }}
     <div class="adversary">
@@ -20,29 +19,8 @@
             <div class="block"><span>M/R DEFENSE</span><div>{{ item.stats.melee_defense }}|{{ item.stats.ranged_defense }}</div></div>
         </div>
     </div>
-    <b>Skills{% if item.level == "Minion" %} (group only){% endif %}:</b> {{ base.list(item.skills)|none }}<br>
-    <b>Talents:</b>
-    {% if not item.talents or item.talents.length == 0 %}
-        None.
-    {% else %}
-        {% for talent in item.talents %}
-            {%- if "id" in talent -%}
-                <a href="/talents/{{ talent.id }}">{{ talent.id|replace("_"," ") }}</a> {{ talent.value }}
-            {%- else -%}
-                <a href="/talents/{{ talent }}">{{ talent|replace("_"," ") }}</a>
-            {%- endif -%}
-            {{ seperator(loop.last) }}
-        {% endfor %}
-    {% endif %}
-    <br>
-    <b>Abilities:</b>
-    {% for ability in item.abilities %}
-        <a href="/abilities/{{ ability }}">{{ ability|replace("_"," ") }}</a>{{ seperator(loop.last) }}
-    {% endfor %}
-    <br>
-    <b>Equipment:</b> {{ item.equipment|none }}<br>
+    <b>Skills{% if item.level == "Minion" %} (group only){% endif %}:</b> {{ item.skills|link_list("skills") }}.<br>
+    <b>Talents:</b> {{ item.talents|link_list("talents") }}.<br>
+    <b>Abilities:</b> {{ item.abilities|link_list("abilities") }}.<br>
+    <b>Equipment:</b> {{ item.equipment|link_list("gear") }}.<br>
 {% endblock %}
-
-{%- macro seperator(last) -%}
-    {% if last %}.{% else %},{% endif %}
-{% endmacro %}

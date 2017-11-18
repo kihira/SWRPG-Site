@@ -11,7 +11,7 @@ def all_weapons():
     for weapon in db.weapons.find({}):
         weapon["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(weapon["_id"], weapon["name"]))
         weapon["price"] = filters.format_price_table(weapon["price"], weapon["restricted"])
-        weapon["special"] = filters.format_specials(weapon["special"])
+        weapon["special"] = filters.format_list(weapon["special"], "qualities")
         weapon["skill"] = Markup("<a href=\"/skills/{0}\">{1}</a>".format(weapon["skill"],
                                                                           weapon["skill"].replace("_", " ")))
         entries.append(weapon)

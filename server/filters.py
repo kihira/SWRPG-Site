@@ -2,7 +2,7 @@ from jinja2.filters import FILTERS
 import re
 
 __all__ = ["format_price_table", "format_number", "format_altitude", "format_index", "format_none",
-           "format_specials", "format_title", "description"]
+           "format_list", "format_title", "description"]
 
 symbols = {
     "BOOST": "boost",
@@ -78,12 +78,17 @@ def format_index(arr):
     return out[:-2]
 
 
-def format_specials(arr):
+def format_list(arr, url):
+    if not arr and len(arr) == 0:
+        return "None"
     out = ""
     for special in arr:
-        out += f'<a href="/qualities/{special["special"]}">{format_title(special["special"])}</a>'
-        if "rank" in special:
-            out += f" {str(special['rank'])}"
+        if type(special) == dict:
+            out += f'<a href="/{url}/{special["id"]}">{format_title(special["id"])}</a>'
+            if "value" in special:
+                out += f" {str(special['value'])}"
+        else:
+            out += f'<a href="/{url}/{special}">{format_title(special)}</a>'
         out += ", "
     return out[:-2]
 
@@ -110,7 +115,7 @@ def register():
     FILTERS["formatnum"] = format_number
     FILTERS["formatprice"] = format_price_table
     FILTERS["formatindex"] = format_index
-    FILTERS["special"] = format_specials
+    FILTERS["link_list"] = format_list
     FILTERS["none"] = format_none
     FILTERS["altitude"] = format_altitude
     FILTERS["title"] = format_title
