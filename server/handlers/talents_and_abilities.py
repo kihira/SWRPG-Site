@@ -10,12 +10,13 @@ def all_talents():
 
     entries = []
     for item in db.talents.find({}).sort("_id", pymongo.ASCENDING):
-        item["name"] = f"<a href='./{item['_id']}'>{item['_id'].replace('_', ' ')}</a>"
+        item["name"] = f'<a href="./{item["_id"]}">{item["_id"].replace("_", " ")}</a>'
         item["activation"] = activation(item["activation"])
         entries.append(item)
 
-    return render_template("table.html", title="Talents", header=["Talent", "Activation", "Ranked", "Force Sensitive"],
-                           fields=["name", "activation", "ranked", "force"], entries=entries)
+    return render_template("table.html", title="Talents",
+                           header=["Talent", "Description", "Activation", "Ranked", "Force Sensitive"],
+                           fields=["name", "short", "activation", "ranked", "force"], entries=entries)
 
 
 @app.route("/talents/<talent_id>")
@@ -36,7 +37,7 @@ def edit_talent(talent_id):
     if request.method == "POST":
         print(request.form)
         db.talents.update_one({"_id": talent_id}, {"$set": {
-            "ranked": request.form["ranked"] if "ranked" in request.form else False,
+            "ranked": True if "ranked" in request.form and request.form["ranked"] else False,
             "short": request.form["short"].replace("\r\n", " ").replace("\n", " "),
             "description": request.form["description"].replace("\r\n", " ").replace("\n", " ")
         }})

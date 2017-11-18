@@ -24,6 +24,7 @@ symbols = {
 }
 
 diff = {
+    "NONE": "",
     "SIMPLE": "Simple (-)",
     "EASY": 'Easy (<span class="symbol difficulty">d</span>)',
     "AVERAGE": 'Average (<span class="symbol difficulty">dd</span>)',
@@ -43,8 +44,8 @@ def description(s: str):
         # todo optimise? use something similar to re.sub
         s = s.replace(f"[{key}]", f'<span class="symbol {value}"></span>')
     s = re.sub(check_regex, lambda match: f"<b>{diff[match.group(1)]} {format_skill(match.group(2))} check</b>", s)
-    s = re.sub(diff_skill_regex, lambda match: f'<b>{diff[match.group(1)]} {format_skill(match.group(2))}</b>', s)
     s = re.sub(diff_regex, lambda match: f'<b>{diff[match.group(1)]}</b>', s)
+    s = re.sub(diff_skill_regex, lambda match: f'<b>{diff[match.group(1)]} {format_skill(match.group(2))}</b>', s)
     return s
 
 
