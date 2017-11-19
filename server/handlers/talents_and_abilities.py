@@ -6,19 +6,15 @@ from flask import render_template, request
 
 @app.route("/talents/")
 def all_talents():
-    import pymongo
-
-    entries = []
-    for item in db.talents.find({}).sort("_id", pymongo.ASCENDING):
-        item["name"] = f'<a href="./{item["_id"]}">{item["_id"].replace("_", " ")}</a>'
+    items = list(db.talents.find({}).sort("_id", 1))
+    for item in items:
         item["activation"] = activation(item["activation"])
         if "short" in item:
             item["short"] = filters.description(item["short"])
-        entries.append(item)
 
-    return render_template("table.html", title="Talents",
-                           header=["Talent", "Description", "Activation", "Ranked", "Force Sensitive"],
-                           fields=["name", "short", "activation", "ranked", "force"], entries=entries)
+    return render_template("table.html", title="Talents", name_header="Talent",
+                           headers=["Description", "Activation", "Ranked", "Force Sensitive"],
+                           fields=["short", "activation", "ranked", "force"], entries=items)
 
 
 @app.route("/talents/<talent_id>")
@@ -51,24 +47,21 @@ def edit_talent(talent_id):
 
 @app.route("/abilities/")
 def all_abilities():
-    import pymongo
-
-    entries = []
-    for item in db.abilities.find({}).sort("_id", pymongo.ASCENDING):
-        item["name"] = f"<a href='./{item['_id']}'>{item['_id'].replace('_', ' ')}</a>"
+    items = list(db.abilities.find({}).sort("_id", 1))
+    for item in items:
         item["description"] = filters.description(item["description"])
-        entries.append(item)
 
-    return render_template("table.html", title="Abilities", header=["Ability", "Description"],
-                           fields=["name", "description"], entries=entries)
+    return render_template("table.html", title="Abilities", name_header="Ability",
+                           headers=["Description"],
+                           fields=["description"], entries=items)
 
 
 @app.route("/abilities/<ability_id>")
 def get_ability(ability_id):
-    ability = db.abilities.find({"_id": ability_id})[0]
-    ability["description"] = filters.description(ability["description"])
+    item = db.abilities.find({"_id": ability_id})[0]
+    item["description"] = filters.description(item["description"])
 
-    return render_template("item.html", title=ability["_id"].replace("_", " "), item=ability)
+    return render_template("item.html", title=item["_id"].replace("_", " "), item=item)
 
 
 def activation(value):

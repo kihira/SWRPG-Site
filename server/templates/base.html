@@ -19,46 +19,6 @@
 </body>
 </html>
 
-{% macro table(ttitle, headers, fields, entries, has_index=True) -%}
-    <table class="item-table">
-        <caption>{{ ttitle }}</caption>
-        <thead>
-        <tr>
-            {%- block table_header scoped %}
-                {% for entry in headers %}
-                    <td>{{ entry }}</td>
-                {% endfor %}
-                {% if has_index %}
-                    <td>Index</td>
-                {% endif %}
-            {% endblock -%}
-        </tr>
-        </thead>
-        <tbody>
-        {%- block table_entries scoped %}
-            {% set category = [""] %}
-            {% for entry in entries %}
-                {% if entry.category and entry.category != category[-1] %}
-                    {% if category.append(entry.category) %}{% endif %}
-                    <!-- Hack as you can't set stuff inside scopes -->
-                    <tr>
-                        <td colspan="20">{{ entry.category }}</td>
-                    </tr>
-                {% endif %}
-                <tr>
-                    {% for field in fields %}
-                        <td>{{ entry[field] }}</td>
-                    {% endfor %}
-                    {% if entry.index %}
-                        <td>{{ entry.index|formatindex }}</td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-        {% endblock -%}
-        </tbody>
-    </table>
-{%- endmacro %}
-
 {% macro list(values) -%}
     {% for value in values %}
         {{ value }}{% if loop.last %}.{% else %}, {% endif %}

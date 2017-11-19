@@ -1,27 +1,19 @@
 from server.app import app
 from server.db import db
-from flask import Markup, render_template
+from flask import render_template
 
 
 @app.route("/specialisations/")
 @app.route("/specializations/")
 def all_specializations():
-    import pymongo
-
-    entries = []
-    for item in db.species.find({}).sort("_id", pymongo.ASCENDING):
-        item["name"] = Markup(
-            "<a href=\"./{0}\">{1}</a>".format(item["_id"], item["_id"]).replace("_", " "))
-        entries.append(item)
-
-    return render_template("table.html", title="Specializations", header=["Specializations", "Career"],
-                           fields=["name", "career"], entries=entries)
+    return render_template("table.html", title="Specializations", headers=["Career"], fields=["career"],
+                           entries=db.specializations.find({}).sort("_id", 1))
 
 
-@app.route("/specialisations/<species_id>")
-@app.route("/specializations/<species_id>")
-def get_specializations(species_id):
-    item = db.specializations.find({"_id": species_id})[0]
+@app.route("/specialisations/<object_id>")
+@app.route("/specializations/<object_id>")
+def get_specializations(object_id):
+    item = db.specializations.find({"_id": object_id})[0]
     talents = {}
     for talent in db.talents.find({"_id": {"$in": [entry for row in item["tree"]["talents"] for entry in row]}}):
         talents[talent["_id"]] = talent

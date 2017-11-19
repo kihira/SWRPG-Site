@@ -1,5 +1,43 @@
 {% extends "base.html" %}
 {% import "base.html" as base %}
 {% block content %}
-    {{ base.table(title, header, fields, entries, has_index|default(true)) }}
+    <table class="item-table">
+        <caption>{{ title }}</caption>
+        <thead>
+        <tr>
+            {%- block table_header scoped %}
+                <td>{{ name_header|default("Name") }}</td>
+                {% for entry in headers %}
+                    <td>{{ entry }}</td>
+                {% endfor %}
+                {% if has_index|default(true) %}
+                    <td>Index</td>
+                {% endif %}
+            {% endblock -%}
+        </tr>
+        </thead>
+        <tbody>
+        {%- block table_entries scoped %}
+            {% set category = [""] %}
+            {% for entry in entries %}
+                {% if entry.category and entry.category != category[-1] %}
+                    {% if category.append(entry.category) %}{% endif %}
+                    <!-- Hack as you can't set stuff inside scopes -->
+                    <tr>
+                        <td colspan="20">{{ entry.category }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td><a href="./{{ entry._id }}">{% if "name" in entry %}{{ entry.name }}{% else %}{{ entry._id|replace("_", " ") }}{% endif %}</a></td>
+                    {% for field in fields %}
+                        <td>{{ entry[field] }}</td>
+                    {% endfor %}
+                    {% if has_index|default(true) %}
+                        <td>{{ entry.index|formatindex }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% endblock -%}
+        </tbody>
+    </table>
 {% endblock %}

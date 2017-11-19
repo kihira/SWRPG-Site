@@ -1,7 +1,7 @@
 from server import filters
 from server.app import app
 from server.db import db
-from flask import Markup, render_template
+from flask import render_template
 from bson import ObjectId
 
 
@@ -13,7 +13,6 @@ def all_vehicles():
     entries = []
     for category in data:
         for vehicle in category["values"]:
-            vehicle["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(vehicle["_id"], vehicle["name"]))
             vehicle["price"] = filters.format_price_table(vehicle["price"], vehicle["restricted"])
             vehicle["crew"] = len(vehicle["crew"])
             if type(vehicle["weapons"]) == list:
@@ -22,9 +21,9 @@ def all_vehicles():
             entries.append(vehicle)
 
     return render_template("table.html", title="Vehicles",
-                           header=["Name", "Silhouette", "Speed", "Handling", "Crew", "Encumbrance", "Passengers",
-                                   "Price", "Rarity", "HP", "Weapons"],
-                           fields=["name", "silhouette", "speed", "handling", "crew", "encumbrance", "passengers",
+                           headers=["Silhouette", "Speed", "Handling", "Crew", "Encumbrance", "Passengers",
+                                    "Price", "Rarity", "HP", "Weapons"],
+                           fields=["silhouette", "speed", "handling", "crew", "encumbrance", "passengers",
                                    "price", "rarity", "hardpoints", "weapons"], entries=entries)
 
 
@@ -36,7 +35,6 @@ def all_starships():
     entries = []
     for category in data:
         for vehicle in category["values"]:
-            vehicle["name"] = Markup("<a href=\"./{0}\">{1}</a>".format(vehicle["_id"], vehicle["name"]))
             vehicle["price"] = filters.format_price_table(vehicle["price"], vehicle["restricted"])
             vehicle["crew"] = len(vehicle["crew"])
             if type(vehicle["weapons"]) == list:
@@ -45,26 +43,26 @@ def all_starships():
             entries.append(vehicle)
 
     return render_template("table.html", title="Starships",
-                           header=["Name", "Silhouette", "Speed", "Handling", "Crew", "Encumbrance", "Passengers",
-                                   "Price", "Rarity", "HP", "Weapons"],
-                           fields=["name", "silhouette", "speed", "handling", "crew", "encumbrance", "passengers",
+                           headers=["Silhouette", "Speed", "Handling", "Crew", "Encumbrance", "Passengers",
+                                    "Price", "Rarity", "HP", "Weapons"],
+                           fields=["silhouette", "speed", "handling", "crew", "encumbrance", "passengers",
                                    "price", "rarity", "hardpoints", "weapons"], entries=entries)
 
 
 @app.route("/vehicles/<object_id>")
 def get_vehicles(object_id):
-    vehicle = db.vehicles.find({"_id": ObjectId(object_id)})[0]
+    item = db.vehicles.find({"_id": ObjectId(object_id)})[0]
 
-    return render_template("vehicle.html", title=vehicle["name"], item=vehicle)
+    return render_template("vehicle.html", title=item["name"], item=item)
 
 
 @app.route("/starships/<object_id>")
 def get_starship(object_id):
-    vehicle = db.starships.find({"_id": ObjectId(object_id)})[0]
-    if type(vehicle["hyperdrive"]) == dict:
-        out = "Primary: {0}".format(vehicle["hyperdrive"]["primary"])
-        if "backup" in vehicle["hyperdrive"]:
-            out += ", Backup: {0}".format(vehicle["hyperdrive"]["backup"])
-        vehicle["hyperdrive"] = out
+    item = db.starships.find({"_id": ObjectId(object_id)})[0]
+    if type(item["hyperdrive"]) == dict:
+        out = "Primary: {0}".format(item["hyperdrive"]["primary"])
+        if "backup" in item["hyperdrive"]:
+            out += ", Backup: {0}".format(item["hyperdrive"]["backup"])
+        item["hyperdrive"] = out
 
-    return render_template("vehicle.html", title=vehicle["name"], item=vehicle)
+    return render_template("vehicle.html", title=item["name"], item=item)
