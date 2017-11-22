@@ -8,6 +8,6 @@ COPY . .
 
 ENV PYTHONUNBUFFERED 1
 
-EXPOSE 5000:5000
+EXPOSE 5000
 
 CMD [ "gunicorn", "-b", ":8000", "-w", "2", "server:app" ]
