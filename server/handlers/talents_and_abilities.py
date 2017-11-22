@@ -33,7 +33,6 @@ def get_talent(talent_id):
 @app.route("/talents/<talent_id>/edit", methods=['GET', 'POST'])
 def edit_talent(talent_id):
     if request.method == "POST":
-        print(request.form)
         db.talents.update_one({"_id": talent_id}, {"$set": {
             "ranked": True if "ranked" in request.form and request.form["ranked"] else False,
             "short": request.form["short"].replace("\r\n", " ").replace("\n", " "),
