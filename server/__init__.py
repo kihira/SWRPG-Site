@@ -1,10 +1,7 @@
 from flask import request, redirect, url_for, render_template
 from server.app import app
 from server.db import db
-from server import filters, handlers
-
-# Register custom filters
-filters.register()
+from server import handlers
 
 
 @app.route("/")

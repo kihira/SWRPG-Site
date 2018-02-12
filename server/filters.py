@@ -1,4 +1,3 @@
-from jinja2.filters import FILTERS
 import re
 
 __all__ = ["format_price_table", "format_number", "format_altitude", "format_index", "format_none",
@@ -112,7 +111,7 @@ def format_title(s: str):
     return s.replace("_", " ")
 
 
-def register():
+def register(FILTERS: dict):
     FILTERS["formatnum"] = format_number
     FILTERS["formatprice"] = format_price_table
     FILTERS["formatindex"] = format_index

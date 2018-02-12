@@ -2,3 +2,4 @@ Flask
 pymongo
 scour
 gunicorn
+pymongo[srv]
