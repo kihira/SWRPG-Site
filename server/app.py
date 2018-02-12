@@ -1,6 +1,6 @@
 from flask import Flask
 
-import filters
+from . import filters
 
 app = Flask(__name__)
 app.jinja_options = {
