@@ -15,7 +15,7 @@
 
 @teuton-fett: "Teuton Fett", "Bebas Neue", "Ubuntu", sans-serif;
 @teuton-normal: "Teuton Mager", "Bebas Neue", "Ubuntu", sans-serif;
-@itc-symbol: "ITCSymbol", "Lucida Grande", Helvetica, Arial, serif;
+@itc-symbol: 'ITC Symbol Std Book', 'Roboto Slab', serif;
 @elektra: "Elektra", "Ubuntu", sans-serif;
 
 html {
@@ -63,6 +63,11 @@ h3 {
 h2 {
   font-size: 2.1em;
   color: @darkgreen;
+  + p::first-letter {
+    font-size: 2.1em;
+    font-weight: bold;
+    color: @darkgreen;
+  }
 }
 
 h1 {
@@ -71,6 +76,19 @@ h1 {
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: @darkgold;
   word-wrap: break-word;
+}
+
+ul {
+  list-style: none;
+  li {
+    &::before {
+      content: '•';
+      color: @darkred;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
+    }
+  }
 }
 
 table.talent {

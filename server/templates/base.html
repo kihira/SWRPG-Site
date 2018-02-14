@@ -7,6 +7,7 @@
     <meta name="format-detection" content="telephone=no">
     <title>{{ title }}</title>
     <link href="{{ url_for("static", filename="style.css") }}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:300" rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for("static", filename="icons/apple-touch-icon.png") }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for("static", filename="icons/favicon-32x32.png") }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for("static", filename="icons/favicon-16x16.png") }}">
@@ -15,6 +16,19 @@
     <meta name="theme-color" content="#ffffff">
 </head>
 <body>
+{% block menu %}
+    {% set nav = [
+            ('/', 'index', 'Index'),
+            ('/equipment', 'equipment', 'Equipment'),
+            ('/character', 'character', 'Character'),
+            ('/vehicles', 'vehicles', 'Vehicles')
+    ]-%}
+    <ul>
+        {% for href, id, caption in nav %}
+            <li><a href="{{ href }}">{{ caption }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
 {% block content %}{% endblock %}
 </body>
 </html>
