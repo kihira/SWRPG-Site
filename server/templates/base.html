@@ -16,20 +16,28 @@
     <meta name="theme-color" content="#ffffff">
 </head>
 <body>
-{% block menu %}
-    {% set nav = [
+<div style="display: inline-block; width: 15%; min-width: 175px; vertical-align: top;">
+    {% block menu %}
+        {% set nav = [
             ('/', 'index', 'Index'),
-            ('/equipment', 'equipment', 'Equipment'),
-            ('/character', 'character', 'Character'),
-            ('/vehicles', 'vehicles', 'Vehicles')
+            ('/adversaries', 'aversaries', 'Adversaries'),
+            ('/armor', 'armor', 'Armor'),
+            ('/attachments', 'attachments', 'Attachments'),
+            ('/books', 'books', 'Books'),
+            ('/gear', 'gear', 'Gear'),
+            ('/talents', 'talents', 'Talents'),
+            ('/weapons', 'weapons', 'Weapons')
     ]-%}
-    <ul>
-        {% for href, id, caption in nav %}
-            <li><a href="{{ href }}">{{ caption }}</a></li>
-        {% endfor %}
-    </ul>
-{% endblock %}
-{% block content %}{% endblock %}
+        <ul>
+            {% for href, id, caption in nav %}
+                <li><a href="{{ href }}">{{ caption }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endblock %}
+</div>
+<div style="display: inline-block; width: 83%;">
+    {% block content %}{% endblock %}
+</div>
 </body>
 </html>
 
