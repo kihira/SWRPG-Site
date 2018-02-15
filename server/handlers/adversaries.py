@@ -12,7 +12,12 @@ def process_items(items: list):
         item["abilities"] = filters.format_list(item["abilities"], "abilities")
         equipment = ""
         for i in item["equipment"]["weapons"]:
-            i = db.weapons.find({"_id": i})[0]
+            if type(i) == dict:
+                equipment += f'{i["quantity"]} '
+                print(i["id"])
+                i = db.weapons.find({"_id": i["id"]})[0]
+            else:
+                i = db.weapons.find({"_id": i})[0]
             equipment += f'<a href="/weapons/{i["_id"]}">{i["name"]}</a>, '
         for i in item["equipment"]["armor"]:
             i = db.armor.find({"_id": i})[0]
@@ -68,7 +73,12 @@ def get_adversary(object_id):
     equipment = []
     # Compile it all into one list so we can compile some stuff together
     for weapon in item["equipment"]["weapons"]:
-        weapon = db.weapons.find({"_id": weapon})[0]
+        if type(weapon) == dict:
+            quantity = weapon["quantity"]
+            weapon = db.weapons.find({"_id": weapon["id"]})[0]
+            weapon["quantity"] = quantity
+        else:
+            weapon = db.weapons.find({"_id": weapon})[0]
         weapon["type"] = "weapon"
         equipment.append(weapon)
     for armor in item["equipment"]["armor"]:
@@ -79,7 +89,9 @@ def get_adversary(object_id):
         gear = db.gear.find({"_id": gear})[0]
         gear["type"] = "gear"
         equipment.append(gear)
-    equipment.append([other for other in item["equipment"]["other"]])
+    equipment.extend([other for other in item["equipment"]["other"]])
     item["equipment"] = equipment
+
+    item["name"] = f'{item["name"]} [{item["level"]}]'
 
     return render_template("adversary.html", title=item["name"], item=item)
