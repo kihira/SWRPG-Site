@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% import "base.html" as base %}
 {% block content %}
-    <table class="item-table">
+    <table id="data" class="item-table">
         <caption>{{ title }}</caption>
         <thead>
         <tr>
@@ -40,4 +40,15 @@
         {% endblock -%}
         </tbody>
     </table>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/rg-1.0.2/datatables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#data').DataTable({
+                "paging": false
+            });
+        })
+    </script>
 {% endblock %}
