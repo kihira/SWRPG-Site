@@ -14,10 +14,9 @@
         <div>{{ item.hardpoints }}</div>
     </div>
     {{ super() }}
-{#    <b>Defense:</b> {{ item.defense }}<br>
-    <b>Soak:</b> {{ item.soak }}<br>
-    <b>Hard Points:</b> {{ item.hardpoints }}<br>#}
-    <b>Encumbrance:</b> {{ item.encumbrance }}<br>
-    <b>Price:</b> {{ item.price|formatprice(item.restricted) }}<br>
-    <b>Rarity:</b> {{ item.rarity }}<br>
+    <div style="padding-top: 5px">
+        <b>Encumbrance:</b> {{ item.encumbrance }}<br>
+        <b>Price:</b> {{ item.price|formatprice(item.restricted) }}<br>
+        <b>Rarity:</b> {{ item.rarity }}<br>
+    </div>
 {% endblock %}

@@ -20,21 +20,24 @@
         </div>
     </div>
     <b>Skills{% if item.level == "Minion" %} (group only){% endif %}:</b> <span>{{ item.skills|link_list("skills") }}.</span><br>
-    <b>Talents:</b> <span>{{ item.talents|link_list("talents") }}.</span><br>
-    <b>Abilities:</b> <span>{{ item.abilities|link_list("abilities") }}.</span><br>
-        <b>Equipment:</b><span>
-        {% for i in item.equipment -%}
-            {% if i.type %}
-                {%- if i.type == "weapon" -%}
-                    {% if i.quantity %}{{ i.quantity }} {% endif %}<a href="/weapons/{{ i._id }}">{{ i.name }}</a> ({{ i.skill }}; Damage {{ i.damage }}; Critical {{ i.critical }}; Range[{{ i.range }}]{% if i.special %}; {{ i.special|link_list("qualities") }}{% endif %})
-                {%- elif i.type == "armor" -%}
-                    <a href="/armor/{{ i._id }}">{{ i.name }}</a> {% if i.soak and i.soak > 0 %}(+{{ i.soak }} soak){% endif %}{# todo defense #}
-                {%- elif i.type == "gear" -%}
-                    <a href="/gear/{{ i._id }}">{{ i.name }}</a>
-                {%- endif -%}
-            {%- else -%}
-                {{ i }}
+    <b>Talents:</b> {{ item.talents|link_list("talents") }}.<br>
+    <b>Abilities:</b> {{ item.abilities|link_list("abilities") }}.<br>
+    <b>Equipment:</b>
+    {% for i in item.equipment -%}
+        {% if i.type %}
+            {%- if i.type == "weapon" -%}
+                {% if i.quantity %}{{ i.quantity }} {% endif %}<a href="/weapons/{{ i._id }}">{{ i.name }}</a> (
+                {{ i.skill }}; Damage {{ i.damage }}; Critical {{ i.critical }}; Range[{{ i.range }}]{% if i.special %};
+                {{ i.special|link_list("qualities") }}{% endif %})
+            {%- elif i.type == "armor" -%}
+                <a href="/armor/{{ i._id }}">{{ i.name }}</a> {% if i.soak and i.soak > 0 %}(+{{ i.soak }}
+                soak){% endif %}{# todo defense #}
+            {%- elif i.type == "gear" -%}
+                <a href="/gear/{{ i._id }}">{{ i.name }}</a>
             {%- endif -%}
-            {%- if not loop.last %}, {% endif -%}
-        {%- endfor -%}.<br></span>
+        {%- else -%}
+            {{ i }}
+        {%- endif -%}
+        {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}.<br>
 {% endblock %}
