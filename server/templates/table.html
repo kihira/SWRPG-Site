@@ -3,6 +3,9 @@
 {% set categories = categories|default(True) %}
 {% set has_index = has_index|default(True) %}
 {% block content %}
+    <div class="filters">
+
+    </div>
     <table id="data" class="item-table">
         <caption>{{ title }}</caption>
         <thead>
@@ -39,56 +42,12 @@
 {% endblock %}
 {% block scripts %}
     {{ super() }}
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/rg-1.0.2/datatables.min.js"></script>
-    <script type="text/javascript">
+    <!-- todo look into webpack and compiling this all together -->
+    <script src="https://cdn.datatables.net/v/dt/dt-1.10.16/rg-1.0.2/datatables.min.js"></script>
+    <script src="{{ url_for("static", filename="js/table.js") }}"></script>
+    <script>
         $(document).ready(function () {
-            // Parse url params
-            var params = {};
-            location.search.substr(1).split("&").forEach(function (value) { params[value.split("=")[0]] = value.split("=")[1]; });
-
-            var table = $('#data').DataTable({
-                paging: false,
-                search: {
-                    search: params["search"] || ""
-                },
-                columns: [
-                    {% if categories %}
-                        {
-                            data: "category",
-                            //type: "num", // Used to make it sort using data-order attribute todo not sorting correctly when second sort is applied
-                            visible: false
-                        },
-                    {% endif %}
-                    { data: "name" },
-                    {% for field in fields %}
-                        { data: "{{ field }}" },
-                    {% endfor %}
-                    {% if has_index %}
-                        { data: "index" }
-                    {% endif %}
-                ],
-                {% if categories %}
-                    orderFixed: [0, 'asc'],
-                    rowGroup: {
-                        dataSrc: "category"
-                    }
-                {% endif %}
-            });
-
-            var buildUrl = function () {
-                var url = window.location.href.split("?")[0] + "?";
-                var params = {};
-                table.order().forEach(function (col) {
-                    params[col[0]] = col[1]
-                });
-                if (table.search()) params["search"] = table.search();
-                window.history.pushState(null, null, url + $.param(params));
-
-                console.log(table.order.fixed());
-            };
-
-            table.on('order.dt', buildUrl);
-            table.on('search.dt', buildUrl);
+            init({{ fields }}, {{ has_index|lower }}, {{ categories|lower }});
         });
     </script>
 {% endblock %}
