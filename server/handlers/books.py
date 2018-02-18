@@ -5,9 +5,9 @@ from flask import render_template
 
 @app.route("/books/")
 def all_books():
-    return render_template("table.html", title="Books", name_header = "Book",
+    return render_template("table.html", title="Books", name_header="Book", categories=False, has_index=False,
                            headers=["System", "Key", "Initials"],
-                           fields=["system", "key", "_id"], entries=list(db.books.find({})), has_index=False)
+                           fields=["system", "key", "_id"], entries=list(db.books.find({})))
 
 
 @app.route("/books/<book_id>")

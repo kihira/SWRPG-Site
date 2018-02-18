@@ -12,7 +12,7 @@ def all_armor():
     for item in items:
         item["price"] = filters.format_price_table(item["price"], item["restricted"])
 
-    return render_template("table.html", title="Armor", name_header="Type",
+    return render_template("table.html", title="Armor", name_header="Type", categories=False,
                            headers=["Defense", "Soak", "Price", "Encumbrance", "Hard Points", "Rarity"],
                            fields=["defense", "soak", "price", "encumbrance", "hardpoints", "rarity"],
                            entries=items)

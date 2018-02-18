@@ -17,7 +17,6 @@ def all_weapons():
     return render_template("table.html", title="Weapons",
                            headers=["Skill", "Dam", "Crit", "Range", "Encum", "HP", "Price", "Rarity", "Special"],
                            fields=["skill", "damage", "critical", "range", "encumbrance", "hardpoints", "price", "rarity", "special"],
-                           categories={"Energy": 0, "Slugthrowers": 1, "Melee": 2, "Explosives": 3, "Grenades": 4, "Portable Missles": 5, "Brawl": 6, "Thrown": 7, "Other": 8, "Lightsaber": 9, "Lightsaber Hilts": 10, "Micro-Rockets": 11},
                            entries=items)
 
 

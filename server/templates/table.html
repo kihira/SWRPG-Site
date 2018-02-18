@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% import "base.html" as base %}
+{% set categories = categories|default(True) %}
+{% set has_index = has_index|default(True) %}
 {% block content %}
     <table id="data" class="item-table">
         <caption>{{ title }}</caption>
@@ -11,7 +13,7 @@
                 {% for entry in headers %}
                     <td>{{ entry }}</td>
                 {% endfor %}
-                {% if has_index|default(true) %}
+                {% if has_index %}
                     <td>Index</td>
                 {% endif %}
             {% endblock -%}
@@ -21,12 +23,12 @@
         {%- block table_entries scoped %}
             {% for entry in entries %}
                 <tr>
-                    {% if categories %}<td data-order="{{ categories[entry.category] }}">{{ entry.category }}</td>{% endif %}
+                    {% if categories %}<td>{{ entry.category }}</td>{% endif %}
                     <td><a href="./{{ entry._id }}">{% if "name" in entry %}{{ entry.name }}{% else %}{{ entry._id|replace("_", " ") }}{% endif %}</a></td>
                     {% for field in fields %}
                         <td>{{ entry[field] }}</td>
                     {% endfor %}
-                    {% if has_index|default(true) %}
+                    {% if has_index %}
                         <td>{{ entry.index|formatindex }}</td>
                     {% endif %}
                 </tr>
@@ -46,26 +48,31 @@
 
             var table = $('#data').DataTable({
                 paging: false,
-                //ajax: "./json",
+                search: {
+                    search: params["search"] || ""
+                },
                 columns: [
-                    {
-                        data: "category",
-                        //type: "num", // Used to make it sort using data-order attribute todo not sorting correctly when second sort is applied
-                        visible: false
-                    },
+                    {% if categories %}
+                        {
+                            data: "category",
+                            //type: "num", // Used to make it sort using data-order attribute todo not sorting correctly when second sort is applied
+                            visible: false
+                        },
+                    {% endif %}
                     { data: "name" },
                     {% for field in fields %}
                         { data: "{{ field }}" },
                     {% endfor %}
-                    { data: "index" }
+                    {% if has_index %}
+                        { data: "index" }
+                    {% endif %}
                 ],
-                search: {
-                    search: params["search"] || ""
-                },
-                orderFixed: [0, 'asc'],
-                rowGroup: {
-                    dataSrc: "category"
-                }
+                {% if categories %}
+                    orderFixed: [0, 'asc'],
+                    rowGroup: {
+                        dataSrc: "category"
+                    }
+                {% endif %}
             });
 
             var buildUrl = function () {

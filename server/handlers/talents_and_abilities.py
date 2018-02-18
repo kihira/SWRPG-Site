@@ -12,9 +12,10 @@ def all_talents():
         if "short" in item:
             item["short"] = filters.description(item["short"])
 
-    return render_template("table.html", title="Talents", name_header="Talent",
+    return render_template("table.html", title="Talents", name_header="Talent", categories=False,
                            headers=["Description", "Activation", "Ranked", "Force Sensitive"],
-                           fields=["short", "activation", "ranked", "force"], entries=items)
+                           fields=["short", "activation", "ranked", "force"],
+                           entries=items)
 
 
 @app.route("/talents/<talent_id>")
@@ -50,7 +51,7 @@ def all_abilities():
     for item in items:
         item["description"] = filters.description(item["description"])
 
-    return render_template("table.html", title="Abilities", name_header="Ability",
+    return render_template("table.html", title="Abilities", name_header="Ability", categories=False,
                            headers=["Description"],
                            fields=["description"], entries=items)
 

@@ -452,14 +452,6 @@ table.item-table {
   td {
     border: 1px solid grey;
     padding: 3px 10px 3px 5px;
-
-    // Category header
-    &[colspan="20"],
-    &[colspan="11"] {
-      background: black;
-      color: white;
-      font-weight: bold;
-    }
   }
 
   thead {
@@ -487,6 +479,11 @@ table.item-table {
       }
       td:not(:first-child) {
         text-align: right;
+      }
+      &.group td {
+        background: black;
+        color: white;
+        font-weight: bold;
       }
     }
   }

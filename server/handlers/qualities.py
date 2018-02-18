@@ -11,9 +11,10 @@ def all_qualities():
         quality["ranked"] = "Yes" if quality["ranked"] else "No"
         quality["description"] = filters.description(quality["description"])
 
-    return render_template("table.html", title="Qualities", name_header="Quality",
+    return render_template("table.html", title="Qualities", name_header="Quality", categories=False,
                            headers=["Active", "Ranked", "Effect"],
-                           fields=["active", "ranked", "description"], entries=items)
+                           fields=["active", "ranked", "description"],
+                           entries=items)
 
 
 @app.route("/qualities/<quality_id>")

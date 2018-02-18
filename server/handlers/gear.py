@@ -13,7 +13,8 @@ def all_gear():
 
     return render_template("table.html", title="Items", name_header="Item",
                            headers=["Price", "Encumbrance", "Rarity"],
-                           fields=["price", "encumbrance", "rarity"], entries=items)
+                           fields=["price", "encumbrance", "rarity"],
+                           entries=items)
 
 
 @app.route("/gear/<object_id>")
