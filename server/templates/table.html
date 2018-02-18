@@ -6,6 +6,7 @@
         <thead>
         <tr>
             {%- block table_header scoped %}
+                {% if categories %}<td>Category</td>{% endif %}
                 <td>{{ name_header|default("Name") }}</td>
                 {% for entry in headers %}
                     <td>{{ entry }}</td>
@@ -18,16 +19,9 @@
         </thead>
         <tbody>
         {%- block table_entries scoped %}
-            {% set category = [""] %}
             {% for entry in entries %}
-                {% if entry.category and entry.category != category[-1] %}
-                    {% if category.append(entry.category) %}{% endif %}
-                    <!-- Hack as you can't set stuff inside scopes -->
-                    <tr>
-                        <td colspan="20">{{ entry.category }}</td>
-                    </tr>
-                {% endif %}
                 <tr>
+                    {% if categories %}<td data-order="{{ categories[entry.category] }}">{{ entry.category }}</td>{% endif %}
                     <td><a href="./{{ entry._id }}">{% if "name" in entry %}{{ entry.name }}{% else %}{{ entry._id|replace("_", " ") }}{% endif %}</a></td>
                     {% for field in fields %}
                         <td>{{ entry[field] }}</td>
@@ -46,9 +40,48 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/rg-1.0.2/datatables.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#data').DataTable({
-                "paging": false
+            // Parse url params
+            var params = {};
+            location.search.substr(1).split("&").forEach(function (value) { params[value.split("=")[0]] = value.split("=")[1]; });
+
+            var table = $('#data').DataTable({
+                paging: false,
+                //ajax: "./json",
+                columns: [
+                    {
+                        data: "category",
+                        //type: "num", // Used to make it sort using data-order attribute todo not sorting correctly when second sort is applied
+                        visible: false
+                    },
+                    { data: "name" },
+                    {% for field in fields %}
+                        { data: "{{ field }}" },
+                    {% endfor %}
+                    { data: "index" }
+                ],
+                search: {
+                    search: params["search"] || ""
+                },
+                orderFixed: [0, 'asc'],
+                rowGroup: {
+                    dataSrc: "category"
+                }
             });
-        })
+
+            var buildUrl = function () {
+                var url = window.location.href.split("?")[0] + "?";
+                var params = {};
+                table.order().forEach(function (col) {
+                    params[col[0]] = col[1]
+                });
+                if (table.search()) params["search"] = table.search();
+                window.history.pushState(null, null, url + $.param(params));
+
+                console.log(table.order.fixed());
+            };
+
+            table.on('order.dt', buildUrl);
+            table.on('search.dt', buildUrl);
+        });
     </script>
 {% endblock %}

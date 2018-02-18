@@ -1,0 +1,18 @@
+{
+  "title": "SWRPG Site",
+  "version": "0.1.0",
+  "name": "swrpg-site",
+  "author": {
+    "name": "Kihira"
+  },
+  "private": true,
+  "homepage": "https://kihira.uk",
+  "dependencies": {
+    "less": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/datatables.net": "^1.10.8",
+    "@types/datatables.net-rowgroup": "^1.0.0",
+    "@types/jquery": "^3.3.0"
+  }
+}
