@@ -4,6 +4,7 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
     const params: {[key: string]: string} = {};
     location.search.substr(1).split("&").forEach((value) => { params[value.split("=")[0]] = value.split("=")[1]; });
 
+    const columns: ColumnSettings[] = [{data: "name"}];
     const settings: DataTables.Settings = {
         paging: false,
         search: {
@@ -11,17 +12,17 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
         },
     };
 
-    const columns: ColumnSettings[] = [];
     if (categories) {
         columns.push({data: "category", visible: false});
-        settings.orderFixed = [0, "asc"];
+        settings.orderFixed = [1, "asc"];
         settings.rowGroup = {dataSrc: "category"};
     }
-    columns.push({data: "name"});
+
     fields.forEach((value) => { columns.push({data: value}); });
     if (hasIndex) {
         columns.push({data: "index"});
     }
+
     settings.columns = columns;
 
     const table = $("#data").DataTable(settings);

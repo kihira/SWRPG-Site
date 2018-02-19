@@ -11,8 +11,9 @@
         <thead>
         <tr>
             {%- block table_header scoped %}
-                {% if categories %}<td>Category</td>{% endif %}
                 <td>{{ name_header|default("Name") }}</td>
+                {% if categories %}
+                    <td>Category</td>{% endif %}
                 {% for entry in headers %}
                     <td>{{ entry }}</td>
                 {% endfor %}
@@ -26,8 +27,9 @@
         {%- block table_entries scoped %}
             {% for entry in entries %}
                 <tr>
-                    {% if categories %}<td>{{ entry.category }}</td>{% endif %}
                     <td><a href="./{{ entry._id }}">{% if "name" in entry %}{{ entry.name }}{% else %}{{ entry._id|replace("_", " ") }}{% endif %}</a></td>
+                    {% if categories %}
+                        <td>{{ entry.category }}</td>{% endif %}
                     {% for field in fields %}
                         <td>{{ entry[field] }}</td>
                     {% endfor %}

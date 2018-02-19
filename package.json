@@ -7,6 +7,9 @@
   },
   "private": true,
   "homepage": "https://kihira.uk",
+  "scripts": {
+    "watch": "tsc --watch"
+  },
   "dependencies": {
     "less": "^3.0.1",
     "tslint": "5.9.1",
