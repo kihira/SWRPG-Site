@@ -28,6 +28,7 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
 
     const columns: ColumnSettings[] = [{data: "name"}];
     const settings: DataTables.Settings = {
+        fixedHeader: true,
         paging: false,
         search: {
             search: params.search || "",
