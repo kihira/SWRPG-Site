@@ -12,7 +12,7 @@ def all_weapons():
     for item in items:
         item["price"] = filters.format_price_table(item["price"], item["restricted"])
         item["special"] = filters.format_list(item["special"], "qualities")
-        item["skill"] = Markup("<a href=\"/skills/{0}\">{1}</a>".format(item["skill"], item["skill"].replace("_", " ")))
+        item["skill"] = Markup(f'<a href="/skills/{item["skill"]}">{item["skill"].replace("_", " ")}</a>')
 
     return render_template("table.html", title="Weapons",
                            headers=["Skill", "Dam", "Crit", "Range", "Encum", "HP", "Price", "Rarity", "Special"],

@@ -1,3 +1,5 @@
+import re
+
 from server import filters
 from server.app import app
 from server.db import db
@@ -7,7 +9,7 @@ from bson import ObjectId
 
 @app.route("/gear/")
 def all_gear():
-    items = list(db.gear.find({}))
+    items = list(db.gear.find({"category": {"$not": re.compile("Adversary")}}))
     for item in items:
         item["price"] = filters.format_price_table(item["price"], item["restricted"])
 
