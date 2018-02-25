@@ -2,7 +2,7 @@ from flask import Flask
 
 from . import filters
 
-app = Flask(__name__)
+app = Flask(__name__.split('.')[0], static_folder="../static")
 app.jinja_options = {
     "extensions": ['jinja2.ext.autoescape', 'jinja2.ext.with_'],
     "autoescape": False

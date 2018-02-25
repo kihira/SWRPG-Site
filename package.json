@@ -8,7 +8,8 @@
   "private": true,
   "homepage": "https://kihira.uk",
   "scripts": {
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "less": "lessc ./assets/style.less ./static/style.css"
   },
   "dependencies": {
     "less": "^3.0.1",

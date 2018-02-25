@@ -3,7 +3,7 @@ instance/
 .webassets-cache
 venv/
 node_modules/
-server/static/fonts/
-server/static/js/*.js*
+fonts/
 .idea/
 *.css
+static/js/

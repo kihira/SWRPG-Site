@@ -3,7 +3,7 @@
     "target": "es5",
     "module": "commonjs",
     "sourceMap": true,
-    //"outDir": "./dist",
+    "outDir": "./static/js",
     "strict": true,
     "esModuleInterop": true
   }
