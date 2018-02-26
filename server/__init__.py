@@ -4,12 +4,6 @@ from server.db import db
 from server import handlers
 
 
-@app.route("/")
-def main_page():
-    return render_template("table.html", title="Hello", header=["First", "Second"],
-                           entries=[["1", "2"]])
-
-
 @app.route("/add-planet", methods=['GET', 'POST'])
 def add_planet():
     if request.method == "POST":
