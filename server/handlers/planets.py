@@ -21,7 +21,8 @@ def all_planets():
 @app.route("/planet/<planet_id>")
 def get_planet(planet_id):
     item = db.planets.find({"_id": planet_id})
-    if len(item) != 1:
+    if item.count() != 1:
         return url_for("404")
+    item = item[0]
 
-    return render_template("item.html", title=item["_id"].replace("_", " "), item=item[0])
+    return render_template("item.html", title=item["_id"].replace("_", " "), item=item)

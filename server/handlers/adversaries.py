@@ -72,7 +72,7 @@ def get_rebels():
 @validate_objectid
 def get_adversary(object_id: str):
     item = db.adversaries.find({"_id": ObjectId(object_id)})
-    if len(item) != 1:
+    if item.count() != 1:
         return url_for("404")
     item = item[0]
 

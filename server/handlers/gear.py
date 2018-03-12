@@ -24,7 +24,8 @@ def all_gear():
 @validate_objectid
 def get_gear(object_id):
     item = db.gear.find({"_id": ObjectId(object_id)})
-    if len(item) != 1:
+    if item.count() != 1:
         return url_for("404")
+    item = item[0]
 
-    return render_template("item.html", title=item["name"], item=item[0])
+    return render_template("item.html", title=item["name"], item=item)

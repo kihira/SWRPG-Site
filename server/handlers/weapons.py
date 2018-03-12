@@ -25,7 +25,7 @@ def all_weapons():
 @validate_objectid
 def get_weapon(object_id):
     item = db.weapons.find({"_id": ObjectId(object_id)})
-    if len(item) != 1:
+    if item.count() != 1:
         return url_for("404")
     item = item[0]
     item["skill"] = Markup("<a href=\"/skills/{0}\">{1}</a>".format(item["skill"], item["skill"].replace("_", " ")))

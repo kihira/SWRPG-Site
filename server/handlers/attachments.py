@@ -21,7 +21,8 @@ def all_attachments():
 @validate_objectid
 def get_attachment(object_id):
     item = db.attachments.find({"_id": ObjectId(object_id)})
-    if len(item) != 1:
+    if item.count() != 1:
         return url_for("404")
+    item = item[0]
 
-    return render_template("attachments.html", title=item["name"], item=item[0])
+    return render_template("attachments.html", title=item["name"], item=item)

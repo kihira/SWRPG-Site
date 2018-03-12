@@ -3,7 +3,7 @@
 {% block item_block %}
     {{ super() }}
     <p class="no-indent">
-        <b>Base Modifications:</b> {{ item.modifiers|symbol }}
+        <b>Base Modifications:</b> {% if item.modifiers %}{{ item.modifiers|description }}{% endif %}
         <br>
         <b>Modification Options:</b> {{ base.list(item.modification_options) }}
     </p>

@@ -16,7 +16,7 @@ def all_specializations():
 @validate_objectid
 def get_specializations(object_id):
     item = db.specializations.find({"_id": object_id})
-    if len(item) != 1:
+    if item.count() != 1:
         return url_for("404")
     item = item[0]
 

@@ -21,7 +21,7 @@ def all_talents():
 @app.route("/talents/<talent_id>")
 def get_talent(talent_id):
     item = db.talents.find({"_id": talent_id})
-    if len(item) != 1:
+    if item.count() != 1:
         return url_for("404")
     item = item[0]
     item["activation"] = activation(item["activation"])
@@ -61,7 +61,10 @@ def all_abilities():
 
 @app.route("/abilities/<ability_id>")
 def get_ability(ability_id):
-    item = db.abilities.find({"_id": ability_id})[0]
+    item = db.abilities.find({"_id": ability_id})
+    if item.count() != 1:
+        return url_for("404")
+    item = item[0]
     item["description"] = filters.description(item["description"])
 
     return render_template("item.html", title=item["_id"].replace("_", " "), item=item)

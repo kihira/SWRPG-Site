@@ -20,7 +20,8 @@ def all_qualities():
 @app.route("/qualities/<quality_id>")
 def get_quality(quality_id):
     item = db.qualities.find({"_id": quality_id})
-    if len(item) != 1:
+    if item.count() != 1:
         return url_for("404")
+    item = item[0]
 
-    return render_template("quality.html", title=item["_id"].replace("_", " "), item=item[0])
+    return render_template("quality.html", title=item["_id"].replace("_", " "), item=item)

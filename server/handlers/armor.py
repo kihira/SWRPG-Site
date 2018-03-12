@@ -24,7 +24,8 @@ def all_armor():
 @validate_objectid
 def armor_item(object_id: str):
     item = db.armor.find({"_id": ObjectId(object_id)})
-    if len(item) != 1:
+    if item.count() != 1:
         return url_for("404")
+    item = item[0]
 
-    return render_template("armor.html", title=item["name"], item=item[0])
+    return render_template("armor.html", title=item["name"], item=item)

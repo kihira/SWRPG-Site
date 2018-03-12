@@ -54,18 +54,20 @@ def all_starships():
 @validate_objectid
 def get_vehicles(object_id):
     item = db.vehicles.find({"_id": ObjectId(object_id)})
-    if len(item) != 1:
+    if item.count() != 1:
         return url_for("404")
+    item = item[0]
 
-    return render_template("vehicle.html", title=item["name"], item=item[0])
+    return render_template("vehicle.html", title=item["name"], item=item)
 
 
 @app.route("/starships/<object_id>")
 @validate_objectid
 def get_starship(object_id):
     item = db.starships.find({"_id": ObjectId(object_id)})
-    if len(item) != 1:
+    if item.count() != 1:
         return url_for("404")
+    item = item[0]
 
     if type(item["hyperdrive"]) == dict:
         out = "Primary: {0}".format(item["hyperdrive"]["primary"])
@@ -73,4 +75,4 @@ def get_starship(object_id):
             out += ", Backup: {0}".format(item["hyperdrive"]["backup"])
         item["hyperdrive"] = out
 
-    return render_template("vehicle.html", title=item["name"], item=item[0])
+    return render_template("vehicle.html", title=item["name"], item=item)
