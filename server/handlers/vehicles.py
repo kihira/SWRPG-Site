@@ -1,7 +1,8 @@
+from decorators import validate_objectid
 from server import filters
 from server.app import app
 from server.db import db
-from flask import render_template
+from flask import render_template, url_for
 from bson import ObjectId
 
 
@@ -50,19 +51,26 @@ def all_starships():
 
 
 @app.route("/vehicles/<object_id>")
+@validate_objectid
 def get_vehicles(object_id):
-    item = db.vehicles.find({"_id": ObjectId(object_id)})[0]
+    item = db.vehicles.find({"_id": ObjectId(object_id)})
+    if len(item) != 1:
+        return url_for("404")
 
-    return render_template("vehicle.html", title=item["name"], item=item)
+    return render_template("vehicle.html", title=item["name"], item=item[0])
 
 
 @app.route("/starships/<object_id>")
+@validate_objectid
 def get_starship(object_id):
-    item = db.starships.find({"_id": ObjectId(object_id)})[0]
+    item = db.starships.find({"_id": ObjectId(object_id)})
+    if len(item) != 1:
+        return url_for("404")
+
     if type(item["hyperdrive"]) == dict:
         out = "Primary: {0}".format(item["hyperdrive"]["primary"])
         if "backup" in item["hyperdrive"]:
             out += ", Backup: {0}".format(item["hyperdrive"]["backup"])
         item["hyperdrive"] = out
 
-    return render_template("vehicle.html", title=item["name"], item=item)
+    return render_template("vehicle.html", title=item["name"], item=item[0])

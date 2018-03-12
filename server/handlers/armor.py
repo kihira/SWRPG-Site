@@ -1,7 +1,8 @@
+from decorators import validate_objectid
 from server import filters
 from server.app import app
 from server.db import db
-from flask import render_template
+from flask import render_template, url_for
 from bson import ObjectId
 
 
@@ -20,7 +21,10 @@ def all_armor():
 
 @app.route("/armour/<object_id>")
 @app.route("/armor/<object_id>")
-def armor_item(object_id):
-    item = db.armor.find({"_id": ObjectId(object_id)})[0]
+@validate_objectid
+def armor_item(object_id: str):
+    item = db.armor.find({"_id": ObjectId(object_id)})
+    if len(item) != 1:
+        return url_for("404")
 
-    return render_template("armor.html", title=item["name"], item=item)
+    return render_template("armor.html", title=item["name"], item=item[0])

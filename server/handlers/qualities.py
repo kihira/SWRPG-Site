@@ -1,7 +1,7 @@
 from server.app import app
 from server.db import db
 from server import filters
-from flask import render_template
+from flask import render_template, url_for
 
 
 @app.route("/qualities/")
@@ -19,6 +19,8 @@ def all_qualities():
 
 @app.route("/qualities/<quality_id>")
 def get_quality(quality_id):
-    item = db.qualities.find({"_id": quality_id})[0]
+    item = db.qualities.find({"_id": quality_id})
+    if len(item) != 1:
+        return url_for("404")
 
-    return render_template("quality.html", title=item["_id"].replace("_", " "), item=item)
+    return render_template("quality.html", title=item["_id"].replace("_", " "), item=item[0])

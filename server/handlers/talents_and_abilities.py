@@ -1,7 +1,7 @@
 from server.app import app
 from server.db import db
 from server import filters
-from flask import render_template, request
+from flask import render_template, request, url_for
 
 
 @app.route("/talents/")
@@ -20,7 +20,10 @@ def all_talents():
 
 @app.route("/talents/<talent_id>")
 def get_talent(talent_id):
-    item = db.talents.find({"_id": talent_id})[0]
+    item = db.talents.find({"_id": talent_id})
+    if len(item) != 1:
+        return url_for("404")
+    item = item[0]
     item["activation"] = activation(item["activation"])
 
     # todo is there a better way to do this? seems messy

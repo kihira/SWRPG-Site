@@ -1,6 +1,7 @@
+from decorators import validate_objectid
 from server.app import app
 from server.db import db
-from flask import render_template
+from flask import render_template, url_for
 
 
 @app.route("/books/")
@@ -12,6 +13,8 @@ def all_books():
 
 @app.route("/books/<book_id>")
 def get_book(book_id):
-    item = db.books.find({"_id": book_id})[0]
+    item = db.books.find({"_id": book_id})
+    if len(item) != 1:
+        return url_for("404")
 
-    return render_template("book.html", title=f'{item["system"]}: {item["name"]}', item=item)
+    return render_template("book.html", title=f'{item["system"]}: {item["name"]}', item=item[0])

@@ -1,7 +1,9 @@
+from bson import ObjectId
+from decorators import validate_objectid
 from server.app import app
 from server.db import db
 from server import filters
-from flask import render_template
+from flask import render_template, url_for
 import pymongo
 
 
@@ -67,9 +69,13 @@ def get_rebels():
 
 
 @app.route("/adversaries/<object_id>")
-def get_adversary(object_id):
-    from bson import ObjectId
-    item = db.adversaries.find({"_id": ObjectId(object_id)})[0]
+@validate_objectid
+def get_adversary(object_id: str):
+    item = db.adversaries.find({"_id": ObjectId(object_id)})
+    if len(item) != 1:
+        return url_for("404")
+    item = item[0]
+
     equipment = []
     # Compile it all into one list so we can compile some stuff together
     for weapon in item["equipment"]["weapons"]:

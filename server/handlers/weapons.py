@@ -1,6 +1,7 @@
 from bson import ObjectId
-from flask import Markup, render_template
+from flask import Markup, render_template, url_for
 
+from decorators import validate_objectid
 from server import filters
 from server.app import app
 from server.db import db
@@ -21,8 +22,12 @@ def all_weapons():
 
 
 @app.route("/weapons/<object_id>")
+@validate_objectid
 def get_weapon(object_id):
-    item = db.weapons.find({"_id": ObjectId(object_id)})[0]
+    item = db.weapons.find({"_id": ObjectId(object_id)})
+    if len(item) != 1:
+        return url_for("404")
+    item = item[0]
     item["skill"] = Markup("<a href=\"/skills/{0}\">{1}</a>".format(item["skill"], item["skill"].replace("_", " ")))
 
     return render_template("weapon.html", title=item["name"], item=item)

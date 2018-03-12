@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template, request, url_for
 
 from server.app import app
 from server.db import db
@@ -16,9 +16,11 @@ def all_species():
 
 @app.route("/species/<species_id>")
 def get_species(species_id):
-    item = db.species.find({"_id": species_id})[0]
+    item = db.species.find({"_id": species_id})
+    if len(item) != 1:
+        return url_for("404")
 
-    return render_template("item.html", title=item["_id"].replace("_", " "), item=item)
+    return render_template("item.html", title=item["_id"].replace("_", " "), item=item[0])
 
 
 # todo auth

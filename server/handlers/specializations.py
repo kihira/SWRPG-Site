@@ -1,6 +1,7 @@
+from decorators import validate_objectid
 from server.app import app
 from server.db import db
-from flask import render_template
+from flask import render_template, url_for
 
 
 @app.route("/specialisations/")
@@ -12,8 +13,13 @@ def all_specializations():
 
 @app.route("/specialisations/<object_id>")
 @app.route("/specializations/<object_id>")
+@validate_objectid
 def get_specializations(object_id):
-    item = db.specializations.find({"_id": object_id})[0]
+    item = db.specializations.find({"_id": object_id})
+    if len(item) != 1:
+        return url_for("404")
+    item = item[0]
+
     talents = {}
     for talent in db.talents.find({"_id": {"$in": [entry for row in item["tree"]["talents"] for entry in row]}}):
         talents[talent["_id"]] = talent
