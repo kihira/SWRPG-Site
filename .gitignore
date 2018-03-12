@@ -7,3 +7,4 @@ fonts/
 .idea/
 *.css
 static/js/
+static/img/*.svg

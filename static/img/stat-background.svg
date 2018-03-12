@@ -1,18 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="114.65mm" height="63.5mm" version="1.1" viewBox="0 0 406.25 225" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-<metadata>
-<rdf:RDF>
-<cc:Work rdf:about="">
-<dc:format>image/svg+xml</dc:format>
-<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-<dc:title/>
-</cc:Work>
-</rdf:RDF>
-</metadata>
-<g transform="translate(-8.3036 -2.7194)">
-<path d="m41.647 77.999h332.32l14.045 14.414v96.703l-20.051 19.033h-320.77l-20.051-19.033v-96.703z" fill="#72cddc"/>
-<path d="m81.993 4.3308h253.14l43.143 42.279v83.698l-43.143 43.143h-253.14l-43.575-43.143v-83.698z" fill="#bcae9a" stroke="#495558" stroke-width="1.1"/>
-<path d="m84.89 11.791h246.92l39.786 39.786v73.765l-39.786 39.786h-246.92l-39.786-39.786v-73.765z" fill="#fff" stroke="#495558" stroke-width="5.1064"/>
-<path d="m87.472 17.387h241.9l23.11 23.11-23.11 23.11h-241.9l-23.11-23.11z" fill="#495558"/>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="433.333" height="240" viewBox="0 0 406.25 225"><path d="M33.344 75.28H365.66l14.045 14.413v96.703l-20.051 19.033H38.888l-20.051-19.033V89.693z" fill="#72cddc"/><path d="M73.69 1.611h253.143l43.143 42.28v83.698l-43.143 43.143H73.69l-43.576-43.143V43.89z" fill="#bcae9a" stroke="#495558" stroke-width="1.1"/><path d="M76.587 9.071h246.917l39.786 39.786v73.765l-39.786 39.786H76.587L36.8 122.622V48.857z" fill="#fff" stroke="#495558" stroke-width="5.106"/><path d="M79.168 14.667h241.898l23.11 23.11-23.11 23.11H79.168l-23.11-23.11z" fill="#495558"/></svg>
