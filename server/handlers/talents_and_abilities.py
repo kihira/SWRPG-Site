@@ -1,7 +1,7 @@
 from server.app import app
 from server.db import db
 from server import filters
-from flask import render_template, request, url_for
+from flask import render_template, request, abort
 
 
 @app.route("/talents/")
@@ -22,7 +22,7 @@ def all_talents():
 def get_talent(talent_id):
     item = db.talents.find({"_id": talent_id})
     if item.count() != 1:
-        return url_for("404")
+        return abort(404)
     item = item[0]
     item["activation"] = activation(item["activation"])
 
@@ -63,7 +63,7 @@ def all_abilities():
 def get_ability(ability_id):
     item = db.abilities.find({"_id": ability_id})
     if item.count() != 1:
-        return url_for("404")
+        return abort(404)
     item = item[0]
     item["description"] = filters.description(item["description"])
 

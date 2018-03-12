@@ -1,7 +1,6 @@
-from decorators import validate_objectid
 from server.app import app
 from server.db import db
-from flask import render_template, url_for
+from flask import render_template, abort
 
 
 @app.route("/books/")
@@ -15,7 +14,7 @@ def all_books():
 def get_book(book_id):
     item = db.books.find({"_id": book_id})
     if item.count() != 1:
-        return url_for("404")
+        return abort(404)
     item = item[0]
 
     return render_template("book.html", title=f'{item["system"]}: {item["name"]}', item=item)

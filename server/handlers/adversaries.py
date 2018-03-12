@@ -3,7 +3,7 @@ from decorators import validate_objectid
 from server.app import app
 from server.db import db
 from server import filters
-from flask import render_template, url_for
+from flask import render_template, abort
 import pymongo
 
 
@@ -73,7 +73,7 @@ def get_rebels():
 def get_adversary(object_id: str):
     item = db.adversaries.find({"_id": ObjectId(object_id)})
     if item.count() != 1:
-        return url_for("404")
+        return abort(404)
     item = item[0]
 
     equipment = []

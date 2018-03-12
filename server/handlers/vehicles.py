@@ -2,7 +2,7 @@ from decorators import validate_objectid
 from server import filters
 from server.app import app
 from server.db import db
-from flask import render_template, url_for
+from flask import render_template, abort
 from bson import ObjectId
 
 
@@ -55,7 +55,7 @@ def all_starships():
 def get_vehicles(object_id):
     item = db.vehicles.find({"_id": ObjectId(object_id)})
     if item.count() != 1:
-        return url_for("404")
+        return abort(404)
     item = item[0]
 
     return render_template("vehicle.html", title=item["name"], item=item)
@@ -66,7 +66,7 @@ def get_vehicles(object_id):
 def get_starship(object_id):
     item = db.starships.find({"_id": ObjectId(object_id)})
     if item.count() != 1:
-        return url_for("404")
+        return abort(404)
     item = item[0]
 
     if type(item["hyperdrive"]) == dict:

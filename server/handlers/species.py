@@ -1,4 +1,4 @@
-from flask import render_template, request, url_for
+from flask import render_template, request, abort
 
 from server.app import app
 from server.db import db
@@ -18,7 +18,7 @@ def all_species():
 def get_species(species_id):
     item = db.species.find({"_id": species_id})
     if item.count() != 1:
-        return url_for("404")
+        return abort(404)
     item = item[0]
 
     return render_template("item.html", title=item["_id"].replace("_", " "), item=item)

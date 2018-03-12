@@ -4,7 +4,7 @@ from decorators import validate_objectid
 from server import filters
 from server.app import app
 from server.db import db
-from flask import render_template, url_for
+from flask import render_template, abort
 from bson import ObjectId
 
 
@@ -25,7 +25,7 @@ def all_gear():
 def get_gear(object_id):
     item = db.gear.find({"_id": ObjectId(object_id)})
     if item.count() != 1:
-        return url_for("404")
+        return abort(404)
     item = item[0]
 
     return render_template("item.html", title=item["name"], item=item)

@@ -1,6 +1,6 @@
 from server.app import app
 from server.db import db
-from flask import render_template, url_for
+from flask import render_template, abort
 
 
 @app.route("/planets/")
@@ -22,7 +22,7 @@ def all_planets():
 def get_planet(planet_id):
     item = db.planets.find({"_id": planet_id})
     if item.count() != 1:
-        return url_for("404")
+        return abort(404)
     item = item[0]
 
     return render_template("item.html", title=item["_id"].replace("_", " "), item=item)
