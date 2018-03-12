@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -10,6 +10,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ request.path }}" />
     {% if image %}<meta property="og:image" content="{{ image }}" />{% endif %}
+    <meta name="twitter:card" content="summary" />
     <link href="{{ url_for("static", filename="style.css") }}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:300,700" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
