@@ -26,8 +26,9 @@
     {% for i in item.equipment -%}
         {% if i.type %}
             {%- if i.type == "weapon" -%}
-                {% if i.quantity %}{{ i.quantity }} {% endif %}<a href="/weapons/{{ i._id }}">{{ i.name }}</a> (
-                {{ i.skill }}; Damage {{ i.damage }}; Critical {{ i.critical }}; Range[{{ i.range }}]{% if i.special %};
+                {% if i.quantity %}{{ i.quantity }} {% endif %}<a href="/weapons/{{ i._id }}">{{ i.name -}}</a>
+                (<a href="/skills/{{- i.skill }}">{{- i.skill|title|replace("(", "[")|replace(")", "]") }}</a>;
+                c  Damage {{ i.damage }}; Critical {{ i.critical }}; Range [{{ i.range }}]; {% if i.special %}
                 {{ i.special|link_list("qualities") }}{% endif %})
             {%- elif i.type == "armor" -%}
                 <a href="/armor/{{ i._id }}">{{ i.name }}</a> {% if i.soak and i.soak > 0 %}(+{{ i.soak }}
