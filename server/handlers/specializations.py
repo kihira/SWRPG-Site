@@ -1,4 +1,4 @@
-from decorators import validate_objectid
+from server.decorators import validate_objectid
 from server.app import app
 from server.db import db
 from flask import render_template, abort

@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask import flash, redirect, url_for, abort
+from flask import redirect, abort
 
 
 def validate_objectid(func):

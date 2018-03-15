@@ -1,6 +1,6 @@
 import re
 
-from decorators import validate_objectid
+from server.decorators import validate_objectid
 from server import filters
 from server.app import app
 from server.db import db
