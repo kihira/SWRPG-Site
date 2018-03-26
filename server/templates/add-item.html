@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+</head>
+<body>
+<form method="post">
+    {% for field in model.fields %}
+        <label for="{{ field.mongo_name }}">{{ field.human_name }}</label><input id="{{ field.mongo_name }}">
+        {% if field.autocomplete %}
+            <input type="hidden" id="{{ field.mongo_name }}-id">
+        {% endif %}
+    {% endfor %}
+</form>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    $(function () {
+        const field_autocomplete = {
+            field_name: [
+                {
+                    value: "objectId",
+                    label: "Field Name"
+                }
+            ]
+        };
+
+        {% for field in model.fields %}
+            {% if field.autocomplete %}
+                $("#{{ field.mongo_name }}").autocomplete({
+                    minLength: 0,
+                    source: field_autocomplete["{{ field.mongo_name }}"],
+                    focus: function (event, ui) {
+                        $("#{{ field.mongo_name }}").val(ui.item.label);
+                        return false;
+                    },
+                    select: function (event, ui) {
+                        $("#{{ field.mongo_name }}").val(ui.item.label);
+                        $("#{{ field.mongo_name }}-id").val(ui.item.value);
+
+                        return false;
+                    }
+                });
+            {% endif %}
+        {% endfor %}
+    })
+</script>
+</html>
