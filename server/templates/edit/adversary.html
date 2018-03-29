@@ -1,0 +1,137 @@
+{% extends "item.html" %}
+{% block content %}
+    {{ super() }}
+    <form method="post">
+        <label>
+            ID:
+            <input type="text" disabled value="{{ item._id }}" style="background: white;">
+        </label>
+        <br>
+        <label>
+            Name:
+            <input type="text" id="name" name="name" value="{{ item.name }}" required>
+        </label>
+        <label>
+            Type:
+            <select id="type" name="type">
+                <option>Minion</option>
+                <option>Rival</option>
+                <option>Nemesis</option>
+            </select>
+        </label>
+        <br>
+        {% set characteristics = item.characteristics|default({}) %}
+        <div style="display: flex">
+            <label>
+                Brawn:
+                <input type="number" name="brawn" value="{{ characteristics.brawn|default(1) }}" required>
+            </label>
+            <label>
+                Agility:
+                <input type="number" name="agility" value="{{ characteristics.agility|default(1) }}" required>
+            </label>
+            <label>
+                Intellect:
+                <input type="number" name="intellect" value="{{ characteristics.intellect|default(1) }}" required>
+            </label>
+            <label>
+                Cunning:
+                <input type="number" name="cunning" value="{{ characteristics.cunning|default(1) }}" required>
+            </label>
+            <label>
+                Willpower:
+                <input type="number" name="willpower" value="{{ characteristics.willpower|default(1) }}" required>
+            </label>
+            <label>
+                Presence:
+                <input type="number" name="presence" value="{{ characteristics.presence|default(1) }}" required>
+            </label>
+        </div>
+        <label>
+            Soak:
+            <input type="number" name="soak" value="{{ item.stats.soak|default(0) }}" required>
+        </label>
+        <br>
+        <label>
+            Wounds:
+            <input type="number" name="wounds" value="{{ item.stats.wounds|default(1) }}" required>
+        </label>
+        <br>
+        <label>
+            <!-- todo enable/disable if nemesis or not -->
+            Strain:
+            <input type="number" name="strain" value="{{ item.stats.strain|default(0) }}">
+        </label>
+        <br>
+        <label>
+            Melee Defense:
+            <input type="number" name="melee_defense" value="{{ item.stats.melee_defense|default(0) }}">
+        </label>
+        <br>
+        <label>
+            Ranged Defense:
+            <input type="number" name="ranged_defense" value="{{ item.stats.ranged_defense|default(0) }}">
+        </label>
+        <br>
+        <div class="repeatable-weapon">
+            {% for weapon in item.weapons %}
+                <label>
+                    Weapon:
+                    <input type="text" name="weapon-{{ loop.index }}" value="{{ weapon._id }}">
+                </label>
+            {% endfor %}
+        </div>
+        <div class="repeatable-talents">
+            {% for talent in item.talents %}
+                <label>
+                    Armor:
+                    <input type="text" name="talent-{{ loop.index }}" value="{{ talent._id }}">
+                </label>
+            {% endfor %}
+        </div>
+        <div class="repeatable-abilities">
+            {% for ability in item.abilities %}
+                <label>
+                    Armor:
+                    <input type="text" name="ability-{{ loop.index }}" value="{{ ability._id }}">
+                </label>
+            {% endfor %}
+        </div>
+        <div class="repeatable-armor">
+            {% for armor in item.armor %}
+                <label>
+                    Armor:
+                    <input type="text" name="armor-{{ loop.index }}" value="{{ armor._id }}">
+                </label>
+            {% endfor %}
+        </div>
+        <div class="repeatable-gear">
+            {% for gear in item.gear %}
+                <label>
+                    Gear:
+                    <input type="text" name="gear-{{ loop.index }}" value="{{ gear._id }}">
+                </label>
+            {% endfor %}
+        </div>
+        <div class="repeatable-other">
+            {% for other in item.other %}
+                <label>
+                    Other:
+                    <input type="text" name="other-{{ loop.index }}" value="{{ other._id }}">
+                </label>
+            {% endfor %}
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(function () {
+            $("#type").on("change", function () {
+                if (this.value === "Nemesis") $("#name").prop("disabled", false);
+                else $("#name").prop("disabled", true);
+            })
+        });
+    </script>
+{% endblock %}

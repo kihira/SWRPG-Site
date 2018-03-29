@@ -1,0 +1,37 @@
+{% extends "item.html" %}
+{% block content %}
+    {{ super() }}
+    <form method="post">
+        <label>
+            ID/Index:
+            <input type="text" name="_id" required value="{{ item._id }}" style="background: white;">
+        </label>
+        <br>
+        <label>
+            SKU:
+            <input type="text" name="sku" required value="{{ item.sku }}">
+        </label>
+        <br>
+        <label>
+            ISBN:
+            <input type="text" name="isbn" required value="{{ item.isbn }}">
+        </label>
+        <br>
+        <label>
+            Product Page:
+            <input type="text" name="ffg_url" required value="{{ item.ffg_url }}">
+        </label>
+        <br>
+        <label>
+            Release Date:
+            <input type="date" name="release_date" required value="{{ item.release_data }}">
+        </label>
+        <br>
+        <label>
+            Description:
+            <textarea name="description" cols="50" rows="5" style="background: white;">{{ item.description }}</textarea>
+        </label>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

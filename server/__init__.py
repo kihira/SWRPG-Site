@@ -33,10 +33,10 @@ def add_planet():
             "conditions": request.form["conditions"],
             "background": request.form["background"]
         }
-        db.planets.insert(planet)
+        db.planets.insert_one(planet)
         print(planet)
         return redirect(url_for("add_planet"))
-    return render_template("add-planet.html")
+    return render_template("edit/add-planet.html")
 
 
 def strip_array(array):

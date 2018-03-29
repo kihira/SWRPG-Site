@@ -10,7 +10,7 @@
     {% for field in model.fields %}
         <label for="{{ field.mongo_name }}">{{ field.human_name }}</label><input id="{{ field.mongo_name }}">
         {% if field.autocomplete %}
-            <input type="hidden" id="{{ field.mongo_name }}-id">
+            <input type="hidden" id="{{ field.mongo_name }}-data">
         {% endif %}
     {% endfor %}
 </form>
@@ -39,7 +39,7 @@
                     },
                     select: function (event, ui) {
                         $("#{{ field.mongo_name }}").val(ui.item.label);
-                        $("#{{ field.mongo_name }}-id").val(ui.item.value);
+                        $("#{{ field.mongo_name }}-data").val(ui.item.value);
 
                         return false;
                     }
