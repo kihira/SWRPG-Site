@@ -70,7 +70,8 @@ def edit_armor(object_id: str):
 
     if request.method == "POST":
         new_item = get_form_data()
-        result: UpdateResult = db.armor.update_one({"_id": item["_id"]}, new_item)
-        return render_template("edit/armor.html", title=item["name"], item=item, updated=(result.modified_count == 1))
+        result: UpdateResult = db.armor.update_one({"_id": item["_id"]}, {"$set": new_item})
+        return render_template("edit/armor.html", title=item["name"], item=new_item,
+                               updated=(result.modified_count == 1))
     # return the template with values filled out if we haven't received any data
     return render_template("edit/armor.html", title=item["name"], item=item)

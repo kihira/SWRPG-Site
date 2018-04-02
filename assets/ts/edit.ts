@@ -17,7 +17,7 @@ class RepeatableSection {
 
     $(fieldset)
       .after(this.container)
-      .hide();
+      .remove();
   }
 
   // todo add support for more nested documents (specifically if something has 2 of the same weapon)
@@ -38,7 +38,7 @@ class RepeatableSection {
 
   private remove = () => {
     $(this).parent().remove();
-  };
+  }
 
   private addNew = () => {
     this.sectionsCount += 1;
@@ -52,7 +52,7 @@ class RepeatableSection {
       })
       .end()
       .appendTo(this.container);
-  };
+  }
 }
 
 const repeatableSections: { [key: string]: RepeatableSection } = {};
