@@ -1,5 +1,6 @@
 @import "fonts";
 @import "mixins";
+@import "edit";
 
 @even-row: #bfbdba;
 @odd-row: #ececec;
@@ -12,11 +13,6 @@
 @challenge: rgb(209, 35, 42);
 @ability: rgb(63, 172, 73);
 @proficiency: rgb(255, 241, 0);
-
-@teuton-fett: 'Teuton Fett', 'ForgottenFuturistRg-Bold', sans-serif;
-@teuton-normal: 'Teuton Mager', 'ForgottenFuturistRg-Regular', sans-serif;
-@itc-symbol: 'ITC Symbol Std Book', 'Roboto Slab', serif;
-@elektra: 'Elektra', 'Ubuntu', sans-serif;
 
 html {
   text-rendering: optimizeLegibility;
@@ -36,7 +32,11 @@ a {
   }
 }
 
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
   font-family: @elektra;
   font-weight: bold;
   text-transform: uppercase;
@@ -82,7 +82,7 @@ ul {
   list-style: none;
   li {
     &::before {
-      content: '•';
+      content: "•";
       color: @darkred;
       display: inline-block;
       width: 1em;
@@ -92,8 +92,8 @@ ul {
 }
 
 table.talent {
-  margin-left:auto;
-  margin-right:auto;
+  margin-left: auto;
+  margin-right: auto;
   tr td {
     width: 200px;
     vertical-align: top;
@@ -167,7 +167,8 @@ table.talent {
     + p {
       text-indent: 15px;
     }
-    &.no-indent { // todo not keen on this method, put more stuff in divs?
+    &.no-indent {
+      // todo not keen on this method, put more stuff in divs?
       text-indent: 0 !important;
     }
   }
@@ -304,7 +305,7 @@ table.talent {
     }
     &-hull {
       margin-top: 1%;
-      margin-left: 17.5%
+      margin-left: 17.5%;
     }
   }
 
@@ -352,19 +353,19 @@ table.talent {
   font-size: 1em;
 
   &.threat::before {
-    content: "t"
+    content: "t";
   }
   &.advantage::before {
-    content: "a"
+    content: "a";
   }
   &.success::before {
-    content: "s"
+    content: "s";
   }
   &.triumph::before {
-    content: "x"
+    content: "x";
   }
   &.failure::before {
-    content: "f"
+    content: "f";
   }
   &.despair::before {
     content: "y";
@@ -373,7 +374,7 @@ table.talent {
     content: "Y";
   }
   &.force-dark::before {
-    content: "z"
+    content: "z";
   }
   &.force-light::before {
     content: "z";

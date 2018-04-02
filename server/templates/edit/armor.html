@@ -1,6 +1,6 @@
 {% extends "item.html" %}
+{% set item = item|default({}) %}
 {% block content %}
-    {% set item = item|default({}) %}
     {% block status %} <!-- todo move this into a base editing class? -->
         {% if updated %}
             <div class="updated">
@@ -16,12 +16,12 @@
     <form method="post">
         <label>
             ID:
-            <input type="text" name="_id" disabled value="{{ item._id|default("") }}" style="background: white;">
+            <input type="text" name="_id" disabled value="{{ item._id|default("") }}">
         </label>
         <br>
         <label>
             Name:
-            <input type="text" name="name" required value="{{ item.name|default("") }}" style="background: white;">
+            <input type="text" name="name" required value="{{ item.name|default("") }}">
         </label>
         <br>
         <label>
@@ -61,10 +61,24 @@
         <br>
         <label>
             Description:
-            <textarea name="description" cols="50" rows="5"
-                      style="background: white;">{{ item.description|default("") }}</textarea>
+            <textarea name="description" cols="50" rows="5">{{ item.description|default("") }}</textarea>
         </label>
         <br>
+        {% block indexes %}
+            <fieldset id="index">
+                <label for="index_entry">Index:</label>
+                <input type="text" id="index_entry" name="index">
+            </fieldset>
+        {% endblock %}
         <input type="submit" value="Submit">
     </form>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for("static", filename="js/edit.js") }}"></script>
+    <script>
+      $(function() {
+        repeatableSections["index"].addExisting({{ item.index|default([]) }});
+      });
+    </script>
 {% endblock %}

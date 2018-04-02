@@ -8,6 +8,21 @@ from flask import render_template, abort, request
 from bson import ObjectId
 
 
+def get_form_data():
+    return {
+        "name": request.form["name"],
+        "defense": request.form["defense"],
+        "soak": request.form["soak"],
+        "hardpoints": request.form["hardpoints"],
+        "encumbrance": request.form["encumbrance"],
+        "price": request.form["price"],
+        "restricted": request.form.get("restricted", False),
+        "rarity": request.form["rarity"],
+        "description": request.form["description"],
+        "index": request.form.getlist("index")
+    }
+
+
 @app.route("/armour/")
 @app.route("/armor/")
 def all_armor():
@@ -37,18 +52,7 @@ def armor_item(object_id: str):
 @app.route("/armor/add", methods=['GET', 'POST'])
 def add_armor():
     if request.method == "POST":
-        # todo support adding index
-        item = {
-            "name": request.form["name"],
-            "defense": request.form["defense"],
-            "soak": request.form["soak"],
-            "hardpoints": request.form["hardpoints"],
-            "encumbrance": request.form["encumbrance"],
-            "price": request.form["price"],
-            "restricted": request.form.get("restricted", False),
-            "rarity": request.form["rarity"],
-            "description": request.form["description"]
-        }
+        item = get_form_data()
         result: InsertOneResult = db.armor.insert_one(item)
         item["_id"] = result.inserted_id
         return render_template("edit/armor.html", item=item, added=True)
@@ -65,17 +69,7 @@ def edit_armor(object_id: str):
     item = item[0]
 
     if request.method == "POST":
-        new_item = {
-            "name": request.form["name"],
-            "defense": request.form["defense"],
-            "soak": request.form["soak"],
-            "hardpoints": request.form["hardpoints"],
-            "encumbrance": request.form["encumbrance"],
-            "price": request.form["price"],
-            "restricted": request.form.get("restricted", False),
-            "rarity": request.form["rarity"],
-            "description": request.form["description"]
-        }
+        new_item = get_form_data()
         result: UpdateResult = db.armor.update_one({"_id": item["_id"]}, new_item)
         return render_template("edit/armor.html", title=item["name"], item=item, updated=(result.modified_count == 1))
     # return the template with values filled out if we haven't received any data
