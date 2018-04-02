@@ -10,15 +10,15 @@ from bson import ObjectId
 
 def get_form_data():
     return {
-        "name": request.form["name"],
-        "defense": request.form["defense"],
-        "soak": request.form["soak"],
-        "hardpoints": request.form["hardpoints"],
-        "encumbrance": request.form["encumbrance"],
-        "price": request.form["price"],
+        "name": request.form.get("name", ""),
+        "defense": request.form.get("defense", 0),
+        "soak": request.form.get("soak", 0),
+        "hardpoints": request.form.get("hardpoints", 0),
+        "encumbrance": request.form.get("encumbrance", 0),
+        "price": request.form.get("price", 0),
         "restricted": request.form.get("restricted", False),
-        "rarity": request.form["rarity"],
-        "description": request.form["description"],
+        "rarity": request.form.get("rarity", 0),
+        "description": request.form.get("description", ""),
         "index": request.form.getlist("index")
     }
 
