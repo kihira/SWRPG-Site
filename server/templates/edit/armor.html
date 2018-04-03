@@ -51,12 +51,3 @@
     </label>
     <br>
 {% endblock %}
-{% block scripts %}
-    {{ super() }}
-    <script src="{{ url_for("static", filename="js/edit.js") }}"></script>
-    <script>
-      $(function() {
-        repeatableSections["index"].addExisting({{ item.index|default([]) }});
-      });
-    </script>
-{% endblock %}
