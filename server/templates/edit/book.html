@@ -4,30 +4,24 @@
         ID/Index:
         <input type="text" name="_id" required value="{{ item._id|default("") }}">
     </label>
-    <br>
     <label>
         SKU:
         <input type="text" name="sku" required value="{{ item.sku|default("") }}">
     </label>
-    <br>
     <label>
         ISBN:
         <input type="text" name="isbn" required value="{{ item.isbn|default("") }}">
     </label>
-    <br>
     <label>
         Product Page:
         <input type="url" name="ffg_url" required value="{{ item.ffg_url|default("") }}">
     </label>
-    <br>
     <label>
         Release Date:
         <input type="date" name="release_date" required value="{{ item.release_date|default("") }}">
     </label>
-    <br>
     <label>
         Description:
-        <textarea name="description" cols="50" rows="5" style="background: white;">{{ item.description }}</textarea>
+        <textarea name="description" cols="50" rows="5">{{ item.description }}</textarea>
     </label>
-    <br>
 {% endblock %}

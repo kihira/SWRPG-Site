@@ -4,50 +4,40 @@
         ID:
         <input type="text" name="_id" disabled value="{{ item._id|default("") }}">
     </label>
-    <br>
     <label>
         Name:
         <input type="text" name="name" required value="{{ item.name|default("") }}">
     </label>
-    <br>
     <label>
         Defense:
         <input type="number" name="defense" required value="{{ item.defense|default(0) }}">
     </label>
-    <br>
     <label>
         Soak:
         <input type="number" name="soak" required value="{{ item.soak|default(0) }}">
     </label>
-    <br>
     <label>
         Hardpoints:
         <input type="number" name="hardpoints" required value="{{ item.hardpoints|default(0) }}">
     </label>
-    <br>
     <label>
         Encumbrance:
         <input type="number" name="encumbrance" required value="{{ item.encumbrance|default(0) }}">
     </label>
-    <br>
     <label>
         Price:
         <input type="number" name="price" required value="{{ item.price|default(0) }}">
     </label>
-    <br>
     <label>
         Restricted:
         <input type="checkbox" name="restricted" {% if item.restricted %}checked="checked"{% endif %}>
     </label>
-    <br>
     <label>
         Rarity:
         <input type="number" name="rarity" required value="{{ item.rarity|default(0) }}">
     </label>
-    <br>
     <label>
         Description:
         <textarea name="description" cols="50" rows="5">{{ item.description|default("") }}</textarea>
     </label>
-    <br>
 {% endblock %}
