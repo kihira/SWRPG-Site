@@ -11,7 +11,6 @@ model = Model([
     TextareaField("description", "Long Description"),
     SelectField("activation", "Activation", options=[
         {"display": "Passive", "value": "passive"},
-        {"display": "Active", "value": "active"},  # is this even shown in the books? must check
         {"display": "Active (Action)", "value": "active_action"},  # todo this isn't compat with current model
         {"display": "Active (Incidental)", "value": "active_incidental"},
         {"display": "Active (Maneuver)", "value": "active_maneuver"},
