@@ -46,6 +46,18 @@ class SelectField(Field):
         self.options = options
 
 
+class ArrayField(Field):
+    field: Field
+
+    def __init__(self, field: Field):
+        super().__init__(field.mongo_name, field.human_name, html_type="array")
+
+        self.field = field
+
+    def get_value(self, form: MultiDict):
+        return form.getlist(self.mongo_name)
+
+
 class Model:
     fields: [Field]
 

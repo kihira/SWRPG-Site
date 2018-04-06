@@ -1,32 +1,42 @@
 {% extends "edit/base.html" %}
 {% block form %}
     {% for field in model.fields %}
-        <label>{{ field.human_name }}
-            {% if field.html_type == "checkbox" %}
-                <input name="{{ field.mongo_name }}" type="checkbox" {% if field.value %}checked="checked"{% endif %}>
-            {% elif field.html_type == "textarea" %}
-                <textarea name="{{ field.mongo_name }}" cols="50" rows="5">{{ field.value|default("") }}</textarea>
-            {% elif field.html_type == "select" %}
-                <select name="{{ field.mongo_name }}">
-                    {% for option in field.options %}
-                        {% if option.value %}
-                            <option value="{{ option.value }}">{{ option.display }}</option>
-                        {% else %}
-                            <option>{{ option }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-            {% else %}
-                <input name="{{ field.mongo_name }}" type="{{ field.html_type }}" value="{{ field.value|default("") }}"
-                       {% if field.readonly %}disabled{% endif %}>
-            {% endif %}
-        </label>
-        {% if field.autocomplete %}
-            <input type="hidden" id="{{ field.mongo_name }}-data">
+        {% if field.html_type == "array" %}
+            <fieldset id="{{ field.mongo_name }}">
+                {{ render_field(field.field) }}
+            </fieldset>
+        {% else %}
+            {{ render_field(field) }}
         {% endif %}
     {% endfor %}
 {% endblock %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+{% macro render_field(field) %}
+    <label>{{ field.human_name }}
+        {% if field.html_type == "checkbox" %}
+            <input name="{{ field.mongo_name }}" type="checkbox" {% if field.value %}checked="checked"{% endif %}>
+        {% elif field.html_type == "textarea" %}
+            <textarea name="{{ field.mongo_name }}" cols="50" rows="5">{{ field.value|default("") }}</textarea>
+        {% elif field.html_type == "select" %}
+            <select name="{{ field.mongo_name }}">
+                {% for option in field.options %}
+                    {% if option.value %}
+                        <option value="{{ option.value }}">{{ option.display }}</option>
+                    {% else %}
+                        <option>{{ option }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        {% else %}
+            <input name="{{ field.mongo_name }}" type="{{ field.html_type }}" value="{{ field.value|default("") }}"
+                   {% if field.readonly %}disabled{% endif %}>
+        {% endif %}
+    </label>
+    {% if field.autocomplete %}
+        <input type="hidden" id="{{ field.mongo_name }}-data">
+    {% endif %}
+{% endmacro %}
+
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
   $(function() {
@@ -59,4 +69,3 @@
     {% endfor %}
   });
 </script>
-</html>
