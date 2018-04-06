@@ -14,9 +14,11 @@
 {% macro render_field(field) %}
     <label>{{ field.human_name }}
         {% if field.html_type == "checkbox" %}
-            <input name="{{ field.mongo_name }}" type="checkbox" {% if field.value %}checked="checked"{% endif %}>
+            <input name="{{ field.mongo_name }}" type="checkbox"
+                   {% if item[field.mongo_name] %}checked="checked"{% endif %}>
         {% elif field.html_type == "textarea" %}
-            <textarea name="{{ field.mongo_name }}" cols="50" rows="5">{{ field.value|default("") }}</textarea>
+            <textarea name="{{ field.mongo_name }}" cols="50"
+                      rows="5">{{ item[field.mongo_name]|default("") }}</textarea>
         {% elif field.html_type == "select" %}
             <select name="{{ field.mongo_name }}">
                 {% for option in field.options %}
@@ -28,7 +30,8 @@
                 {% endfor %}
             </select>
         {% else %}
-            <input name="{{ field.mongo_name }}" type="{{ field.html_type }}" value="{{ field.value|default("") }}"
+            <input name="{{ field.mongo_name }}" type="{{ field.html_type }}"
+                   value="{{ item[field.mongo_name]|default("") }}"
                    {% if field.readonly %}disabled{% endif %}>
         {% endif %}
     </label>
