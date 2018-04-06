@@ -1,7 +1,23 @@
+from model import Model, Field, CheckboxField, TextareaField, SelectField
 from server.app import app
 from server.db import db
 from server import filters
 from flask import render_template, request, abort
+
+model = Model([
+    Field("_id", "ID"),
+    CheckboxField("ranked", "Ranked"),
+    TextareaField("short", "Short Description"),
+    TextareaField("description", "Long Description"),
+    SelectField("activation", "Activation", options=[
+        {"display": "Passive", "value": "passive"},
+        {"display": "Active", "value": "active"},  # is this even shown in the books? must check
+        {"display": "Active (Action)", "value": "active_action"},  # todo this isn't compat with current model
+        {"display": "Active (Incidental)", "value": "active_incidental"},
+        {"display": "Active (Maneuver)", "value": "active_maneuver"},
+        {"display": "Active (Out Of Turn)", "value": "active_oot"},
+    ])
+])
 
 
 @app.route("/talents/")
@@ -38,14 +54,24 @@ def get_talent(talent_id):
 def edit_talent(talent_id):
     if request.method == "POST":
         db.talents.update_one({"_id": talent_id}, {"$set": {
-            "ranked": True if "ranked" in request.form and request.form["ranked"] else False,
+            "ranked": request.form.get("ranked", False),
             "short": request.form["short"].replace("\r\n", " ").replace("\n", " "),
             "description": request.form["description"].replace("\r\n", " ").replace("\n", " ")
         }})
     item = db.talents.find({"_id": talent_id})[0]
     item["activation"] = activation(item["activation"])
 
-    return render_template("edit/talent.html", title=item["_id"].replace("_", " "), item=item)
+    return render_template("edit/add-item.html", title=item["_id"].replace("_", " "), item=item)
+
+
+@app.route("/talents/add", methods=['GET', 'POST'])
+def add_talent():
+    if request.method == "POST":
+        # db.talents.insert_one({})
+        print(model.from_form(request.form))
+    return render_template("edit/add-item.html", model=model)
+
+    # return render_template("edit/add-item.html", title=item["_id"].replace("_", " "), item=item)
 
 
 @app.route("/abilities/")

@@ -1,51 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-</head>
-<body>
-<form method="post">
+{% extends "edit/base.html" %}
+{% block form %}
     {% for field in model.fields %}
-        <label for="{{ field.mongo_name }}">{{ field.human_name }}</label><input id="{{ field.mongo_name }}">
+        <label>{{ field.human_name }}
+            {% if field.html_type == "checkbox" %}
+                <input name="{{ field.mongo_name }}" type="checkbox" {% if field.value %}checked="checked"{% endif %}>
+            {% elif field.html_type == "textarea" %}
+                <textarea name="{{ field.mongo_name }}" cols="50" rows="5">{{ field.value|default("") }}</textarea>
+            {% elif field.html_type == "select" %}
+                <select name="{{ field.mongo_name }}">
+                    {% for option in field.options %}
+                        {% if option.value %}
+                            <option value="{{ option.value }}">{{ option.display }}</option>
+                        {% else %}
+                            <option>{{ option }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            {% else %}
+                <input name="{{ field.mongo_name }}" type="{{ field.html_type }}" value="{{ field.value|default("") }}"
+                       {% if field.readonly %}disabled{% endif %}>
+            {% endif %}
+        </label>
         {% if field.autocomplete %}
             <input type="hidden" id="{{ field.mongo_name }}-data">
         {% endif %}
     {% endfor %}
-</form>
-</body>
+{% endblock %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
-    $(function () {
-        const field_autocomplete = {
-            field_name: [
-                {
-                    value: "objectId",
-                    label: "Field Name"
-                }
-            ]
-        };
+  $(function() {
+    var field_autocomplete = {
+      field_name: [
+        {
+          value: "objectId",
+          label: "Field Name"
+        }
+      ]
+    };
 
-        {% for field in model.fields %}
-            {% if field.autocomplete %}
-                $("#{{ field.mongo_name }}").autocomplete({
-                    minLength: 0,
-                    source: field_autocomplete["{{ field.mongo_name }}"],
-                    focus: function (event, ui) {
-                        $("#{{ field.mongo_name }}").val(ui.item.label);
-                        return false;
-                    },
-                    select: function (event, ui) {
-                        $("#{{ field.mongo_name }}").val(ui.item.label);
-                        $("#{{ field.mongo_name }}-data").val(ui.item.value);
+    {% for field in model.fields %}
+      {% if field.autocomplete %}
+        $("#{{ field.mongo_name }}").autocomplete({
+          minLength: 0,
+          source: field_autocomplete["{{ field.mongo_name }}"],
+          focus: function(event, ui) {
+            $("#{{ field.mongo_name }}").val(ui.item.label);
+            return false;
+          },
+          select: function(event, ui) {
+            $("#{{ field.mongo_name }}").val(ui.item.label);
+            $("#{{ field.mongo_name }}-data").val(ui.item.value);
 
-                        return false;
-                    }
-                });
-            {% endif %}
-        {% endfor %}
-    })
+            return false;
+          }
+        });
+      {% endif %}
+    {% endfor %}
+  });
 </script>
 </html>
