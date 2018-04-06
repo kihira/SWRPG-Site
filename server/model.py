@@ -1,3 +1,4 @@
+from bson import ObjectId
 from werkzeug.datastructures import MultiDict
 
 
@@ -44,6 +45,31 @@ class SelectField(Field):
         super().__init__(mongo_name, human_name, html_type="select")
 
         self.options = options
+
+
+class NumberField(Field):
+    min: int
+    max: int
+    step: int
+
+    def __init__(self, mongo_name, human_name, min=0, max=100, step=1):
+        super().__init__(mongo_name, human_name, html_type="number")
+
+        self.min = min
+        self.max = max
+        self.step = step
+
+    def get_value(self, form: MultiDict):
+        return form.get(self.mongo_name, default=self.default, type=int)
+
+
+class ObjectIdField(Field):
+    def __init__(self, mongo_name, human_name, readonly=False):
+        super().__init__(mongo_name, human_name, readonly=readonly)
+
+    def get_value(self, form: MultiDict):
+        print(form)
+        return ObjectId(form.get(self.mongo_name, ""))
 
 
 class ArrayField(Field):

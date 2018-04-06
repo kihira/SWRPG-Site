@@ -1,5 +1,6 @@
 from pymongo.results import InsertOneResult, UpdateResult
 
+from model import Model, Field, NumberField, CheckboxField, TextareaField, ObjectIdField
 from server.decorators import validate_objectid
 from server import filters
 from server.app import app
@@ -7,20 +8,18 @@ from server.db import db
 from flask import render_template, abort, request
 from bson import ObjectId
 
-
-def get_form_data():
-    return {
-        "name": request.form.get("name", ""),
-        "defense": request.form.get("defense", 0),
-        "soak": request.form.get("soak", 0),
-        "hardpoints": request.form.get("hardpoints", 0),
-        "encumbrance": request.form.get("encumbrance", 0),
-        "price": request.form.get("price", 0),
-        "restricted": request.form.get("restricted", False),
-        "rarity": request.form.get("rarity", 0),
-        "description": request.form.get("description", ""),
-        "index": request.form.getlist("index")
-    }
+model = Model([
+    ObjectIdField("_id", "ID", readonly=True),
+    Field("name", "Name"),
+    NumberField("defense", "Defense", max=5),
+    NumberField("soak", "Soak"),
+    NumberField("hardpoints", "Hardpoints"),
+    NumberField("encumbrance", "encumbrance"),
+    NumberField("price", "Price", max=100000),
+    CheckboxField("restricted", "Restricted"),
+    NumberField("rarity", "Rarity", max=10),
+    TextareaField("description", "Description")
+])
 
 
 @app.route("/armour/")
@@ -52,11 +51,11 @@ def armor_item(object_id: str):
 @app.route("/armor/add", methods=['GET', 'POST'])
 def add_armor():
     if request.method == "POST":
-        item = get_form_data()
+        item = model.from_form(request.form)
         result: InsertOneResult = db.armor.insert_one(item)
         item["_id"] = result.inserted_id
-        return render_template("edit/armor.html", item=item, added=True)
-    return render_template("edit/armor.html")
+        return render_template("edit/add-item.html", item=item, model=model, added=True)
+    return render_template("edit/add-item.html", model=model)
 
 
 @app.route("/armour/<object_id>/edit", methods=['GET', 'POST'])
@@ -69,9 +68,9 @@ def edit_armor(object_id: str):
     item = item[0]
 
     if request.method == "POST":
-        new_item = get_form_data()
+        new_item = model.from_form(request.form)
         result: UpdateResult = db.armor.update_one({"_id": item["_id"]}, {"$set": new_item})
-        return render_template("edit/armor.html", title=item["name"], item=new_item,
+        return render_template("edit/add-item.html", title=item["name"], item=new_item, model=model,
                                updated=(result.modified_count == 1))
-    # return the template with values filled out if we haven't received any data
-    return render_template("edit/armor.html", title=item["name"], item=item)
+
+    return render_template("edit/add-item.html", title=item["name"], item=item, model=model)

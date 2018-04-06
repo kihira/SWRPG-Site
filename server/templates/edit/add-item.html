@@ -16,6 +16,9 @@
         {% if field.html_type == "checkbox" %}
             <input name="{{ field.mongo_name }}" type="checkbox"
                    {% if item[field.mongo_name] %}checked="checked"{% endif %}>
+        {% elif field.html_type == "number" %}
+            <input name="{{ field.mongo_name }}" type="number" min="{{ field.min }}" max="{{ field.max }}"
+                   step="{{ field.step }}" value="{{ item[field.mongo_name]|default(0) }}">
         {% elif field.html_type == "textarea" %}
             <textarea name="{{ field.mongo_name }}" cols="50"
                       rows="5">{{ item[field.mongo_name]|default("") }}</textarea>
@@ -32,7 +35,7 @@
         {% else %}
             <input name="{{ field.mongo_name }}" type="{{ field.html_type }}"
                    value="{{ item[field.mongo_name]|default("") }}"
-                   {% if field.readonly %}disabled{% endif %}>
+                   {% if field.readonly %}readonly{% endif %}>
         {% endif %}
     </label>
     {% if field.autocomplete %}
