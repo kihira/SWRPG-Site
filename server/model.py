@@ -84,6 +84,21 @@ class ArrayField(Field):
         return form.getlist(self.mongo_name)
 
 
+class FieldGroup(Field):
+    fields: [Field]
+
+    def __init__(self, group_name, human_name, fields: [Field]):
+        super().__init__(group_name, human_name, html_type="group")
+
+        self.fields = fields
+
+    def get_value(self, form: MultiDict):
+        values = {}
+        for field in self.fields:
+            values[field.mongo_name] = field.get_value(form)
+        return values
+
+
 class Model:
     fields: [Field]
 

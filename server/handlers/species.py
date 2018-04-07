@@ -1,9 +1,15 @@
 from flask import render_template, request, abort
 
+from model import Model
 from server.app import app
 from server.db import db
 
 from pymongo import ASCENDING
+
+
+model = Model([
+
+])
 
 
 @app.route("/species/")
