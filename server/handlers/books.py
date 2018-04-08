@@ -1,10 +1,10 @@
 from pymongo.results import InsertOneResult, UpdateResult
 
-from decorators import get_item
+from decorators import get_item, login_required
 from model import Model, Field, TextareaField, SelectField
 from server.app import app
 from server.db import db
-from flask import render_template, abort, request
+from flask import render_template, abort, request, flash
 
 model = Model([
     Field("_id", "Index"),
@@ -37,21 +37,21 @@ def get_book(item):
 
 
 @app.route("/books/add", methods=['GET', 'POST'])
+@login_required
 def add_book():
     if request.method == "POST":
         item = model.from_form(request.form)
-        result: InsertOneResult = db.books.insert_one(item)
-        return render_template("edit/add-item.html", item=item, model=model, added=True)
+        item["_id"] = db["books"].insert_one(item)
+        flash(f'Successfully added item. <a href="{item["_id"]}">View</a><a href="{item["_id"]}/edit">Edit</a>')
     return render_template("edit/add-item.html", model=model)
 
 
 @app.route("/books/<item>/edit", methods=['GET', 'POST'])
+@login_required
 @get_item(db.books)
 def edit_book(item):
     if request.method == "POST":
-        new_item = model.from_form(request.form)
-        result: UpdateResult = db.books.update_one({"_id": item["_id"]}, {"$set": new_item})
-        return render_template("edit/add-item.html", title=item["name"], item=new_item, model=model,
-                               updated=(result.modified_count == 1))
-
-    return render_template("edit/add-item.html", title=item["name"], item=item, model=model)
+        item = model.from_form(request.form)
+        db["books"].update_one({"_id": item["_id"]}, {"$set": item})
+        flash(f'Successfully updated item.')
+    return render_template("edit/add-item.html", item=item, model=model)

@@ -1,11 +1,11 @@
-from pymongo.results import InsertOneResult, UpdateResult
+from pymongo.results import UpdateResult
 
 from model import Model, Field, NumberField, CheckboxField, TextareaField, ObjectIdField
-from server.decorators import get_item
+from server.decorators import get_item, login_required
 from server import filters
 from server.app import app
 from server.db import db
-from flask import render_template, request
+from flask import render_template, request, flash
 
 model = Model([
     ObjectIdField("_id", "ID", readonly=True),
@@ -43,21 +43,22 @@ def get_armor(item):
 
 @app.route("/armour/add", methods=['GET', 'POST'])
 @app.route("/armor/add", methods=['GET', 'POST'])
+@login_required
 def add_armor():
     if request.method == "POST":
         item = model.from_form(request.form)
         item["_id"] = db["armor"].insert_one(item).inserted_id
-        return render_template("edit/add-item.html", item=item, model=model, added=True)
+        flash(f'Successfully added item. <a href="{item["_id"]}">View</a><a href="{item["_id"]}/edit">Edit</a>')
     return render_template("edit/add-item.html", model=model)
 
 
 @app.route("/armour/<item>/edit", methods=['GET', 'POST'])
 @app.route("/armor/<item>/edit", methods=['GET', 'POST'])
+@login_required
 @get_item(db.armor, True)
 def edit_armor(item):
     if request.method == "POST":
-        new_item = model.from_form(request.form)
-        result: UpdateResult = db["armor"].update_one({"_id": item["_id"]}, {"$set": new_item})
-        return render_template("edit/add-item.html", item=new_item, model=model, updated=(result.modified_count == 1))
-
+        item = model.from_form(request.form)
+        db["armor"].update_one({"_id": item["_id"]}, {"$set": item})
+        flash(f'Successfully updated item.')
     return render_template("edit/add-item.html", item=item, model=model)

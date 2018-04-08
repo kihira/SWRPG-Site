@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, flash
 
-from decorators import get_item
+from decorators import get_item, login_required
 from model import Model, Field, CheckboxField, FieldGroup, NumberField
 from server.app import app
 from server.db import db
@@ -39,8 +39,8 @@ def get_species(item):
     return render_template("item.html", item=item)
 
 
-# todo auth
 @app.route("/species/add", methods=['GET', 'POST'])
+@login_required
 def add_species():
     if request.method == "POST":
         item = model.from_form(request.form)
@@ -51,6 +51,7 @@ def add_species():
 
 # todo auth
 @app.route("/species/<item>/edit", methods=['GET', 'POST'])
+@login_required
 @get_item(db.species)
 def edit_species(item):
     if request.method == "POST":

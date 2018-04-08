@@ -8,3 +8,4 @@ fonts/
 *.css
 static/js/
 static/img/*.svg
+users.json

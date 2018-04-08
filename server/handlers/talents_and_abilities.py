@@ -1,9 +1,9 @@
-from decorators import get_item
+from decorators import get_item, login_required
 from model import Model, Field, CheckboxField, TextareaField, SelectField
 from server.app import app
 from server.db import db
 from server import filters
-from flask import render_template, request
+from flask import render_template, request, flash
 
 model = Model([
     Field("_id", "ID"),
@@ -46,26 +46,26 @@ def get_talent(item):
     return render_template("talent.html", title=item["_id"].replace("_", " "), item=item)
 
 
-# todo auth
+@app.route("/talents/add", methods=['GET', 'POST'])
+@login_required
+def add_talent():
+    if request.method == "POST":
+        item = model.from_form(request.form)
+        item["_id"] = db["talents"].insert_one(item)
+        flash(f'Successfully added item. <a href="{item["_id"]}">View</a><a href="{item["_id"]}/edit">Edit</a>')
+    return render_template("edit/add-item.html", model=model)
+
+
 @app.route("/talents/<item>/edit", methods=['GET', 'POST'])
+@login_required
 @get_item(db.talents)
 def edit_talent(item):
     if request.method == "POST":
         item = model.from_form(request.form)
         db["talents"].update_one({"_id": item["_id"]}, {"$set": item})
-
+        flash(f'Successfully updated item.')
     item["activation"] = activation(item["activation"])
     return render_template("edit/add-item.html", item=item, model=model)
-
-
-@app.route("/talents/add", methods=['GET', 'POST'])
-def add_talent():
-    if request.method == "POST":
-        # db.talents.insert_one({})
-        print(model.from_form(request.form))
-    return render_template("edit/add-item.html", model=model)
-
-    # return render_template("edit/add-item.html", title=item["_id"].replace("_", " "), item=item)
 
 
 @app.route("/abilities/")

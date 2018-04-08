@@ -1,8 +1,10 @@
 from functools import wraps
 
 from bson import ObjectId
-from flask import abort
+from flask import abort, session, redirect, url_for
 from pymongo.collection import Collection
+
+import login
 
 
 def get_item(collection: Collection, objectid=False):
@@ -27,3 +29,14 @@ def get_item(collection: Collection, objectid=False):
             return f(*args, **kwargs)
         return wrapper
     return decorated
+
+
+def login_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        # Only have admin users for now, this should be fine
+        if "username" in session and session["username"] in login.users:
+            return f(*args, **kwargs)
+        return redirect(url_for("login"))
+
+    return wrapper
