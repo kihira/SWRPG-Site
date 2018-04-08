@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% import "base.html" as base %}
+
+{% set title = item["name"] %}
+{% if item["_id"] %}{% set title = item["_id"]|title %}{% endif %}
+
 {% block content %}
     <div class="item-block">
-        <h4>{{ item.name|default(title) }}</h4>
+        <h4>{{ title }}</h4>
         {% block item_block %}
             {% if item.description|default(description) %}
                 <p>{{ item.description|description }}</p>

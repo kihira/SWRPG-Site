@@ -3,7 +3,7 @@ from model import Model, Field, CheckboxField, TextareaField, SelectField
 from server.app import app
 from server.db import db
 from server import filters
-from flask import render_template, request, abort
+from flask import render_template, request
 
 model = Model([
     Field("_id", "ID"),
@@ -51,14 +51,11 @@ def get_talent(item):
 @get_item(db.talents)
 def edit_talent(item):
     if request.method == "POST":
-        db.talents.update_one({"_id": item["_id"]}, {"$set": {
-            "ranked": request.form.get("ranked", False),
-            "short": request.form["short"].replace("\r\n", " ").replace("\n", " "),
-            "description": request.form["description"].replace("\r\n", " ").replace("\n", " ")
-        }})
+        item = model.from_form(request.form)
+        db["talents"].update_one({"_id": item["_id"]}, {"$set": item})
 
     item["activation"] = activation(item["activation"])
-    return render_template("edit/add-item.html", title=item["_id"].replace("_", " "), item=item)
+    return render_template("edit/add-item.html", item=item, model=model)
 
 
 @app.route("/talents/add", methods=['GET', 'POST'])
@@ -73,7 +70,7 @@ def add_talent():
 
 @app.route("/abilities/")
 def all_abilities():
-    items = list(db.abilities.find({}).sort("_id", 1))
+    items = list(db["abilities"].find({}).sort("_id", 1))
     for item in items:
         item["description"] = filters.description(item["description"])
 

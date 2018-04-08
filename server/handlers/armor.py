@@ -46,7 +46,7 @@ def armor_item(item):
 def add_armor():
     if request.method == "POST":
         item = model.from_form(request.form)
-        result: InsertOneResult = db.armor.insert_one(item)
+        result: InsertOneResult = db["armor"].insert_one(item)
         item["_id"] = result.inserted_id
         return render_template("edit/add-item.html", item=item, model=model, added=True)
     return render_template("edit/add-item.html", model=model)
@@ -58,7 +58,7 @@ def add_armor():
 def edit_armor(item):
     if request.method == "POST":
         new_item = model.from_form(request.form)
-        result: UpdateResult = db.armor.update_one({"_id": item["_id"]}, {"$set": new_item})
+        result: UpdateResult = db["armor"].update_one({"_id": item["_id"]}, {"$set": new_item})
         return render_template("edit/add-item.html", title=item["name"], item=new_item, model=model,
                                updated=(result.modified_count == 1))
 
