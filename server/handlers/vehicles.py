@@ -1,4 +1,4 @@
-from server.decorators import validate_objectid
+from server.decorators import get_item
 from server import filters
 from server.app import app
 from server.db import db
@@ -50,25 +50,15 @@ def all_starships():
                                    "price", "rarity", "hardpoints", "weapons"], entries=entries)
 
 
-@app.route("/vehicles/<object_id>")
-@validate_objectid
-def get_vehicles(object_id):
-    item = db.vehicles.find({"_id": ObjectId(object_id)})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-
+@app.route("/vehicles/<item>")
+@get_item(db.vehicles, True)
+def get_vehicle(item):
     return render_template("vehicle.html", title=item["name"], item=item)
 
 
-@app.route("/starships/<object_id>")
-@validate_objectid
-def get_starship(object_id):
-    item = db.starships.find({"_id": ObjectId(object_id)})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-
+@app.route("/starships/<item>")
+@get_item(db.starships, True)
+def get_starship(item):
     if type(item["hyperdrive"]) == dict:
         out = "Primary: {0}".format(item["hyperdrive"]["primary"])
         if "backup" in item["hyperdrive"]:

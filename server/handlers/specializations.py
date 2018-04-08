@@ -1,7 +1,7 @@
-from server.decorators import validate_objectid
+from server.decorators import get_item
 from server.app import app
 from server.db import db
-from flask import render_template, abort
+from flask import render_template
 
 
 @app.route("/specialisations/")
@@ -11,15 +11,10 @@ def all_specializations():
                            entries=db.specializations.find({}).sort("_id", 1))
 
 
-@app.route("/specialisations/<object_id>")
-@app.route("/specializations/<object_id>")
-@validate_objectid
-def get_specializations(object_id):
-    item = db.specializations.find({"_id": object_id})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-
+@app.route("/specialisations/<item>")
+@app.route("/specializations/<item>")
+@get_item(db.specializations)
+def get_specializations(item):
     talents = {}
     for talent in db.talents.find({"_id": {"$in": [entry for row in item["tree"]["talents"] for entry in row]}}):
         talents[talent["_id"]] = talent

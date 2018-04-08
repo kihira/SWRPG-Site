@@ -1,7 +1,8 @@
+from decorators import get_item
 from server.app import app
 from server.db import db
 from server import filters
-from flask import render_template, abort
+from flask import render_template
 
 
 @app.route("/qualities/")
@@ -17,11 +18,7 @@ def all_qualities():
                            entries=items)
 
 
-@app.route("/qualities/<quality_id>")
-def get_quality(quality_id):
-    item = db.qualities.find({"_id": quality_id})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-
+@app.route("/qualities/<item>")
+@get_item(db.qualities)
+def get_quality(item):
     return render_template("quality.html", title=item["_id"].replace("_", " "), item=item)

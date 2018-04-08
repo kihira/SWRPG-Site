@@ -52,8 +52,8 @@ class NumberField(Field):
     max: int
     step: int
 
-    def __init__(self, mongo_name, human_name, min=0, max=100, step=1):
-        super().__init__(mongo_name, human_name, html_type="number")
+    def __init__(self, mongo_name, human_name, min=0, max=100, default=0, step=1, required=True):
+        super().__init__(mongo_name, human_name, html_type="number", default=default, required=required)
 
         self.min = min
         self.max = max

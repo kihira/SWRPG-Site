@@ -1,3 +1,4 @@
+from decorators import get_item
 from model import Model, Field, CheckboxField, TextareaField, SelectField
 from server.app import app
 from server.db import db
@@ -33,33 +34,30 @@ def all_talents():
                            entries=items)
 
 
-@app.route("/talents/<talent_id>")
-def get_talent(talent_id):
-    item = db.talents.find({"_id": talent_id})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
+@app.route("/talents/<item>")
+@get_item(db.talents)
+def get_talent(item):
     item["activation"] = activation(item["activation"])
 
     # todo is there a better way to do this? seems messy
     item["trees"] = [s["_id"].replace("_", " ") for s in db.specializations.find(
-        {"tree.talents": {"$elemMatch": {"$elemMatch": {"$in": [talent_id]}}}}, {"_id": 1})]
+        {"tree.talents": {"$elemMatch": {"$elemMatch": {"$in": [item]}}}}, {"_id": 1})]
 
     return render_template("talent.html", title=item["_id"].replace("_", " "), item=item)
 
 
 # todo auth
-@app.route("/talents/<talent_id>/edit", methods=['GET', 'POST'])
-def edit_talent(talent_id):
+@app.route("/talents/<item>/edit", methods=['GET', 'POST'])
+@get_item(db.talents)
+def edit_talent(item):
     if request.method == "POST":
-        db.talents.update_one({"_id": talent_id}, {"$set": {
+        db.talents.update_one({"_id": item["_id"]}, {"$set": {
             "ranked": request.form.get("ranked", False),
             "short": request.form["short"].replace("\r\n", " ").replace("\n", " "),
             "description": request.form["description"].replace("\r\n", " ").replace("\n", " ")
         }})
-    item = db.talents.find({"_id": talent_id})[0]
-    item["activation"] = activation(item["activation"])
 
+    item["activation"] = activation(item["activation"])
     return render_template("edit/add-item.html", title=item["_id"].replace("_", " "), item=item)
 
 
@@ -84,14 +82,9 @@ def all_abilities():
                            fields=["description"], entries=items)
 
 
-@app.route("/abilities/<ability_id>")
-def get_ability(ability_id):
-    item = db.abilities.find({"_id": ability_id})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-    item["description"] = filters.description(item["description"])
-
+@app.route("/abilities/<item>")
+@get_item(db.abilities)
+def get_ability(item):
     return render_template("item.html", title=item["_id"].replace("_", " "), item=item)
 
 

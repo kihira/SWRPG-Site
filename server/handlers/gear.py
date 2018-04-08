@@ -1,11 +1,10 @@
 import re
 
-from server.decorators import validate_objectid
+from server.decorators import get_item
 from server import filters
 from server.app import app
 from server.db import db
-from flask import render_template, abort
-from bson import ObjectId
+from flask import render_template
 
 
 @app.route("/gear/")
@@ -20,12 +19,7 @@ def all_gear():
                            entries=items)
 
 
-@app.route("/gear/<object_id>")
-@validate_objectid
-def get_gear(object_id):
-    item = db.gear.find({"_id": ObjectId(object_id)})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-
+@app.route("/gear/<item>")
+@get_item(db.gear, True)
+def get_gear(item):
     return render_template("item.html", title=item["name"], item=item)

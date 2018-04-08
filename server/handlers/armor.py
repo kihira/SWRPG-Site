@@ -1,12 +1,11 @@
 from pymongo.results import InsertOneResult, UpdateResult
 
 from model import Model, Field, NumberField, CheckboxField, TextareaField, ObjectIdField
-from server.decorators import validate_objectid
+from server.decorators import get_item
 from server import filters
 from server.app import app
 from server.db import db
-from flask import render_template, abort, request
-from bson import ObjectId
+from flask import render_template, request
 
 model = Model([
     ObjectIdField("_id", "ID", readonly=True),
@@ -35,15 +34,10 @@ def all_armor():
                            entries=items)
 
 
-@app.route("/armour/<object_id>")
-@app.route("/armor/<object_id>")
-@validate_objectid
-def armor_item(object_id: str):
-    item = db.armor.find({"_id": ObjectId(object_id)})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-
+@app.route("/armour/<item>")
+@app.route("/armor/<item>")
+@get_item(db.armor, True)
+def armor_item(item):
     return render_template("armor.html", title=item["name"], item=item)
 
 
@@ -58,15 +52,10 @@ def add_armor():
     return render_template("edit/add-item.html", model=model)
 
 
-@app.route("/armour/<object_id>/edit", methods=['GET', 'POST'])
-@app.route("/armor/<object_id>/edit", methods=['GET', 'POST'])
-@validate_objectid
-def edit_armor(object_id: str):
-    item = db.armor.find({"_id": ObjectId(object_id)})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-
+@app.route("/armour/<item>/edit", methods=['GET', 'POST'])
+@app.route("/armor/<item>/edit", methods=['GET', 'POST'])
+@get_item(db.armor, True)
+def edit_armor(item):
     if request.method == "POST":
         new_item = model.from_form(request.form)
         result: UpdateResult = db.armor.update_one({"_id": item["_id"]}, {"$set": new_item})

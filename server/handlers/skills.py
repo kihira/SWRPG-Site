@@ -1,3 +1,4 @@
+from decorators import get_item
 from server.app import app
 from server.db import db
 from flask import render_template, abort
@@ -20,11 +21,7 @@ def all_skills():
                            fields=["characteristic"], entries=items)
 
 
-@app.route("/skills/<skill_id>")
-def get_skill(skill_id):
-    item = db.skills.find({"_id": skill_id})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-
+@app.route("/skills/<item>")
+@get_item(db.skills)
+def get_skill(item):
     return render_template("item.html", title=item["_id"].replace("_", " "), item=item)

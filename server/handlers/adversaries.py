@@ -1,9 +1,9 @@
 from bson import ObjectId
-from server.decorators import validate_objectid
+from server.decorators import get_item
 from server.app import app
 from server.db import db
 from server import filters
-from flask import render_template, abort
+from flask import render_template
 import pymongo
 
 
@@ -68,14 +68,9 @@ def get_rebels():
                                                       .sort("name", pymongo.ASCENDING))))
 
 
-@app.route("/adversaries/<object_id>")
-@validate_objectid
-def get_adversary(object_id: str):
-    item = db.adversaries.find({"_id": ObjectId(object_id)})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-
+@app.route("/adversaries/<item>")
+@get_item(db.adversaries, True)
+def get_adversary(item):
     equipment = []
     # Compile it all into one list so we can compile some stuff together
     for weapon in item["equipment"]["weapons"]:

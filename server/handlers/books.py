@@ -1,5 +1,6 @@
 from pymongo.results import InsertOneResult, UpdateResult
 
+from decorators import get_item
 from model import Model, Field, TextareaField, SelectField
 from server.app import app
 from server.db import db
@@ -29,13 +30,9 @@ def all_books():
                            fields=["system", "key", "_id"], entries=list(db.books.find({})))
 
 
-@app.route("/books/<book_id>")
-def get_book(book_id):
-    item = db.books.find({"_id": book_id})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-
+@app.route("/books/<item>")
+@get_item(db.books)
+def get_book(item):
     return render_template("book.html", title=f'{item["system"]}: {item["name"]}', item=item)
 
 
@@ -48,13 +45,9 @@ def add_book():
     return render_template("edit/add-item.html", model=model)
 
 
-@app.route("/books/<object_id>/edit", methods=['GET', 'POST'])
-def edit_book(object_id: str):
-    item = db.books.find({"_id": object_id})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-
+@app.route("/books/<item>/edit", methods=['GET', 'POST'])
+@get_item(db.books)
+def edit_book(item):
     if request.method == "POST":
         new_item = model.from_form(request.form)
         result: UpdateResult = db.books.update_one({"_id": item["_id"]}, {"$set": new_item})

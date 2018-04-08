@@ -1,3 +1,4 @@
+from decorators import get_item
 from server.app import app
 from server.db import db
 from flask import render_template, abort
@@ -18,11 +19,7 @@ def all_planets():
                            fields=["government", "languages", "imports", "exports", "routes"], entries=items)
 
 
-@app.route("/planet/<planet_id>")
-def get_planet(planet_id):
-    item = db.planets.find({"_id": planet_id})
-    if item.count() != 1:
-        return abort(404)
-    item = item[0]
-
+@app.route("/planet/<item>")
+@get_item(db.planets)
+def get_planet(item):
     return render_template("item.html", title=item["_id"].replace("_", " "), item=item)
