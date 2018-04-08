@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template, request, redirect, flash
 
 from decorators import get_item
 from model import Model, Field, CheckboxField, FieldGroup, NumberField
@@ -36,7 +36,7 @@ def all_species():
 @app.route("/species/<item>")
 @get_item(db.species)
 def get_species(item):
-    return render_template("item.html", title=item["_id"].replace("_", " "), item=item)
+    return render_template("item.html", item=item)
 
 
 # todo auth
@@ -45,7 +45,7 @@ def add_species():
     if request.method == "POST":
         item = model.from_form(request.form)
         item["_id"] = db["species"].insert_one(item).inserted_id
-        return render_template("edit/add-item.html", item=item, model=model)
+        flash(f'Successfully added item. <a href="{item["_id"]}">View</a><a href="{item["_id"]}/edit">Edit</a>')
     return render_template("edit/add-item.html", model=model)
 
 
@@ -54,9 +54,8 @@ def add_species():
 @get_item(db.species)
 def edit_species(item):
     if request.method == "POST":
-        new_item = model.from_form(request.form)
-        db["species"].update_one({"_id": item["_id"]}, {"$set": new_item})
-        return render_template("edit/add-item.html", item=new_item, model=model, updated=True)
-
+        item = model.from_form(request.form)
+        db["species"].update_one({"_id": item["_id"]}, {"$set": item})
+        flash(f'Successfully updated item.')
     return render_template("edit/add-item.html", item=item, model=model)
 

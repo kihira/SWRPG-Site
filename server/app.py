@@ -9,6 +9,7 @@ app.jinja_options = {
 }
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
+app.secret_key = "test"
 # Register custom filters
 filters.register(app.jinja_env.filters)
 

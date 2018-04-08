@@ -1,18 +1,15 @@
 {% extends "item.html" %}
 {% set item = item|default({}) %}
 {% block content %}
-    {% block status %}
-        {% if updated %}
-            <div class="updated">
-                Successfully updated item
-            </div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
         {% endif %}
-        {% if added %}
-            <div class="added">
-                Successfully added item
-            </div>
-        {% endif %}
-    {% endblock %}
+    {% endwith %}
     <form method="post">
         {% block form %}{% endblock %}
         {% block indexes %}
@@ -28,8 +25,8 @@
     {{ super() }}
     <script src="{{ url_for("static", filename="js/edit.js") }}"></script>
     <script>
-      $(function() {
-        repeatableSections["index"].addExisting({{ item.index|default([]) }});
-      });
+        $(function() {
+            repeatableSections["index"].addExisting({{ item.index|default([]) }});
+        });
     </script>
 {% endblock %}
