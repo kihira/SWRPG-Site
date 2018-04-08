@@ -33,7 +33,7 @@
         {% elif field.html_type == "group" %}
             <div class="group" style="display: flex">
                 {% for sub_field in field.fields %}
-                    {{ render_field(sub_field, item[field.mongo_name]) }}
+                    {{ render_field(sub_field, item[field.mongo_name]|default({})) }}
                 {% endfor %}
             </div>
         {% else %}
