@@ -2,7 +2,7 @@
 {% import "base.html" as base %}
 
 {% set title = item["name"] %}
-{% if item["_id"] %}{% set title = item["_id"]|title %}{% endif %}
+{% if not title and item["_id"] %}{% set title = item["_id"]|title %}{% endif %}
 
 {% block content %}
     <div class="item-block">

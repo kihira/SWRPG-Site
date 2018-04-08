@@ -40,9 +40,23 @@ def get_species(item):
 
 
 # todo auth
+@app.route("/species/add", methods=['GET', 'POST'])
+def add_species():
+    if request.method == "POST":
+        item = model.from_form(request.form)
+        item["_id"] = db["species"].insert_one(item).inserted_id
+        return render_template("edit/add-item.html", item=item, model=model)
+    return render_template("edit/add-item.html", model=model)
+
+
+# todo auth
 @app.route("/species/<item>/edit", methods=['GET', 'POST'])
 @get_item(db.species)
 def edit_species(item):
     if request.method == "POST":
-        print(model.from_form(request.form))
-    return render_template("edit/species.html", title=item["_id"].replace("_", " "), item=item)
+        new_item = model.from_form(request.form)
+        db["species"].update_one({"_id": item["_id"]}, {"$set": new_item})
+        return render_template("edit/add-item.html", item=new_item, model=model, updated=True)
+
+    return render_template("edit/add-item.html", item=item, model=model)
+
