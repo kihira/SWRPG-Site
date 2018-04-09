@@ -1,10 +1,23 @@
 import ColumnSettings = DataTables.ColumnSettings;
+import * as $ from "jquery";
+
+import "datatables.net";
+import "datatables.net-fixedheader";
+import "datatables.net-rowgroup";
 
 interface Query {
     search?: string;
     asc?: number[];
     desc?: number[];
 }
+
+interface InitParams {
+    fields: string[];
+    has_index: boolean;
+    categories: boolean;
+}
+
+declare var initParams: InitParams;
 
 function init(fields: string[], hasIndex: boolean, categories: boolean) {
     const params: Query = {};
@@ -70,7 +83,7 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
 
         const asc: number[] = [];
         const desc: number[] = [];
-        table.order().forEach((col) => {
+        table.order().forEach((col: Array<(string | number)>) => {
             if (col[1] === "asc") {
                 asc.push(col[0] as number);
             }
@@ -95,3 +108,8 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
     table.on("order.dt", buildUrl);
     table.on("search.dt", buildUrl);
 }
+
+// Gotta get an object defined in a <script> from the html as webpack causes stuff to lazy load if CommonsChunk
+$(() => {
+    init(initParams.fields, initParams.has_index, initParams.categories);
+});

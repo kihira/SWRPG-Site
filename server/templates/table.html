@@ -44,12 +44,12 @@
 {% endblock %}
 {% block scripts %}
     {{ super() }}
-    <!-- todo look into webpack and compiling this all together -->
-    <script src="https://cdn.datatables.net/v/dt/dt-1.10.16/fh-3.1.3/rg-1.0.2/datatables.min.js"></script>
-    <script src="{{ url_for("static", filename="js/table.js") }}"></script>
     <script>
-        $(function () {
-            init({{ fields }}, {{ has_index|lower }}, {{ categories|lower }});
-        });
+        initParams = {
+            fields: {{ fields }},
+            has_index: {{ has_index|lower }},
+            categories: {{ categories|lower }}
+        };
     </script>
+    <script src="/static/js/table.bundle.js"></script>
 {% endblock %}

@@ -4,7 +4,9 @@
     "module": "commonjs",
     "sourceMap": true,
     "outDir": "./static/js",
-    "strict": true,
-    "esModuleInterop": true
-  }
+    "strict": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }
