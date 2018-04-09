@@ -42,12 +42,18 @@
 {% block scripts %}
     {{ super() }}
     <script src="{{ url_for("static", filename="js/edit.js") }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(function() {
             repeatableSections["index"].addExisting({{ item.index|default([]) }});
+
+            {% for field in model.fields %}
+                {% if field.html_type == "array" %}
+                    repeatableSections[{{ field.mongo_name }}].addExisting({{ item[field.mongo_name]|default([]) }});
+                {% endif %}
+            {% endfor %}
         });
     </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(function() {
             var field_autocomplete = {
