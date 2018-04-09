@@ -53,7 +53,7 @@ def add_talent():
         item = model.from_form(request.form)
         item["_id"] = db["talents"].insert_one(item)
         flash(f'Successfully added item. <a href="{item["_id"]}">View</a><a href="{item["_id"]}/edit">Edit</a>')
-    return render_template("edit/add-item.html", model=model)
+    return render_template("edit/add-edit.html", model=model)
 
 
 @app.route("/talents/<item>/edit", methods=['GET', 'POST'])
@@ -65,7 +65,7 @@ def edit_talent(item):
         db["talents"].update_one({"_id": item["_id"]}, {"$set": item})
         flash(f'Successfully updated item.')
     item["activation"] = activation(item["activation"])
-    return render_template("edit/add-item.html", item=item, model=model)
+    return render_template("edit/add-edit.html", item=item, model=model)
 
 
 @app.route("/abilities/")

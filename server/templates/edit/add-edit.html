@@ -1,0 +1,117 @@
+{% extends "item.html" %}
+{% set item = item|default({}) %}
+
+{% block head %}
+    <link href="{{ url_for("static", filename="edit.css") }}" rel="stylesheet">
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <form method="post">
+        {% block form %}
+            {% for field in model.fields %}
+                {% if field.html_type == "array" %}
+                    <fieldset id="{{ field.mongo_name }}">
+                        {{ render_field(field.field, item) }}
+                    </fieldset>
+                {% else %}
+                    {{ render_field(field, item) }}
+                {% endif %}
+            {% endfor %}
+        {% endblock %}
+
+        {% block indexes %}
+            <fieldset id="index">
+                <label for="index_entry">Index:</label>
+                <input type="text" id="index_entry" name="index">
+            </fieldset>
+        {% endblock %}
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for("static", filename="js/edit.js") }}"></script>
+    <script>
+        $(function() {
+            repeatableSections["index"].addExisting({{ item.index|default([]) }});
+        });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(function() {
+            var field_autocomplete = {
+                field_name: [
+                    {
+                        value: "objectId",
+                        label: "Field Name"
+                    }
+                ]
+            };
+
+            {% for field in model.fields %}
+                {% if field.autocomplete %}
+                    $("#{{ field.mongo_name }}").autocomplete({
+                        minLength: 0,
+                        source: field_autocomplete["{{ field.mongo_name }}"],
+                        focus: function(event, ui) {
+                            $("#{{ field.mongo_name }}").val(ui.item.label);
+                            return false;
+                        },
+                        select: function(event, ui) {
+                            $("#{{ field.mongo_name }}").val(ui.item.label);
+                            $("#{{ field.mongo_name }}-data").val(ui.item.value);
+
+                            return false;
+                        }
+                    });
+                {% endif %}
+            {% endfor %}
+        });
+    </script>
+{% endblock %}
+
+{% macro render_field(field, item) %}
+    <label>{{ field.human_name }}
+        {% if field.html_type == "checkbox" %}
+            <input name="{{ field.mongo_name }}" type="checkbox" {% if item[field.mongo_name] %}checked{% endif %}>
+        {% elif field.html_type == "number" %}
+            <input name="{{ field.mongo_name }}" type="number" min="{{ field.min }}" max="{{ field.max }}"
+                   step="{{ field.step }}" value="{{ item[field.mongo_name]|default(0) }}">
+        {% elif field.html_type == "textarea" %}
+            <textarea name="{{ field.mongo_name }}" cols="50" rows="5">{{ item[field.mongo_name]|default("") }}</textarea>
+        {% elif field.html_type == "select" %}
+            <select name="{{ field.mongo_name }}">
+                {% for option in field.options %}
+                    {% if option.value %}
+                        <option value="{{ option.value }}">{{ option.display }}</option>
+                    {% else %}
+                        <option>{{ option }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        {% elif field.html_type == "group" %}
+            <div class="group">
+                {% for sub_field in field.fields %}
+                    {{ render_field(sub_field, item[field.mongo_name]|default({})) }}
+                {% endfor %}
+            </div>
+        {% else %}
+            <input name="{{ field.mongo_name }}" type="{{ field.html_type }}"
+                   value="{{ item[field.mongo_name]|default("") }}" {% if field.readonly %}readonly{% endif %}>
+        {% endif %}
+    </label>
+    {% if field.autocomplete %}
+        <input type="hidden" id="{{ field.mongo_name }}-data">
+    {% endif %}
+{% endmacro %}

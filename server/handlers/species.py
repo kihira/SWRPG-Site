@@ -46,7 +46,7 @@ def add_species():
         item = model.from_form(request.form)
         item["_id"] = db["species"].insert_one(item).inserted_id
         flash(f'Successfully added item. <a href="{item["_id"]}">View</a><a href="{item["_id"]}/edit">Edit</a>')
-    return render_template("edit/add-item.html", model=model)
+    return render_template("edit/add-edit.html", model=model)
 
 
 # todo auth
@@ -58,5 +58,5 @@ def edit_species(item):
         item = model.from_form(request.form)
         db["species"].update_one({"_id": item["_id"]}, {"$set": item})
         flash(f'Successfully updated item.')
-    return render_template("edit/add-item.html", item=item, model=model)
+    return render_template("edit/add-edit.html", item=item, model=model)
 
