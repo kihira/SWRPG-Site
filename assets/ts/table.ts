@@ -1,9 +1,4 @@
 import ColumnSettings = DataTables.ColumnSettings;
-import * as $ from "jquery";
-
-import "datatables.net";
-import "datatables.net-fixedheader";
-import "datatables.net-rowgroup";
 
 interface Query {
     search?: string;

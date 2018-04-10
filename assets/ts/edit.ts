@@ -1,5 +1,3 @@
-import * as $ from "jquery";
-
 interface KeyDict {
     [key: string]: any;
 }
