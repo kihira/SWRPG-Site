@@ -34,7 +34,7 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
         }
     });
 
-    const columns: ColumnSettings[] = [{data: "name"}];
+    const columns: ColumnSettings[] = [{name: "name", data: "name"}];
     const settings: DataTables.Settings = {
         fixedHeader: true,
         paging: false,
@@ -44,14 +44,22 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
     };
 
     if (categories) {
-        columns.push({data: "category", visible: false});
-        settings.orderFixed = [1, "asc"];
+        columns.push({name: "category", data: "category", visible: false});
+        settings.orderFixed = {pre: [1, "asc"]};
         settings.rowGroup = {dataSrc: "category"};
+
+        $("#categories").on("change", function(this: HTMLElement) {
+            const checked = $(this).prop("checked");
+            table.rowGroup().enable(checked);
+            table.column("category:name").visible(!checked);
+            table.order.fixed(checked ? {pre: [1, "asc"]} : {});
+            table.draw();
+        });
     }
 
-    fields.forEach((value) => { columns.push({data: value}); });
+    fields.forEach((value) => { columns.push({name: value, data: value}); });
     if (hasIndex) {
-        columns.push({data: "index"});
+        columns.push({name: "index", data: "index"});
     }
 
     settings.columns = columns;

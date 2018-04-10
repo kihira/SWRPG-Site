@@ -12,7 +12,12 @@
 
 {% block content %}
     <div class="filters">
-
+        {% if categories %}
+            <label>
+                Group by Category
+                <input type="checkbox" id="categories" checked="checked">
+            </label>
+        {% endif %}
     </div>
     <table id="data" class="item-table">
         <caption>{{ title }}</caption>
