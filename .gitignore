@@ -6,6 +6,7 @@ node_modules/
 fonts/
 .idea/
 *.css
+*.map
 static/js/
 static/img/*.svg
 users.json
