@@ -1,25 +1,27 @@
 @font-face {
   font-family: 'Elektra';
   font-weight: bold;
-  src: url("../../static/fonts/ElektraMediumPro-Bold.otf");
+  src: url("/static/fonts/elektramediumpro-bold-webfont.woff2") format("woff2"),
+  url("/static/fonts/elektramediumpro-bold-webfont.woff") format("woff");
 }
 
 @font-face {
   font-family: "EotE Symbol";
-  src: url("../../static/fonts/EotESymbol-Regular-PLUS.otf");
+  src: url("/static/fonts/eotesymbol-regular-plus-webfont.woff2") format("woff2"),
+  url("/static/fonts/eotesymbol-regular-plus-webfont.woff") format("woff");
 }
 
 @font-face {
   font-family: "Bebas Neue";
-  src: url("/fonts/bebasneue_regular-webfont.woff2") format("woff2"),
-  url("/fonts/bebasneue_regular-webfont.woff") format("woff");
+  src: url("/static/fonts/bebasneue_regular-webfont.woff2") format("woff2"),
+  url("/static/fonts/bebasneue_regular-webfont.woff") format("woff");
   font-weight: normal;
 }
 
 @font-face {
   font-family: "Bebas Neue";
-  src: url("/fonts/bebasneue_bold-webfont.woff2") format("woff2"),
-  url("/fonts/bebasneue_bold-webfont.woff") format("woff");
+  src: url("/static/fonts/bebasneue_bold-webfont.woff2") format("woff2"),
+  url("/static/fonts/bebasneue_bold-webfont.woff") format("woff");
   font-weight: bold;
 }
 
@@ -50,23 +52,17 @@
 
 @font-face {
   font-family: 'ForgottenFuturistRg-Regular';
-  src: url('/fonts/35D12C_0_0.eot');
-  src: url('/fonts/35D12C_0_0.eot?#iefix') format('embedded-opentype'),
-       url('/fonts/35D12C_0_0.woff2') format('woff2'),
-       url('/fonts/35D12C_0_0.woff') format('woff'),
-       url('/fonts/35D12C_0_0.ttf') format('truetype');
+  src: url('/static/fonts/35D12C_0_0.woff2') format('woff2'),
+  url('/static/fonts/35D12C_0_0.woff') format('woff');
 }
 
 @font-face {
   font-family: 'ForgottenFuturistRg-Bold';
-  src: url('/fonts/35D12C_1_0.eot');
-  src: url('/fonts/35D12C_1_0.eot?#iefix') format('embedded-opentype'),
-       url('/fonts/35D12C_1_0.woff2') format('woff2'),
-       url('/fonts/35D12C_1_0.woff') format('woff'),
-       url('/fonts/35D12C_1_0.ttf') format('truetype');
+  src: url('/static/fonts/35D12C_1_0.woff2') format('woff2'),
+  url('/static/fonts/35D12C_1_0.woff') format('woff');
 }
 
-@teuton-fett: 'Teuton Fett', 'ForgottenFuturistRg-Bold', sans-serif;
-@teuton-normal: 'Teuton Mager', 'ForgottenFuturistRg-Regular', sans-serif;
-@itc-symbol: 'ITC Symbol Std Book', 'Roboto Slab', serif;
+@teuton-fett: 'ForgottenFuturistRg-Bold', sans-serif;
+@teuton-normal: 'ForgottenFuturistRg-Regular', sans-serif;
+@itc-symbol: 'Roboto Slab', serif;
 @elektra: 'Elektra', 'Ubuntu', sans-serif;
