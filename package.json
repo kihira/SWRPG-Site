@@ -9,8 +9,8 @@
   "homepage": "https://swrpg.foxes.rocks",
   "scripts": {
     "build": "npm run less && npm run svg && npm run ts",
-    "watch": "concurrently --kill-others \"tsc --watch\" \"node watch.js\"",
-    "less": "lessc ./assets/style.less ./static/style.css",
+    "watch": "concurrently --kill-others \"tsc -p tsconfig.json --watch\" \"node watch.js\"",
+    "less": "lessc ./assets/less/style.less ./static/style.css",
     "svg": "svgo -f ./assets/svg -o ./static/img",
     "ts": "tsc -p tsconfig.json"
   },

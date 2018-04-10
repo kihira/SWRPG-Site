@@ -26,7 +26,7 @@ watch('./assets/svg', {filter: /\.svg$/, recursive: true}, (evt, name) => {
     });
 });
 
-watch('./assets/style.less', (evt, name) => {
+watch('./assets/less/style.less', (evt, name) => {
     const less = exec("npm run less");
     less.stderr.pipe(process.stderr);
     less.stdout.pipe(process.stdout);
