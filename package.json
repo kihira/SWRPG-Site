@@ -9,7 +9,7 @@
   "homepage": "https://swrpg.foxes.rocks",
   "scripts": {
     "build": "npm run less && npm run svg && npm run ts",
-    "watch": "concurrently --kill-others \"tsc --watch\" \"webpack --watch\"",
+    "watch": "concurrently --kill-others \"tsc --watch\" \"node watch.js\"",
     "less": "lessc ./assets/style.less ./static/style.css",
     "svg": "svgo -f ./assets/svg -o ./static/img",
     "ts": "tsc -p tsconfig.json"
@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
+    "node-watch": "^0.5.8",
     "tslint": "^5.9.1"
   }
 }
