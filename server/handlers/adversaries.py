@@ -95,4 +95,4 @@ def get_adversary(item):
 
     item["name"] = f'{item["name"]} [{item["level"]}]'
 
-    return render_template("adversary.html", title=item["name"], item=item)
+    return render_template("adversary.html", item=item)

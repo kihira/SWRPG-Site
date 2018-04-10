@@ -22,4 +22,4 @@ def all_planets():
 @app.route("/planet/<item>")
 @get_item(db.planets)
 def get_planet(item):
-    return render_template("item.html", title=item["_id"].replace("_", " "), item=item)
+    return render_template("item.html", item=item)

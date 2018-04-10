@@ -24,4 +24,4 @@ def all_skills():
 @app.route("/skills/<item>")
 @get_item(db.skills)
 def get_skill(item):
-    return render_template("item.html", title=item["_id"].replace("_", " "), item=item)
+    return render_template("item.html", item=item)

@@ -25,4 +25,4 @@ def all_weapons():
 def get_weapon(item):
     item["skill"] = Markup("<a href=\"/skills/{0}\">{1}</a>".format(item["skill"], item["skill"].replace("_", " ")))
 
-    return render_template("weapon.html", title=item["name"], item=item)
+    return render_template("weapon.html", item=item)

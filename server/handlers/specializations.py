@@ -29,4 +29,4 @@ def get_specializations(item):
             elif "description" in talent:
                 row[index]["description"] = talent["description"]
 
-    return render_template("specialization.html", title=item["_id"].replace("_", " "), item=item)
+    return render_template("specialization.html", item=item)

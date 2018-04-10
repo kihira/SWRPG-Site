@@ -82,7 +82,7 @@ def all_abilities():
 @app.route("/abilities/<item>")
 @get_item(db.abilities)
 def get_ability(item):
-    return render_template("item.html", title=item["_id"].replace("_", " "), item=item)
+    return render_template("item.html", item=item)
 
 
 def activation(value):

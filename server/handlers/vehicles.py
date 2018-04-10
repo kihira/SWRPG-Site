@@ -2,8 +2,7 @@ from server.decorators import get_item
 from server import filters
 from server.app import app
 from server.db import db
-from flask import render_template, abort
-from bson import ObjectId
+from flask import render_template
 
 
 @app.route("/vehicles/")
@@ -53,7 +52,7 @@ def all_starships():
 @app.route("/vehicles/<item>")
 @get_item(db.vehicles, True)
 def get_vehicle(item):
-    return render_template("vehicle.html", title=item["name"], item=item)
+    return render_template("vehicle.html", item=item)
 
 
 @app.route("/starships/<item>")
@@ -65,4 +64,4 @@ def get_starship(item):
             out += ", Backup: {0}".format(item["hyperdrive"]["backup"])
         item["hyperdrive"] = out
 
-    return render_template("vehicle.html", title=item["name"], item=item)
+    return render_template("vehicle.html", item=item)

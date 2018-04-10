@@ -21,4 +21,4 @@ def all_qualities():
 @app.route("/qualities/<item>")
 @get_item(db.qualities)
 def get_quality(item):
-    return render_template("quality.html", title=item["_id"].replace("_", " "), item=item)
+    return render_template("quality.html", item=item)

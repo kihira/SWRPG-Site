@@ -22,4 +22,4 @@ def all_gear():
 @app.route("/gear/<item>")
 @get_item(db.gear, True)
 def get_gear(item):
-    return render_template("item.html", title=item["name"], item=item)
+    return render_template("item.html", item=item)

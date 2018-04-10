@@ -19,4 +19,4 @@ def all_attachments():
 @app.route("/attachments/<item>")
 @get_item(db.attachments, True)
 def get_attachment(item):
-    return render_template("attachments.html", title=item["name"], item=item)
+    return render_template("attachments.html", item=item)
