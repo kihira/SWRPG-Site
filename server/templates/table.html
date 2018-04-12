@@ -29,9 +29,10 @@
         {%- block table_entries scoped %}
             {% for entry in entries %}
                 <tr>
-                    <td><a href="./{{ entry._id }}">{% if "name" in entry %}{{ entry.name }}{% else %}{{ entry._id|replace("_", " ") }}{% endif %}</a></td>
+                    <td><a href="./{{ entry._id }}">{{ render_name(entry) }}</a></td>
                     {% if categories %}
-                        <td>{{ entry.category }}</td>{% endif %}
+                        <td>{{ entry.category }}</td>
+                    {% endif %}
                     {% for field in fields %}
                         <td>{{ entry[field] }}</td>
                     {% endfor %}
@@ -74,4 +75,8 @@
             <td>Index</td>
         {% endif %}
     </tr>
+{% endmacro %}
+
+{% macro render_name(item) %}
+    {% if "name" in item %}{{ item.name }}{% else %}{{ item._id|replace("_", " ") }}{% endif %}
 {% endmacro %}

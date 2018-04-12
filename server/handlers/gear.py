@@ -1,5 +1,6 @@
 import re
 
+from model import Model, ObjectIdField
 from server.decorators import get_item
 from server import filters
 from server.app import app

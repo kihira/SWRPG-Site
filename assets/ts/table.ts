@@ -15,7 +15,7 @@ interface InitParams {
 
 declare var initParams: InitParams;
 
-function createSelect(element: JQuery, column: ColumnMethods) {
+function createSelect(column: ColumnMethods) {
     // Build list of options from data that is used for search
     const options: Set<string> = new Set();
     column.cache("search").each((value: string) => {  // gets the data that is used when searching (ie without html)
@@ -30,17 +30,15 @@ function createSelect(element: JQuery, column: ColumnMethods) {
         select.append($("<option>").attr("value", value).text(value));
     });
 
+    // Add filter to filters section
+    const label = $("<label>").text(column.header().textContent || "");
+    select.appendTo(label);
+    label.appendTo($(".filters"));
+
     // Init chosen library on it and register handler for change
-    select.chosen({width: "100%"}).on("change", function (this: HTMLElement) {
+    select.chosen({width: "30%"}).on("change", function(this: HTMLElement) {
         column.search(($(this).val() as string[]).join(" ")).draw();
     });
-}
-
-function buildFilters(table: DataTables.Api) {
-    for (const field in initParams.fields) {
-        const col = table.column(field);
-        console.log(col.data().sort().reverse()[0]);
-    }
 }
 
 function init(fields: string[], hasIndex: boolean, categories: boolean) {
@@ -137,7 +135,7 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
         window.history.pushState(null, "", url + $.param(newParams));
     };
 
-    createSelect($(".filters"), table.column("index:name"));
+    createSelect(table.column("index:name"));
     // console.log(table.columns().data());
 
     table.on("order.dt", buildUrl);
