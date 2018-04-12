@@ -15,6 +15,34 @@ interface InitParams {
 
 declare var initParams: InitParams;
 
+function createNumberFilter(column: ColumnMethods, name: string) {
+    // Find min/max values for column
+    const data = {min: 0, max: 0, column: column.index() as number};
+    column.cache("search").each((value: string) => { // todo should look into why this is string and not numbers
+        const num = parseInt(value, 10);
+        if (num < data.min) { data.min = num; }
+        else if (num > data.max) { data.max = num; }
+    });
+
+    // Create elements
+    const minElem = $("<input>").addClass("number-filter")
+        .attr("type", "number").attr("min", data.min).attr("max", data.max).attr("value", data.min);
+    const maxElem = minElem.clone().attr("value", data.max);
+    const div = $("<div>").appendTo($(".filters")).text(name);
+    minElem.appendTo($("<label>").text("Min").appendTo(div));
+    maxElem.appendTo($("<label>").text("Max").appendTo(div));
+
+    // Register a new search function to handle this filter
+    // todo should use one global one or create individual ones?
+    $.fn.dataTable.ext.search.push((settings: DataTables.Api, searchData: any[]): boolean => {
+        const min = parseInt(minElem.val() as string, 10);
+        const max = parseInt(maxElem.val() as string, 10);
+        const value = searchData[data.column] as number;
+
+        return !isNaN(min) && !isNaN(max) && value >= min && value <= max;
+    });
+}
+
 function createSelect(column: ColumnMethods) {
     // Build list of options from data that is used for search
     const options: Set<string> = new Set();
@@ -136,10 +164,12 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
     };
 
     createSelect(table.column("index:name"));
-    // console.log(table.columns().data());
+    createNumberFilter(table.column("encumbrance:name"), "Encumbrance");
 
     table.on("order.dt", buildUrl);
     table.on("search.dt", buildUrl);
+
+    $(".number-filter").on("keyup change", () => table.draw());
 }
 
 // Gotta get an object defined in a <script> from the html as webpack causes stuff to lazy load if CommonsChunk
