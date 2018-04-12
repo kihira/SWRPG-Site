@@ -44,7 +44,7 @@ function createNumberFilter(column: ColumnMethods, name: string) {
     });
 }
 
-function createSelect(column: ColumnMethods) {
+function createSelectFilter(column: ColumnMethods) {
     // Build list of options from data that is used for search
     const options: Set<string> = new Set();
     column.cache("search").each((value: string) => {  // gets the data that is used when searching (ie without html)
@@ -55,7 +55,7 @@ function createSelect(column: ColumnMethods) {
     const select = $("<select>")
         .attr("multiple", "multiple")
         .appendTo($(column.footer()).text(""));
-    options.forEach((value: string) => {
+    Array.from(options).sort().forEach((value: string) => {
         select.append($("<option>").attr("value", value).text(value));
     });
 
@@ -164,11 +164,15 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
         window.history.pushState(null, "", url + $.param(newParams));
     };
 
-    createSelect(table.column("index:name"));
-
     // Technically internal APIs but can be used for auto creating
     table.settings()[0].aoColumns.forEach((column: ColumnLegacy) => {
         if (column.sType === "num") { createNumberFilter(table.column(column.idx), column.sTitle); }
+        else if (column.sType === "html") { // Most likely to be a list of things that link elsewhere
+            const data = table.column(column.idx).data();
+            let commas = 0;
+            data.each((value: string) => { commas += value.split(/,/g).length - 1; });
+            if (commas > data.length / 4) { createSelectFilter(table.column(column.idx)); } // todo check ratio is good
+        }
     });
 
     table.on("order.dt", buildUrl);
