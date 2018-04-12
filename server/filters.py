@@ -1,5 +1,7 @@
 import re
 
+from flask import json
+
 __all__ = ["format_price_table", "format_number", "format_altitude", "format_index", "format_none",
            "format_list", "format_title", "description"]
 
@@ -46,6 +48,10 @@ def description(s: str):
     s = re.sub(diff_regex, lambda match: f'<b>{diff[match.group(1)]}</b>', s)
     s = re.sub(diff_skill_regex, lambda match: f'<b>{diff[match.group(1)]} {format_skill(match.group(2))}</b>', s)
     return s
+
+
+def to_json(fields: [object]):
+    return json.dumps([field.__dict__ for field in fields])
 
 
 def format_skill(skill):
@@ -120,3 +126,4 @@ def register(FILTERS: dict):
     FILTERS["altitude"] = format_altitude
     FILTERS["title"] = format_title
     FILTERS["description"] = description
+    FILTERS["modeltojson"] = to_json

@@ -7,6 +7,7 @@
 {% block head %}
     <link rel="stylesheet" type="text/css"
           href="https://cdn.datatables.net/v/dt/dt-1.10.16/fh-3.1.3/r-2.2.1/rg-1.0.2/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/chosen.css"/>
     {{ super() }}
 {% endblock %}
 
@@ -22,19 +23,7 @@
     <table id="data" class="item-table" style="width:100%">
         <caption>{{ title }}</caption>
         <thead>
-        <tr>
-            {%- block table_header scoped %}
-                <td>{{ name_header|default("Name") }}</td>
-                {% if categories %}
-                    <td>Category</td>{% endif %}
-                {% for entry in headers %}
-                    <td>{{ entry }}</td>
-                {% endfor %}
-                {% if has_index %}
-                    <td>Index</td>
-                {% endif %}
-            {% endblock -%}
-        </tr>
+        {{ render_header() }}
         </thead>
         <tbody>
         {%- block table_entries scoped %}
@@ -53,10 +42,15 @@
             {% endfor %}
         {% endblock -%}
         </tbody>
+        <tfoot>
+        {{ render_header() }}
+        </tfoot>
     </table>
 {% endblock %}
+
 {% block scripts %}
     {{ super() }}
+    <script src="/static/js/chosen.jquery.js"></script>
     <script>
         initParams = {
             fields: {{ fields }},
@@ -67,3 +61,17 @@
     <script src="https://cdn.datatables.net/v/dt/dt-1.10.16/fh-3.1.3/r-2.2.1/rg-1.0.2/datatables.min.js"></script>
     <script src="/static/js/table.js"></script>
 {% endblock %}
+
+{% macro render_header() %}
+    <tr>
+        <td>{{ name_header|default("Name") }}</td>
+        {% if categories %}
+            <td>Category</td>{% endif %}
+        {% for entry in headers %}
+            <td>{{ entry }}</td>
+        {% endfor %}
+        {% if has_index %}
+            <td>Index</td>
+        {% endif %}
+    </tr>
+{% endmacro %}

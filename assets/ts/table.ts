@@ -1,4 +1,5 @@
 import ColumnSettings = DataTables.ColumnSettings;
+import ColumnMethods = DataTables.ColumnMethods;
 
 interface Query {
     search?: string;
@@ -13,6 +14,34 @@ interface InitParams {
 }
 
 declare var initParams: InitParams;
+
+function createSelect(element: JQuery, column: ColumnMethods) {
+    // Build list of options from data that is used for search
+    const options: Set<string> = new Set();
+    column.cache("search").each((value: string) => {  // gets the data that is used when searching (ie without html)
+        value.split(", ").forEach((item: string) => options.add(item.split(":")[0]));
+    });
+
+    // Create the select and option elements
+    const select = $("<select>")
+        .attr("multiple", "multiple")
+        .appendTo($(column.footer()).text(""));
+    options.forEach((value: string) => {
+        select.append($("<option>").attr("value", value).text(value));
+    });
+
+    // Init chosen library on it and register handler for change
+    select.chosen({width: "100%"}).on("change", function (this: HTMLElement) {
+        column.search(($(this).val() as string[]).join(" ")).draw();
+    });
+}
+
+function buildFilters(table: DataTables.Api) {
+    for (const field in initParams.fields) {
+        const col = table.column(field);
+        console.log(col.data().sort().reverse()[0]);
+    }
+}
 
 function init(fields: string[], hasIndex: boolean, categories: boolean) {
     const params: Query = {};
@@ -107,6 +136,9 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
 
         window.history.pushState(null, "", url + $.param(newParams));
     };
+
+    createSelect($(".filters"), table.column("index:name"));
+    // console.log(table.columns().data());
 
     table.on("order.dt", buildUrl);
     table.on("search.dt", buildUrl);
