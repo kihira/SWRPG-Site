@@ -1,5 +1,6 @@
 import ColumnSettings = DataTables.ColumnSettings;
 import ColumnMethods = DataTables.ColumnMethods;
+import ColumnLegacy = DataTables.ColumnLegacy;
 
 interface Query {
     search?: string;
@@ -164,7 +165,11 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
     };
 
     createSelect(table.column("index:name"));
-    createNumberFilter(table.column("encumbrance:name"), "Encumbrance");
+
+    // Technically internal APIs but can be used for auto creating
+    table.settings()[0].aoColumns.forEach((column: ColumnLegacy) => {
+        if (column.sType === "num") { createNumberFilter(table.column(column.idx), column.sTitle); }
+    });
 
     table.on("order.dt", buildUrl);
     table.on("search.dt", buildUrl);
