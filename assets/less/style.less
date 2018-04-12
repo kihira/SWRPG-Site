@@ -79,14 +79,12 @@ h1 {
 
 ul {
   list-style: none;
-  li {
-    &::before {
-      content: "•";
-      color: @darkred;
-      display: inline-block;
-      width: 1em;
-      margin-left: -1em;
-    }
+  & li:not(.search-choice)::before {
+    content: "•";
+    color: @darkred;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
   }
 }
 
