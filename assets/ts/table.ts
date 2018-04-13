@@ -1,6 +1,5 @@
 import ColumnSettings = DataTables.ColumnSettings;
 import ColumnMethods = DataTables.ColumnMethods;
-import {isArray} from "util";
 
 interface Query {
     search?: string;
