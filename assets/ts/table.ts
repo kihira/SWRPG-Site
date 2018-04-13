@@ -1,6 +1,6 @@
 import ColumnSettings = DataTables.ColumnSettings;
-import ColumnMethods = DataTables.ColumnMethods;
 import ColumnLegacy = DataTables.ColumnLegacy;
+import ColumnMethods = DataTables.ColumnMethods;
 
 interface Query {
     search?: string;
@@ -46,16 +46,16 @@ function createNumberFilter(column: ColumnMethods, name: string) {
 
 function createSelectFilter(column: ColumnMethods) {
     // Build list of options from data that is used for search
-    const options: Set<string> = new Set();
+    const options: string[] = [];
     column.cache("search").each((value: string) => {  // gets the data that is used when searching (ie without html)
-        value.split(", ").forEach((item: string) => options.add(item.split(":")[0]));
+        value.split(", ").forEach((item: string) => options.push(item.split(":")[0]));
     });
 
     // Create the select and option elements
     const select = $("<select>")
         .attr("multiple", "multiple")
         .appendTo($(column.footer()).text(""));
-    Array.from(options).sort().forEach((value: string) => {
+    options.filter((value, index) => options.indexOf(value) === index).sort().forEach((value: string) => {
         select.append($("<option>").attr("value", value).text(value));
     });
 

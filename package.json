@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npm run less && npm run svg && npm run ts",
     "watch": "concurrently --kill-others \"tsc -p tsconfig.json --watch\" \"node watch.js\"",
-    "less": "lessc ./assets/less/style.less ./static/style.css",
+    "less": "lessc --source-map ./assets/less/style.less ./static/style.css",
     "svg": "svgo -f ./assets/svg -o ./static/img",
     "ts": "tsc -p tsconfig.json"
   },
@@ -23,9 +23,11 @@
     "@types/jqueryui": "^1.12.2",
     "less": "^3.0.1",
     "svgo": "^1.0.5",
-    "typescript": "^2.8.1"
+    "typescript": "^2.8.1",
+    "uglify-js": "^3.3.21"
   },
   "devDependencies": {
+    "@types/node": "^9.6.4",
     "concurrently": "^3.5.1",
     "node-watch": "^0.5.8",
     "tslint": "^5.9.1"

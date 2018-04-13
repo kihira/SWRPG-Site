@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es5",
     "module": "commonjs",
     "sourceMap": true,
     "outDir": "./static/js",
     "strict": true
   },
+  "include": [
+    "assets/ts"
+  ],
   "exclude": [
     "node_modules"
   ]
