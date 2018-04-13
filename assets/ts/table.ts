@@ -1,5 +1,6 @@
 import ColumnSettings = DataTables.ColumnSettings;
 import ColumnMethods = DataTables.ColumnMethods;
+import {isArray} from "util";
 
 interface Query {
     search?: string;
@@ -10,7 +11,12 @@ interface Query {
 interface Column {
     header: string;
     field: string;
-    filter?: { type: "select" | "number", data: string[] };
+    filter?: { type: "select" | "number", data: string[] | Array<{ display: string, value: string }> };
+}
+
+interface Entry {
+    display: string;
+    value: string;
 }
 
 function createNumberFilter(column: ColumnMethods) {
@@ -41,21 +47,24 @@ function createNumberFilter(column: ColumnMethods) {
     });
 }
 
-function createSelectFilter(column: ColumnMethods, options?: string[]) {
+function createSelectFilter(column: ColumnMethods, options?: Array<Entry | string>) {
     if (!options) {
         // Build list of options from data that is used for search
         options = [];
         column.cache("search").each((value: string) => {  // gets the data that is used when searching (ie without html)
             value.split(", ").forEach((item: string) => options!.push(item.split(":")[0]));
         });
+        options.filter((value, index, arr) => arr.indexOf(value) === index);
     }
 
     // Create the select and option elements
     const select = $("<select>")
         .attr("multiple", "multiple")
         .appendTo($(column.footer()).text(""));
-    options.filter((value, index, arr) => arr.indexOf(value) === index).sort().forEach((value: string) => {
-        select.append($("<option>").attr("value", value).text(value));
+    options.sort().forEach((value) => {
+        select.append($("<option>")
+            .attr("value", typeof value === "string" ? value : value.value)
+            .text(typeof value === "string" ? value : value.display));
     });
 
     // Add filter to filters section

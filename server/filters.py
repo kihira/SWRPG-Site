@@ -3,7 +3,7 @@ import re
 from flask import json
 
 __all__ = ["format_price_table", "format_number", "format_altitude", "format_index", "format_none",
-           "format_list", "format_title", "description"]
+           "format_list", "title", "description"]
 
 symbols = {
     "BOOST": "boost",
@@ -55,7 +55,7 @@ def to_json(fields: [object]):
 
 
 def format_skill(skill):
-    return f'<a href="/skills/{skill}">{format_title(skill)}</a>'
+    return f'<a href="/skills/{skill}">{title(skill)}</a>'
 
 
 def format_number(s):
@@ -90,11 +90,11 @@ def format_list(arr, url):
     out = ""
     for special in arr:
         if type(special) == dict:
-            out += f'<a href="/{url}/{special["id"]}">{format_title(special["id"])}</a>'
+            out += f'<a href="/{url}/{special["id"]}">{title(special["id"])}</a>'
             if "value" in special:
                 out += f" {str(special['value'])}"
         else:
-            out += f'<a href="/{url}/{special}">{format_title(special)}</a>'
+            out += f'<a href="/{url}/{special}">{title(special)}</a>'
         out += ", "
     return out[:-2]
 
@@ -113,7 +113,7 @@ def format_altitude(s):
     return str(s) + " meters"
 
 
-def format_title(s: str):
+def title(s: str):
     return s.replace("_", " ")
 
 
@@ -124,6 +124,6 @@ def register(FILTERS: dict):
     FILTERS["link_list"] = format_list
     FILTERS["none"] = format_none
     FILTERS["altitude"] = format_altitude
-    FILTERS["title"] = format_title
+    FILTERS["title"] = title
     FILTERS["description"] = description
     FILTERS["modeltojson"] = to_json

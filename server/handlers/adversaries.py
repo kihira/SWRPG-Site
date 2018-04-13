@@ -37,12 +37,11 @@ def all_adversaries():
     columns = [
         {"header": "Type", "field": "level"},
         {"header": "Skills", "field": "skills",
-         "filter": {"type": "select", "data": [filters.format_title(x["_id"]) for x in list(db["skills"].find({}))]}},
+         "filter": {"type": "select", "data": [filters.title(x["_id"]) for x in list(db["skills"].find({}))]}},
         {"header": "Talents", "field": "talents",
-         "filter": {"type": "select", "data": [filters.format_title(x["_id"]) for x in list(db["talents"].find({}))]}},
+         "filter": {"type": "select", "data": [filters.title(x["_id"]) for x in list(db["talents"].find({}))]}},
         {"header": "Abilities", "field": "abilities",
-         "filter": {"type": "select",
-                    "data": [filters.format_title(x["_id"]) for x in list(db["abilities"].find({}))]}},
+         "filter": {"type": "select", "data": [filters.title(x["_id"]) for x in list(db["abilities"].find({}))]}},
         {"header": "Equipment", "field": "equipment", "filter": {"type": "select"}}
     ]
 
