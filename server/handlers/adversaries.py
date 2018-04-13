@@ -35,7 +35,7 @@ def process_items(items: list):
 
 @app.route("/adversaries/")
 def all_adversaries():
-    return render_template("table.html", title="Adversaries",
+    return render_template("table.html", title="Adversaries", categories=False,
                            headers=["Type", "Skills", "Talents", "Abilities", "Equipment"],
                            fields=["level", "skills", "talents", "abilities", "equipment"],
                            entries=process_items(list(db.adversaries.find({}).sort("name", pymongo.ASCENDING))))
