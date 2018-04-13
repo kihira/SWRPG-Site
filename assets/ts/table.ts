@@ -1,5 +1,4 @@
 import ColumnSettings = DataTables.ColumnSettings;
-import ColumnLegacy = DataTables.ColumnLegacy;
 import ColumnMethods = DataTables.ColumnMethods;
 
 interface Query {
@@ -8,15 +7,13 @@ interface Query {
     desc?: number[];
 }
 
-interface InitParams {
-    fields: string[];
-    has_index: boolean;
-    categories: boolean;
+interface Column {
+    header: string;
+    field: string;
+    filter?: { type: "select" | "number", data: string[] };
 }
 
-declare var initParams: InitParams;
-
-function createNumberFilter(column: ColumnMethods, name: string) {
+function createNumberFilter(column: ColumnMethods) {
     // Find min/max values for column
     const data = {min: 0, max: 0, column: column.index() as number};
     column.cache("search").each((value: string) => { // todo should look into why this is string and not numbers
@@ -44,18 +41,20 @@ function createNumberFilter(column: ColumnMethods, name: string) {
     });
 }
 
-function createSelectFilter(column: ColumnMethods) {
-    // Build list of options from data that is used for search
-    const options: string[] = [];
-    column.cache("search").each((value: string) => {  // gets the data that is used when searching (ie without html)
-        value.split(", ").forEach((item: string) => options.push(item.split(":")[0]));
-    });
+function createSelectFilter(column: ColumnMethods, options?: string[]) {
+    if (!options) {
+        // Build list of options from data that is used for search
+        options = [];
+        column.cache("search").each((value: string) => {  // gets the data that is used when searching (ie without html)
+            value.split(", ").forEach((item: string) => options!.push(item.split(":")[0]));
+        });
+    }
 
     // Create the select and option elements
     const select = $("<select>")
         .attr("multiple", "multiple")
         .appendTo($(column.footer()).text(""));
-    options.filter((value, index) => options.indexOf(value) === index).sort().forEach((value: string) => {
+    options.filter((value, index, arr) => arr.indexOf(value) === index).sort().forEach((value: string) => {
         select.append($("<option>").attr("value", value).text(value));
     });
 
@@ -70,7 +69,7 @@ function createSelectFilter(column: ColumnMethods) {
     });
 }
 
-function init(fields: string[], hasIndex: boolean, categories: boolean) {
+function init(columns: Column[], hasIndex: boolean, categories: boolean) {
     const params: Query = {};
     location.search.substr(1).split("&").forEach((value) => {
         const data = value.split("=");
@@ -90,7 +89,7 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
         }
     });
 
-    const columns: ColumnSettings[] = [{name: "name", data: "name"}];
+    const columnSettings: ColumnSettings[] = [{name: "name", data: "name"}];
     const settings: DataTables.Settings = {
         fixedHeader: true,
         paging: false,
@@ -100,7 +99,7 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
     };
 
     if (categories) {
-        columns.push({name: "category", data: "category", visible: false});
+        columnSettings.push({name: "category", data: "category", visible: false});
         settings.orderFixed = {pre: [1, "asc"]};
         settings.rowGroup = {dataSrc: "category"};
 
@@ -113,12 +112,14 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
         });
     }
 
-    fields.forEach((value) => { columns.push({name: value, data: value}); });
+    columns.forEach((value) => {
+        columnSettings.push({name: value.field, data: value.field});
+    });
     if (hasIndex) {
-        columns.push({name: "index", data: "index"});
+        columnSettings.push({name: "index", data: "index"});
     }
 
-    settings.columns = columns;
+    settings.columns = columnSettings;
 
     // Set default order based on query string
     const order: Array<Array<(number | string)>> = [];
@@ -164,24 +165,33 @@ function init(fields: string[], hasIndex: boolean, categories: boolean) {
         window.history.pushState(null, "", url + $.param(newParams));
     };
 
-    // Technically internal APIs but can be used for auto creating
-    table.settings()[0].aoColumns.forEach((column: ColumnLegacy) => {
-        if (column.sType === "num") { createNumberFilter(table.column(column.idx), column.sTitle); }
-        else if (column.sType === "html") { // Most likely to be a list of things that link elsewhere
-            const data = table.column(column.idx).data();
-            let commas = 0;
-            data.each((value: string) => { commas += value.split(/,/g).length - 1; });
-            if (commas > data.length / 4) { createSelectFilter(table.column(column.idx)); } // todo check ratio is good
+    columns.forEach((column) => {
+        if (!column.filter) {
+            return;
+        }
+        switch (column.filter.type) {
+            case "select":
+                createSelectFilter(table.column(`${column.field}:name`), column.filter.data);
+                break;
+            case "number":
+                createNumberFilter(table.column(`${column.field}:name`));
+                break;
         }
     });
+
+    // Technically internal APIs but can be used for auto creating
+    /*    table.settings()[0].aoColumns.forEach((column: ColumnLegacy) => {
+            if (column.sType === "num") { createNumberFilter(table.column(column.idx)); }
+            else if (column.sType === "html") { // Most likely to be a list of things that link elsewhere
+                const data = table.column(column.idx).data();
+                let commas = 0;
+                data.each((value: string) => { commas += value.split(/,/g).length - 1; });
+                if (commas > data.length / 4) { createSelectFilter(table.column(column.idx)); }
+            }
+        });*/
 
     table.on("order.dt", buildUrl);
     table.on("search.dt", buildUrl);
 
     $(".number-filter").on("keyup change", () => table.draw());
 }
-
-// Gotta get an object defined in a <script> from the html as webpack causes stuff to lazy load if CommonsChunk
-$(() => {
-    init(initParams.fields, initParams.has_index, initParams.categories);
-});

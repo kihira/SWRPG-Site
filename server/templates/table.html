@@ -31,13 +31,13 @@
                 <tr>
                     <td><a href="./{{ entry._id }}">{{ render_name(entry) }}</a></td>
                     {% if categories %}
-                        <td>{{ entry.category }}</td>
+                        <td>{{ entry["category"] }}</td>
                     {% endif %}
-                    {% for field in fields %}
-                        <td>{{ entry[field] }}</td>
+                    {% for column in columns %}
+                        <td>{{ entry[column["field"]] }}</td>
                     {% endfor %}
                     {% if has_index %}
-                        <td>{{ entry.index|formatindex }}</td>
+                        <td>{{ entry["index"]|formatindex }}</td>
                     {% endif %}
                 </tr>
             {% endfor %}
@@ -52,15 +52,13 @@
 {% block scripts %}
     {{ super() }}
     <script src="/static/js/chosen.jquery.min.js"></script>
-    <script>
-        initParams = {
-            fields: {{ fields }},
-            has_index: {{ has_index|lower }},
-            categories: {{ categories|lower }}
-        };
-    </script>
-    <script src="https://cdn.datatables.net/v/dt/dt-1.10.16/fh-3.1.3/r-2.2.1/rg-1.0.2/datatables.min.js"></script>
+    <script src="/static/js/datatables.min.js"></script>
     <script src="/static/js/table.min.js"></script>
+    <script>
+        $(() => {
+            init({{ columns|tojson }}, {{ has_index|lower }}, {{ categories|lower }});
+        });
+    </script>
 {% endblock %}
 
 {% macro render_header() %}
@@ -68,8 +66,8 @@
         <td>{{ name_header|default("Name") }}</td>
         {% if categories %}
             <td>Category</td>{% endif %}
-        {% for entry in headers %}
-            <td>{{ entry }}</td>
+        {% for column in columns %}
+            <td>{{ column["header"] }}</td>
         {% endfor %}
         {% if has_index %}
             <td>Index</td>

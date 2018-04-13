@@ -1,4 +1,3 @@
-from bson import ObjectId
 from server.decorators import get_item
 from server.app import app
 from server.db import db
@@ -35,10 +34,20 @@ def process_items(items: list):
 
 @app.route("/adversaries/")
 def all_adversaries():
-    return render_template("table.html", title="Adversaries", categories=False,
-                           headers=["Type", "Skills", "Talents", "Abilities", "Equipment"],
-                           fields=["level", "skills", "talents", "abilities", "equipment"],
-                           entries=process_items(list(db.adversaries.find({}).sort("name", pymongo.ASCENDING))))
+    columns = [
+        {"header": "Type", "field": "level"},
+        {"header": "Skills", "field": "skills",
+         "filter": {"type": "select", "data": [filters.format_title(x["_id"]) for x in list(db["skills"].find({}))]}},
+        {"header": "Talents", "field": "talents",
+         "filter": {"type": "select", "data": [filters.format_title(x["_id"]) for x in list(db["talents"].find({}))]}},
+        {"header": "Abilities", "field": "abilities",
+         "filter": {"type": "select",
+                    "data": [filters.format_title(x["_id"]) for x in list(db["abilities"].find({}))]}},
+        {"header": "Equipment", "field": "equipment", "filter": {"type": "select"}}
+    ]
+
+    return render_template("table.html", title="Adversaries", categories=False, columns=columns,
+                           entries=process_items(list(db["adversaries"].find({}).sort("name", pymongo.ASCENDING))))
 
 
 @app.route("/adversaries/imperials")
