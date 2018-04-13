@@ -51,10 +51,10 @@
 
 {% block scripts %}
     {{ super() }}
-    <script src="/static/js/chosen.jquery.min.js"></script>
-    <script src="/static/js/datatables.min.js"></script>
+    <script src="/static/js/chosen.jquery.min.js" defer></script>
+    <script src="/static/js/datatables.min.js" defer></script>
     <script src="/static/js/table.min.js"></script>
-    <script>
+    <script defer>
         $(() => {
             init({{ columns|tojson }}, {{ has_index|lower }}, {{ categories|lower }});
         });
