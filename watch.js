@@ -3,6 +3,7 @@ const SVGO = require("svgo");
 const fs = require("fs");
 const path = require("path");
 const less = require("less");
+const uglify = require("uglify-js");
 
 const svgo = new SVGO();
 
@@ -52,4 +53,20 @@ watch(["./assets/less/style.less", "./assets/less/edit.less"], (evt, name) => {
                 console.error(err.stack);
             })
     });
+});
+
+// todo shouldn't watch ./static/js in the future, just parse the typescript output
+watch(["./assets/js", "./static/js"], {filter: /(?<!\.min)\.js$/, recursive: true}, (evt, name) => {
+    if (!fs.existsSync(name)) return;
+    fs.readFile(name, "utf8", (err, data) => {
+        const basename = path.basename(name);
+        const result = uglify.minify(data, {sourceMap: {filename: basename, url: `${basename}.map`}});
+        if (result.error) {
+            console.error(result.error.stack);
+            return;
+        }
+        writeFile("static/js", `${basename.slice(0, basename.length - 3)}.min.js`, result.code);
+        writeFile("static/js", `${basename.slice(0, basename.length - 3)}.map`, result.map);
+        console.info(`Minified ${basename}`)
+    })
 });
