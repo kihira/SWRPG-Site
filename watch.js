@@ -4,6 +4,8 @@ const fs = require("fs");
 const path = require("path");
 const less = require("less");
 const uglify = require("uglify-js");
+const csso = require("csso");
+const SourceMapConsumer = require("source-map").SourceMapConsumer;
 
 const svgo = new SVGO();
 
@@ -11,6 +13,15 @@ function writeFile(directory, fileName, data) {
     fs.writeFile(path.resolve(__dirname, directory, fileName), data, (err) => {
         if (err) throw err;
     })
+}
+
+function minifyCss(data, sourceMap, filename) {
+    const result = csso.minify(data, {filename: filename, sourceMap: true});
+    if (sourceMap) {
+        result.map.applySourceMap(new SourceMapConsumer(sourceMap), filename)
+    }
+    result.css += `\n/*# sourceMappingURL=${path.parse(filename).name}.css.map */`;
+    return result
 }
 
 watch('./assets/svg', {filter: /\.svg$/, recursive: true}, (evt, name) => {
@@ -38,16 +49,17 @@ watch('./assets/svg', {filter: /\.svg$/, recursive: true}, (evt, name) => {
 
 watch(["./assets/less/style.less", "./assets/less/edit.less"], (evt, name) => {
     fs.readFile(name, 'utf8', (err, data) => {
+        const pathData = path.parse(name);
         less.render(data, {
-            sourceMap: {sourceMapFileInline: true},
-            paths: [path.dirname(name)],
-            filename: path.basename(name)
+            sourceMap: {},
+            paths: [pathData.dir],
+            filename: name // need to pass full path to ensure it works with @import
         })
             .then((result) => {
-                const basename = path.basename(name).split(".")[0];
-                writeFile("static", `${basename}.css`, result.css);
-                // writeFile("static", `${basename}.css.map`, result.map);
-                console.info(`Compiled ${path.basename(name)}`)
+                result = minifyCss(result.css, result.map, pathData.base);
+                writeFile("static/css", `${pathData.name}.css`, result.css);
+                writeFile("static/css", `${pathData.name}.css.map`, result.map);
+                console.info(`Compiled ${pathData.base}`)
             })
             .catch((err) => {
                 console.error(err.stack);
@@ -66,7 +78,7 @@ watch(["./assets/js", "./static/js"], {filter: /(?<!\.min)\.js$/, recursive: tru
             return;
         }
         writeFile("static/js", `${basename.slice(0, basename.length - 3)}.min.js`, result.code);
-        writeFile("static/js", `${basename.slice(0, basename.length - 3)}.map`, result.map);
+        writeFile("static/js", `${basename}.map`, result.map);
         console.info(`Minified ${basename}`)
     })
 });

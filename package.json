@@ -21,6 +21,7 @@
     "@types/datatables.net-rowgroup": "^1.0.0",
     "@types/jquery": "^3.3.1",
     "@types/jqueryui": "^1.12.2",
+    "csso": "^3.5.0",
     "less": "^3.0.1",
     "svgo": "^1.0.5",
     "typescript": "^2.8.1",
@@ -31,6 +32,7 @@
     "@types/uglify-js": "^3.0.2",
     "concurrently": "^3.5.1",
     "node-watch": "^0.5.8",
-    "tslint": "^5.9.1"
+    "tslint": "^5.9.1",
+    "source-map": "latest"
   }
 }
