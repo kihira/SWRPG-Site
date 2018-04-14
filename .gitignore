@@ -5,8 +5,10 @@ venv/
 node_modules/
 fonts/
 .idea/
-*.css
-*.map
+users.json
+
+# Generated files
+static/css
 static/js/
 static/img/*.svg
-users.json
+*.map

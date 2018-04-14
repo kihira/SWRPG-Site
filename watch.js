@@ -15,7 +15,7 @@ function writeFile(directory, fileName, data) {
     })
 }
 
-function minifyCss(data, sourceMap, filename) {
+function minifyCss(data, filename, sourceMap) {
     const result = csso.minify(data, {filename: filename, sourceMap: true});
     if (sourceMap) {
         result.map.applySourceMap(new SourceMapConsumer(sourceMap), filename)
@@ -64,6 +64,17 @@ watch(["./assets/less/style.less", "./assets/less/edit.less"], (evt, name) => {
             .catch((err) => {
                 console.error(err.stack);
             })
+    });
+});
+
+watch("./assets/css", {filter: /\.css$/}, (evt, name) => {
+    if (!fs.existsSync(name)) return;
+    fs.readFile(name, "utf8", (err, data) => {
+        const pathData = path.parse(name);
+        const result = minifyCss(data, name);
+        writeFile("static/css", `${pathData.name}.css`, result.css);
+        writeFile("static/css", `${pathData.name}.css.map`, result.map);
+        console.info(`Minified ${pathData.base}`)
     });
 });
 
