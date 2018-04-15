@@ -53,7 +53,7 @@ function createSelectFilter(column: ColumnMethods, options?: Array<Entry | strin
         column.cache("search").each((value: string) => {  // gets the data that is used when searching (ie without html)
             value.split(", ").forEach((item: string) => options!.push(item.split(":")[0]));
         });
-        options.filter((value, index, arr) => arr.indexOf(value) === index);
+        options = options.filter((value, index, arr) => arr.indexOf(value) === index);
     }
 
     // Create the select and option elements
