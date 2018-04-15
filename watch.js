@@ -82,14 +82,14 @@ watch("./assets/css", {filter: /\.css$/}, (evt, name) => {
 watch(["./assets/js", "./static/js"], {filter: /(?<!\.min)\.js$/, recursive: true}, (evt, name) => {
     if (!fs.existsSync(name)) return;
     fs.readFile(name, "utf8", (err, data) => {
-        const basename = path.basename(name);
-        const result = uglify.minify(data, {sourceMap: {filename: basename, url: `${basename}.map`}});
+        const pathData = path.parse(name);
+        const result = uglify.minify(data, {sourceMap: {filename: pathData.base, url: `${pathData.base}.map`}});
         if (result.error) {
             console.error(result.error.stack);
             return;
         }
-        writeFile("static/js", `${basename.slice(0, basename.length - 3)}.min.js`, result.code);
-        writeFile("static/js", `${basename}.map`, result.map);
-        console.info(`Minified ${basename}`)
+        writeFile("static/js", `${pathData.name}.min.js`, result.code);
+        writeFile("static/js", `${pathData.base}.map`, result.map);
+        console.info(`Minified ${pathData.base}`)
     })
 });
