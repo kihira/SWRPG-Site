@@ -10,14 +10,22 @@ from server.db import db
 def all_weapons():
     items = list(db.weapons.find({}))
     for item in items:
-        item["price"] = filters.format_price_table(item["price"], item["restricted"])
         item["special"] = filters.format_list(item["special"], "qualities")
         item["skill"] = Markup(f'<a href="/skills/{item["skill"]}">{item["skill"].replace("_", " ")}</a>')
 
-    return render_template("table.html", title="Weapons",
-                           headers=["Skill", "Dam", "Crit", "Range", "Encum", "HP", "Price", "Rarity", "Special"],
-                           fields=["skill", "damage", "critical", "range", "encumbrance", "hardpoints", "price", "rarity", "special"],
-                           entries=items)
+    columns = [
+        {"header": "Skill", "field": "skill"},
+        {"header": "Dam", "field": "damage", "filter": {"type": "number"}},
+        {"header": "Crit", "field": "critical", "filter": {"type": "number"}},
+        {"header": "Range", "field": "range", "filter": {"type": "select"}},
+        {"header": "HP", "field": "hardpoints", "filter": {"type": "number"}},
+        {"header": "Price", "field": "price", "filter": {"type": "number"}},
+        {"header": "Restricted", "field": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
+        {"header": "Rarity", "field": "rarity", "filter": {"type": "number"}},
+        {"header": "Special", "field": "special", "filter": {"type": "select"}},
+    ]
+
+    return render_template("table.html", title="Weapons", columns=columns, entries=items)
 
 
 @app.route("/weapons/<item>")

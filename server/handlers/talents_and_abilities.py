@@ -22,15 +22,20 @@ model = Model([
 
 @app.route("/talents/")
 def all_talents():
-    items = list(db.talents.find({}).sort("_id", 1))
+    items = list(db["talents"].find({}).sort("_id", 1))
     for item in items:
         item["activation"] = activation(item["activation"])
         if "short" in item:
             item["short"] = filters.description(item["short"])
 
-    return render_template("table.html", title="Talents", name_header="Talent", categories=False,
-                           headers=["Description", "Activation", "Ranked", "Force Sensitive"],
-                           fields=["short", "activation", "ranked", "force"],
+    columns = [
+        {"header": "Description", "field": "description"},
+        {"header": "Activation", "field": "activation", "filter": {"type": "select"}},
+        {"header": "Ranked", "field": "ranked"},
+        {"header": "Force Sensitive", "field": "force"}
+    ]
+
+    return render_template("table.html", title="Talents", name_header="Talent", categories=False, columns=columns,
                            entries=items)
 
 

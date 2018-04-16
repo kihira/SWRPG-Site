@@ -1,14 +1,14 @@
 from decorators import get_item
 from server.app import app
 from server.db import db
-from flask import render_template, abort
+from flask import render_template
 
 
 @app.route("/skills/")
 def all_skills():
     # Groups all skills by category, then reverses it to present something like you would see in the books
     # todo this could probably be done better
-    data = list(db.skills.aggregate([{"$group": {"_id": "$category", "values": {"$push": "$$ROOT"}}}]))
+    data = list(db["skills"].aggregate([{"$group": {"_id": "$category", "values": {"$push": "$$ROOT"}}}]))
     data.reverse()
 
     items = []
@@ -17,8 +17,7 @@ def all_skills():
             items.append(skill)
 
     return render_template("table.html", title="Skills", name_header="Skill",
-                           headers=["Characteristic"],
-                           fields=["characteristic"], entries=items)
+                           columns=[{"header": "Characteristic", "field": "characteristic"}], entries=items)
 
 
 @app.route("/skills/<item>")

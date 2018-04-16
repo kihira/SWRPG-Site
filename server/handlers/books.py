@@ -1,10 +1,8 @@
-from pymongo.results import InsertOneResult, UpdateResult
-
 from decorators import get_item, login_required
 from model import Model, Field, TextareaField, SelectField
 from server.app import app
 from server.db import db
-from flask import render_template, abort, request, flash
+from flask import render_template, request, flash
 
 model = Model([
     Field("_id", "Index"),
@@ -25,9 +23,14 @@ model = Model([
 
 @app.route("/books/")
 def all_books():
+    columns = [
+        {"header": "System", "field": "system"},
+        {"header": "Key", "field": "key"},
+        {"header": "Initials", "field": "_id"},
+    ]
+
     return render_template("table.html", title="Books", name_header="Book", categories=False, has_index=False,
-                           headers=["System", "Key", "Initials"],
-                           fields=["system", "key", "_id"], entries=list(db.books.find({})))
+                           columns=columns, entries=list(db["books"].find({})))
 
 
 @app.route("/books/<item>")

@@ -1,12 +1,12 @@
 from decorators import get_item
 from server.app import app
 from server.db import db
-from flask import render_template, abort
+from flask import render_template
 
 
 @app.route("/planets/")
 def all_planets():
-    items = list(db.planets.find({}))
+    items = list(db["planets"].find({}))
 
     for item in items:
         item["languages"] = ", ".join(item["languages"])
@@ -14,9 +14,15 @@ def all_planets():
         item["exports"] = ", ".join(item["exports"])
         item["routes"] = ", ".join(item["routes"])
 
-    return render_template("table.html", title="Planets", name_header="Planet",
-                           headers=["Government", "Languages", "Imports", "Exports", "Routes"],
-                           fields=["government", "languages", "imports", "exports", "routes"], entries=items)
+    columns = [
+        {"header": "Government", "field": "government"},
+        {"header": "Languages", "field": "languages", "filter": {"type": "select"}},
+        {"header": "Imports", "field": "imports", "filter": {"type": "select"}},
+        {"header": "Exports", "field": "exports", "filter": {"type": "select"}},
+        {"header": "Routes", "field": "routes", "filter": {"type": "select"}},
+    ]
+
+    return render_template("table.html", title="Planets", name_header="Planet", columns=columns, entries=items)
 
 
 @app.route("/planet/<item>")

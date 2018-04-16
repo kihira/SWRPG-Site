@@ -21,7 +21,7 @@ model = Model([
 @app.route("/armour/")
 @app.route("/armor/")
 def all_armor():
-    items = list(db.armor.find({}))
+    items = list(db["armor"].find({}))
 
     columns = [
         {"header": "Defense", "field": "defense", "filter": {"type": "number"}},

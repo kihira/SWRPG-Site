@@ -1,5 +1,4 @@
 from server.decorators import get_item
-from server import filters
 from server.app import app
 from server.db import db
 from flask import render_template
@@ -7,13 +6,17 @@ from flask import render_template
 
 @app.route("/attachments/")
 def all_attachments():
-    items = list(db.attachments.find({}))
-    for item in items:
-        item["price"] = filters.format_price_table(item["price"], item["restricted"])
+    items = list(db["attachments"].find({}))
 
-    return render_template("table.html", title="Attachments", name_header="Attachment",
-                           headers=["Price", "Encumbrance", "HP Required", "Rarity"],
-                           fields=["price", "encumbrance", "hardpoints", "rarity"], entries=items)
+    columns = [
+        {"header": "Price", "field": "price", "filter": {"type": "number"}},
+        {"header": "Restricted", "field": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
+        {"header": "Encumbrance", "field": "encumbrance", "filter": {"type": "number"}},
+        {"header": "HP Required", "field": "hardpoints", "filter": {"type": "number"}},
+        {"header": "Rarity", "field": "rarity", "filter": {"type": "number"}}
+    ]
+
+    return render_template("table.html", title="Attachments", name_header="Attachment", columns=columns, entries=items)
 
 
 @app.route("/attachments/<item>")

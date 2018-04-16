@@ -1,5 +1,4 @@
 from server.decorators import get_item
-from server import filters
 from server.app import app
 from server.db import db
 from flask import render_template
@@ -7,46 +6,62 @@ from flask import render_template
 
 @app.route("/vehicles/")
 def all_vehicles():
-    data = list(db.vehicles.aggregate([{"$group": {"_id": "$category", "values": {"$push": "$$ROOT"}}},
-                                       {"$sort": {"_id": 1}}]))
+    entries = list(db["vehicles"].aggregate([{"$group": {"_id": "$category", "values": {"$push": "$$ROOT"}}},
+                                             {"$sort": {"_id": 1}}]))
 
-    entries = []
-    for category in data:
+    items = []
+    for category in entries:
         for vehicle in category["values"]:
-            vehicle["price"] = filters.format_price_table(vehicle["price"], vehicle["restricted"])
             vehicle["crew"] = len(vehicle["crew"])
             if type(vehicle["weapons"]) == list:
                 vehicle["weapons"] = len(vehicle["weapons"])
+            items.append(vehicle)
 
-            entries.append(vehicle)
+    columns = [
+        {"header": "Silhouette", "field": "silhouette", "filter": {"type": "number"}},
+        {"header": "Speed", "field": "speed", "filter": {"type": "number"}},
+        {"header": "Handling", "field": "handling", "filter": {"type": "number"}},
+        {"header": "Crew", "field": "crew", "filter": {"type": "number"}},
+        {"header": "Encumbrance", "field": "encumbrance", "filter": {"type": "number"}},
+        {"header": "Passengers", "field": "passengers", "filter": {"type": "number"}},
+        {"header": "Price", "field": "price", "filter": {"type": "number"}},
+        {"header": "Restricted", "field": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
+        {"header": "Rarity", "field": "rarity", "filter": {"type": "number"}},
+        {"header": "HP", "field": "hardpoints", "filter": {"type": "number"}},
+        {"header": "Weapons", "field": "weapons", "filter": {"type": "number"}},
+    ]
 
-    return render_template("table.html", title="Vehicles",
-                           headers=["Silhouette", "Speed", "Handling", "Crew", "Encumbrance", "Passengers",
-                                    "Price", "Rarity", "HP", "Weapons"],
-                           fields=["silhouette", "speed", "handling", "crew", "encumbrance", "passengers",
-                                   "price", "rarity", "hardpoints", "weapons"], entries=entries)
+    return render_template("table.html", title="Vehicles", columns=columns, entries=items)
 
 
 @app.route("/starships/")
 def all_starships():
-    data = list(db.starships.aggregate([{"$group": {"_id": "$category", "values": {"$push": "$$ROOT"}}},
-                                        {"$sort": {"_id": 1}}]))
+    entries = list(db["starships"].aggregate([{"$group": {"_id": "$category", "values": {"$push": "$$ROOT"}}},
+                                              {"$sort": {"_id": 1}}]))
 
-    entries = []
-    for category in data:
+    items = []
+    for category in entries:
         for vehicle in category["values"]:
-            vehicle["price"] = filters.format_price_table(vehicle["price"], vehicle["restricted"])
             vehicle["crew"] = len(vehicle["crew"])
             if type(vehicle["weapons"]) == list:
                 vehicle["weapons"] = len(vehicle["weapons"])
+            items.append(vehicle)
 
-            entries.append(vehicle)
+    columns = [
+        {"header": "Silhouette", "field": "silhouette", "filter": {"type": "number"}},
+        {"header": "Speed", "field": "speed", "filter": {"type": "number"}},
+        {"header": "Handling", "field": "handling", "filter": {"type": "number"}},
+        {"header": "Crew", "field": "crew", "filter": {"type": "number"}},
+        {"header": "Encumbrance", "field": "encumbrance", "filter": {"type": "number"}},
+        {"header": "Passengers", "field": "passengers", "filter": {"type": "number"}},
+        {"header": "Price", "field": "price", "filter": {"type": "number"}},
+        {"header": "Restricted", "field": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
+        {"header": "Rarity", "field": "rarity", "filter": {"type": "number"}},
+        {"header": "HP", "field": "hardpoints", "filter": {"type": "number"}},
+        {"header": "Weapons", "field": "weapons", "filter": {"type": "number"}},
+    ]
 
-    return render_template("table.html", title="Starships",
-                           headers=["Silhouette", "Speed", "Handling", "Crew", "Encumbrance", "Passengers",
-                                    "Price", "Rarity", "HP", "Weapons"],
-                           fields=["silhouette", "speed", "handling", "crew", "encumbrance", "passengers",
-                                   "price", "rarity", "hardpoints", "weapons"], entries=entries)
+    return render_template("table.html", title="Starships", columns=columns, entries=items)
 
 
 @app.route("/vehicles/<item>")
