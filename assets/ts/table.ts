@@ -11,6 +11,7 @@ interface Column {
     header: string;
     field: string;
     filter?: { type: "select" | "number", data: string[] | Array<{ display: string, value: string }> };
+    hidden?: boolean;
 }
 
 interface Entry {
@@ -121,7 +122,7 @@ function init(columns: Column[], hasIndex: boolean, categories: boolean) {
     }
 
     columns.forEach((value) => {
-        columnSettings.push({name: value.field, data: value.field});
+        columnSettings.push({name: value.field, data: value.field, visible: !value.hidden});
     });
     if (hasIndex) {
         columnSettings.push({name: "index", data: "index"});

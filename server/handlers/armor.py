@@ -1,5 +1,3 @@
-from pymongo.results import UpdateResult
-
 from model import Model, Field, NumberField, CheckboxField, TextareaField, ObjectIdField
 from server.decorators import get_item, login_required
 from server import filters
@@ -26,12 +24,21 @@ model = Model([
 def all_armor():
     items = list(db.armor.find({}))
     for item in items:
-        item["price"] = filters.format_price_table(item["price"], item["restricted"])
+        pass
+        # item["price"] = filters.format_price_table(item["price"], item["restricted"])
+
+    columns = [
+        {"header": "Defense", "field": "defense", "filter": {"type": "number"}},
+        {"header": "Soak", "field": "soak", "filter": {"type": "number"}},
+        {"header": "Price", "field": "price", "filter": {"type": "number"}},
+        {"header": "Restricted", "field": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
+        {"header": "Encumbrance", "field": "encumbrance", "filter": {"type": "number"}},
+        {"header": "Hard Points", "field": "hardpoints", "filter": {"type": "number"}},
+        {"header": "Rarity", "field": "rarity", "filter": {"type": "number"}}
+    ]
 
     return render_template("table.html", title="Armor", name_header="Type", categories=False,
-                           headers=["Defense", "Soak", "Price", "Encumbrance", "Hard Points", "Rarity"],
-                           fields=["defense", "soak", "price", "encumbrance", "hardpoints", "rarity"],
-                           entries=items)
+                           columns=columns, entries=items)
 
 
 @app.route("/armour/<item>")
