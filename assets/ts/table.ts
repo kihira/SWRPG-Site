@@ -1,5 +1,6 @@
 import ColumnSettings = DataTables.ColumnSettings;
 import ColumnMethods = DataTables.ColumnMethods;
+import CellMetaSettings = DataTables.CellMetaSettings;
 
 interface Query {
     search?: string;
@@ -19,32 +20,42 @@ interface Entry {
     value: string;
 }
 
+function numberSearch(minElem: JQuery, maxElem: JQuery, settings: DataTables.Api, searchData: any[], index: number, dataSrc: any): boolean {
+    console.log(arguments);
+    const min = parseInt(minElem.val() as string, 10);
+    const max = parseInt(maxElem.val() as string, 10);
+    const value = dataSrc.price as number;
+    console.log(minElem.uniqueId());
+
+    return !isNaN(min) && !isNaN(max) && value >= min && value <= max;
+}
+
 function createNumberFilter(column: ColumnMethods) {
     // Find min/max values for column
     const data = {min: 0, max: 0, column: column.index() as number};
-    column.cache("search").each((value: string) => { // todo should look into why this is string and not numbers
+    column.data().each((value: string) => {
         const num = parseInt(value, 10);
         if (num < data.min) { data.min = num; }
         else if (num > data.max) { data.max = num; }
     });
 
     // Create elements
-    const minElem = $("<input>").addClass("number-filter")
-        .attr("type", "number").attr("min", data.min).attr("max", data.max).attr("value", data.min);
-    const maxElem = minElem.clone().attr("value", data.max);
-    const div = $("<div>").appendTo($(".filters")).text(name);
-    minElem.appendTo($("<label>").text("Min").appendTo(div));
-    maxElem.appendTo($("<label>").text("Max").appendTo(div));
+    const name = column.header().textContent || "";
+    const minElem = $("<input/>", {
+        class: "number-filter",
+        id: name + "_min",
+        max: data.max,
+        min: data.min,
+        value: data.min,
+    });
+    const maxElem = minElem.clone().attr("value", data.max).attr("id", name + "_max");
+    const div = $("<div/>").appendTo($(".filters")).text(name);
+    minElem.appendTo($("<label/>").text("Min").appendTo(div));
+    maxElem.appendTo($("<label/>").text("Max").appendTo(div));
 
     // Register a new search function to handle this filter
     // todo should use one global one or create individual ones?
-    $.fn.dataTable.ext.search.push((settings: DataTables.Api, searchData: any[]): boolean => {
-        const min = parseInt(minElem.val() as string, 10);
-        const max = parseInt(maxElem.val() as string, 10);
-        const value = searchData[data.column] as number;
-
-        return !isNaN(min) && !isNaN(max) && value >= min && value <= max;
-    });
+    $.fn.dataTable.ext.search.push(numberSearch.bind(null, minElem, maxElem));
 }
 
 function createSelectFilter(column: ColumnMethods, options?: Array<Entry | string>) {
@@ -122,7 +133,19 @@ function init(columns: Column[], hasIndex: boolean, categories: boolean) {
     }
 
     columns.forEach((value) => {
-        columnSettings.push({name: value.field, data: value.field, visible: !value.hidden});
+        const cs: ColumnSettings = {name: value.field, data: value.field, visible: !value.hidden};
+        if (value.field === "price") {
+            cs.render = (data: any, type: any, row: any, meta: CellMetaSettings) => {
+                let out = "<td>";
+                if (row.restricted) {
+                    out += "(R) ";
+                }
+                out += data + "</td>";
+                return out;
+            };
+            cs.type = "num";
+        }
+        columnSettings.push(cs);
     });
     if (hasIndex) {
         columnSettings.push({name: "index", data: "index"});
