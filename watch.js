@@ -5,7 +5,7 @@ const path = require("path");
 const less = require("less");
 const uglify = require("uglify-js");
 const csso = require("csso");
-const SourceMapConsumer = require("source-map").SourceMapConsumer;
+const SourceMapConsumer = require("./node_modules/csso/node_modules/css-tree/node_modules/source-map/source-map").SourceMapConsumer;
 
 const svgo = new SVGO();
 
@@ -56,7 +56,7 @@ watch(["./assets/less/style.less", "./assets/less/edit.less"], (evt, name) => {
             filename: name // need to pass full path to ensure it works with @import
         })
             .then((result) => {
-                result = minifyCss(result.css, result.map, pathData.base);
+                result = minifyCss(result.css, pathData.base, result.map);
                 writeFile("static/css", `${pathData.name}.css`, result.css);
                 writeFile("static/css", `${pathData.name}.css.map`, result.map);
                 console.info(`Compiled ${pathData.base}`)

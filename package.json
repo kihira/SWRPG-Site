@@ -32,7 +32,6 @@
     "@types/uglify-js": "^3.0.2",
     "concurrently": "^3.5.1",
     "node-watch": "^0.5.8",
-    "tslint": "^5.9.1",
-    "source-map": "latest"
+    "tslint": "^5.9.1"
   }
 }
