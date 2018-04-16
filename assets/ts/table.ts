@@ -150,16 +150,6 @@ function init(columns: Column[], hasIndex: boolean, categories: boolean) {
             };
             cs.type = "num";
         }
-        if (value.filter) {
-            switch (value.filter.type) {
-                case "select":
-                    createSelectFilter(table.column(`${value.field}:name`), value.filter.data);
-                    break;
-                case "number":
-                    createNumberFilter(table.column(`${value.field}:name`));
-                    break;
-            }
-        }
         columnSettings.push(cs);
     });
     if (hasIndex) {
@@ -214,6 +204,19 @@ function init(columns: Column[], hasIndex: boolean, categories: boolean) {
 
     table.on("order.dt", buildUrl);
     table.on("search.dt", buildUrl);
+
+    // Setup filters
+    columns.forEach((column) => {
+        if (!column.filter) { return; }
+        switch (column.filter.type) {
+            case "select":
+                createSelectFilter(table.column(`${column.field}:name`), column.filter.data);
+                break;
+            case "number":
+                createNumberFilter(table.column(`${column.field}:name`));
+                break;
+        }
+    });
 
     // If number filters is defined, it means we have a number filter
     if (numberFilters) {
