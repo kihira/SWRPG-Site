@@ -20,14 +20,20 @@ interface Entry {
     value: string;
 }
 
-function numberSearch(minElem: JQuery, maxElem: JQuery, settings: DataTables.Api, searchData: any[], index: number, dataSrc: any): boolean {
-    console.log(arguments);
-    const min = parseInt(minElem.val() as string, 10);
-    const max = parseInt(maxElem.val() as string, 10);
-    const value = dataSrc.price as number;
-    console.log(minElem.uniqueId());
+let numberFilters: [{ min: JQuery; max: JQuery; dataField: string}];
 
-    return !isNaN(min) && !isNaN(max) && value >= min && value <= max;
+function numberSearch(settings: DataTables.Api, searchData: any[], index: number, dataSrc: any): boolean {
+    let success = true;
+    numberFilters.forEach((filter) => {
+        const min = parseInt(filter.min.val() as string, 10) || 0;
+        const max = parseInt(filter.max.val() as string, 10) || 0;
+        const value = dataSrc[filter.dataField] as number;
+        if ( value < min || value > max) {
+            success = false;
+            return;
+        }
+    });
+    return success;
 }
 
 function createNumberFilter(column: ColumnMethods) {
@@ -53,9 +59,8 @@ function createNumberFilter(column: ColumnMethods) {
     minElem.appendTo($("<label/>").text("Min").appendTo(div));
     maxElem.appendTo($("<label/>").text("Max").appendTo(div));
 
-    // Register a new search function to handle this filter
-    // todo should use one global one or create individual ones?
-    $.fn.dataTable.ext.search.push(numberSearch.bind(null, minElem, maxElem));
+    if (!numberFilters) { numberFilters = [{min: minElem, max: maxElem, dataField: column.dataSrc() as string}]; }
+    else { numberFilters.push({min: minElem, max: maxElem, dataField: column.dataSrc() as string}); }
 }
 
 function createSelectFilter(column: ColumnMethods, options?: Array<Entry | string>) {
@@ -145,6 +150,16 @@ function init(columns: Column[], hasIndex: boolean, categories: boolean) {
             };
             cs.type = "num";
         }
+        if (value.filter) {
+            switch (value.filter.type) {
+                case "select":
+                    createSelectFilter(table.column(`${value.field}:name`), value.filter.data);
+                    break;
+                case "number":
+                    createNumberFilter(table.column(`${value.field}:name`));
+                    break;
+            }
+        }
         columnSettings.push(cs);
     });
     if (hasIndex) {
@@ -197,33 +212,12 @@ function init(columns: Column[], hasIndex: boolean, categories: boolean) {
         window.history.pushState(null, "", url + $.param(newParams));
     };
 
-    columns.forEach((column) => {
-        if (!column.filter) {
-            return;
-        }
-        switch (column.filter.type) {
-            case "select":
-                createSelectFilter(table.column(`${column.field}:name`), column.filter.data);
-                break;
-            case "number":
-                createNumberFilter(table.column(`${column.field}:name`));
-                break;
-        }
-    });
-
-    // Technically internal APIs but can be used for auto creating
-    /*    table.settings()[0].aoColumns.forEach((column: ColumnLegacy) => {
-            if (column.sType === "num") { createNumberFilter(table.column(column.idx)); }
-            else if (column.sType === "html") { // Most likely to be a list of things that link elsewhere
-                const data = table.column(column.idx).data();
-                let commas = 0;
-                data.each((value: string) => { commas += value.split(/,/g).length - 1; });
-                if (commas > data.length / 4) { createSelectFilter(table.column(column.idx)); }
-            }
-        });*/
-
     table.on("order.dt", buildUrl);
     table.on("search.dt", buildUrl);
 
-    $(".number-filter").on("keyup change", () => table.draw());
+    // If number filters is defined, it means we have a number filter
+    if (numberFilters) {
+        $.fn.dataTable.ext.search.push(numberSearch);
+        $(".number-filter").on("keyup change", () => table.draw());
+    }
 }
