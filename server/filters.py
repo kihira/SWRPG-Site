@@ -59,12 +59,7 @@ def format_skill(skill):
 
 
 def format_number(s):
-    s = str(s)
-    if len(s) <= 3:
-        return s
-    for i in range(len(s)-3, 0, -3):
-        s = f'{s[:i]},{s[i:]}'
-    return s
+    return "{:,}".format(s)
 
 
 def format_price_table(price, restricted):

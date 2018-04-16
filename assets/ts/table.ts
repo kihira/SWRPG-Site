@@ -140,12 +140,12 @@ function init(columns: Column[], hasIndex: boolean, categories: boolean) {
     columns.forEach((value) => {
         const cs: ColumnSettings = {name: value.field, data: value.field, visible: !value.hidden};
         if (value.field === "price") {
-            cs.render = (data: any, type: any, row: any, meta: CellMetaSettings) => {
+            cs.render = (data: string, type: any, row: any) => {
                 let out = "<td>";
                 if (row.restricted) {
                     out += "(R) ";
                 }
-                out += data + "</td>";
+                out += parseInt(data, 10).toLocaleString() + "</td>";
                 return out;
             };
             cs.type = "num";

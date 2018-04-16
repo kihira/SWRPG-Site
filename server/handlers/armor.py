@@ -1,6 +1,5 @@
 from model import Model, Field, NumberField, CheckboxField, TextareaField, ObjectIdField
 from server.decorators import get_item, login_required
-from server import filters
 from server.app import app
 from server.db import db
 from flask import render_template, request, flash
@@ -23,9 +22,6 @@ model = Model([
 @app.route("/armor/")
 def all_armor():
     items = list(db.armor.find({}))
-    for item in items:
-        pass
-        # item["price"] = filters.format_price_table(item["price"], item["restricted"])
 
     columns = [
         {"header": "Defense", "field": "defense", "filter": {"type": "number"}},
