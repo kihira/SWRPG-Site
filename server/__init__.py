@@ -4,6 +4,10 @@ from server.db import db
 from server import handlers
 
 
+if __name__ == '__main__':
+    app.run()
+
+
 @app.route("/add-planet", methods=['GET', 'POST'])
 def add_planet():
     if request.method == "POST":
