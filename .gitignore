@@ -8,7 +8,5 @@ fonts/
 users.json
 
 # Generated files
-static/css
-static/js/
-static/img/
+static/
 *.map

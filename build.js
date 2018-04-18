@@ -72,6 +72,20 @@ function buildJs() {
     });
 }
 
+function copyFonts() {
+    fs.ensureDirSync("static/fonts");
+    fs.copy("assets/fonts", "static/fonts/", (err) => {if (err) console.log(err);});
+    console.log("Copied fonts")
+}
+
+function copyIcons() {
+    fs.ensureDirSync("static/icons");
+    fs.copy("assets/icons", "static/icons/", (err) => {if (err) console.log(err);});
+    console.log("Copied icons")
+}
+
 buildCss();
 buildImages();
 buildJs();
+copyFonts();
+copyIcons();
