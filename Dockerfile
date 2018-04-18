@@ -5,8 +5,7 @@ COPY package.json yarn.lock ./
 RUN yarn install --production
 
 COPY assets ./assets
-COPY tsconfig.json ./
-RUN mkdir -p ./static/img
+COPY tsconfig.json build.js ./
 RUN yarn run build
 
 
@@ -17,10 +16,12 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY server ./server
-COPY static ./static
+#COPY static ./static
+COPY users.json ./
 COPY --from=builder /usr/src/build/static ./static
 
 ENV PYTHONUNBUFFERED 1
+ENV FLASK_APP "server"
 ENV DB_CONN "mongodb://localhost:27017"
 EXPOSE 8000
 

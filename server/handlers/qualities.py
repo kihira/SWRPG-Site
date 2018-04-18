@@ -1,4 +1,4 @@
-from decorators import get_item
+from server.decorators import get_item
 from server.app import app
 from server.db import db
 from server import filters

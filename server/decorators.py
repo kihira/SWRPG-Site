@@ -3,8 +3,7 @@ from functools import wraps
 from bson import ObjectId
 from flask import abort, session, redirect, url_for
 from pymongo.collection import Collection
-
-import login
+from server import login
 
 
 def get_item(collection: Collection, objectid=False):

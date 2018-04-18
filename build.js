@@ -1,28 +1,27 @@
 const fs = require("fs-extra");
 const path = require("path");
 const csso = require("csso");
-const SourceMapConsumer = require("source-map").SourceMapConsumer;
-const svgo = new require("svgo")();
+const SVGO = require("svgo");
+const less = require("less");
+const uglify = require("uglify-js");
+const svgo = new SVGO();
 
 function buildImages() {
-    fs.ensureDirSync("./static/img");
+    fs.ensureDirSync("static/img");
 
     // PNG images
-    fs.copy("./assets/images", "./static/img/", (err) => {
-        if (err) console.log(err);
-    });
+    fs.copy("assets/images", "static/img/", (err) => {if (err) console.log(err);});
 
     // SVG
     fs.readdir("./assets/svg", (err, files) => {
         files.forEach((file) => {
-            const data = fs.readFileSync(file);
+            const data = fs.readFileSync(`assets/svg/${file}`);
             svgo.optimize(data)
                 .then(result => {
-                    if (result.error) {
-                        console.error(result.error);
-                    }
+                    if (result.error) { console.error(result.error); }
                     else {
-                        writeFile("static/img", path.parse(name).name, result.data);
+                        fs.outputFile(`static/img/${file}`, result.data);
+                        console.log(`Optimised ${file}`)
                     }
                 })
                 .catch((err) => console.error(err.stack));
@@ -30,38 +29,49 @@ function buildImages() {
     });
 }
 
-function minifyCss(data, filename, sourceMap) {
-    const result = csso.minify(data, {filename: filename, sourceMap: true, comments: false});
-    if (sourceMap) {
-        result.map.applySourceMap(new SourceMapConsumer(sourceMap), filename)
-    }
-    result.css += `\n/*# sourceMappingURL=${path.parse(filename).name}.css.map */`;
-    return result
+function minifyCss(data, filename) {
+    return csso.minify(data, {filename: filename, comments: false})
 }
 
 function buildCss() {
-    fs.readFile(name, 'utf8', (err, data) => {
-        const pathData = path.parse(name);
+    fs.readdirSync("assets/less").forEach((file) => {
+        const data = fs.readFileSync(`assets/less/${file}`, "utf8");
         less.render(data, {
-            sourceMap: {},
-            paths: [pathData.dir],
-            filename: name // need to pass full path to ensure it works with @import
+            paths: ["assets/less/"],
+            filename: file // need to pass full path to ensure it works with @import
         })
             .then((result) => {
-                result = minifyCss(result.css, pathData.base, result.map);
-                writeFile("static/css", `${pathData.name}.css`, result.css);
-                writeFile("static/css", `${pathData.name}.css.map`, result.map);
-                console.info(`Compiled ${pathData.base}`)
+                fs.outputFile(`static/css/${path.parse(file).name}.css`, minifyCss(result.css).css);
+                console.info(`Compiled ${file}`)
             })
             .catch((err) => {
                 console.error(err.stack);
-            })
+            });
     });
-    fs.readFile(name, "utf8", (err, data) => {
-        const pathData = path.parse(name);
-        const result = minifyCss(data, name);
-        writeFile("static/css", `${pathData.name}.css`, result.css);
-        writeFile("static/css", `${pathData.name}.css.map`, result.map);
-        console.info(`Minified ${pathData.base}`)
+
+    fs.readdirSync("./assets/css").forEach((file) => {
+        const data = fs.readFileSync(`./assets/css/${file}`, "utf8");
+        fs.outputFile(`static/css/${file}`, minifyCss(data).css);
+        console.info(`Minified ${file}`)
     });
 }
+
+function buildJs() {
+    fs.readdirSync("assets/js").forEach((file) => {
+        if (file.indexOf(".map") !== -1) return;
+        const data = fs.readFileSync(`assets/js/${file}`, "utf8");
+        const files = {};
+        files[file] = data;
+        const result = uglify.minify(files);
+        if (result.error) {
+            console.error(result.error.stack);
+            return;
+        }
+        fs.outputFile(`static/js/${path.parse(file).name}.min.js`, result.code);
+        console.info(`Minified ${file}`)
+    });
+}
+
+buildCss();
+buildImages();
+buildJs();

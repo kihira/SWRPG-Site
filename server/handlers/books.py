@@ -1,5 +1,5 @@
-from decorators import get_item, login_required
-from model import Model, Field, TextareaField, SelectField
+from server.decorators import get_item, login_required
+from server.model import Model, Field, TextareaField, SelectField
 from server.app import app
 from server.db import db
 from flask import render_template, request, flash

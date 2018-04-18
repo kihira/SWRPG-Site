@@ -1,4 +1,4 @@
-from model import Model, Field, NumberField, CheckboxField, TextareaField, ObjectIdField
+from server.model import Model, Field, NumberField, CheckboxField, TextareaField, ObjectIdField
 from server.decorators import get_item, login_required
 from server.app import app
 from server.db import db

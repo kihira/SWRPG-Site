@@ -8,11 +8,8 @@
   "private": true,
   "homepage": "https://swrpg.foxes.rocks",
   "scripts": {
-    "build": "npm run less && npm run svg && npm run ts",
-    "watch": "concurrently --kill-others \"tsc -p tsconfig.json --watch\" \"node watch.js\"",
-    "less": "lessc ./assets/less/style.less ./static/style.css && lessc ./assets/less/edit.less ./static/edit.css",
-    "svg": "svgo -f ./assets/svg -o ./static/img",
-    "ts": "tsc -p tsconfig.json"
+    "build": "tsc && node build.js",
+    "watch": "concurrently --kill-others \"tsc -p tsconfig.json --watch\" \"node watch.js\""
   },
   "dependencies": {
     "@types/chosen-js": "^1.6.2",

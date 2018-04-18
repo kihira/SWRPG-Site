@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, flash
 
-from decorators import get_item, login_required
-from model import Model, Field, CheckboxField, FieldGroup, NumberField
+from server.decorators import get_item, login_required
+from server.model import Model, Field, CheckboxField, FieldGroup, NumberField
 from server.app import app
 from server.db import db
 
