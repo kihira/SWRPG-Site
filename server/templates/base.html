@@ -34,16 +34,16 @@
     {% block menu %}
         {% set nav = [
             ('/', 'index', 'Index'),
-            ('/adversaries', 'aversaries', 'Adversaries'),
-            ('/armor', 'armor', 'Armor'),
-            ('/attachments', 'attachments', 'Attachments'),
-            ('/books', 'books', 'Books'),
-            ('/gear', 'gear', 'Gear'),
-            ('/skills', 'skills', 'Skills'),
-            ('/talents', 'talents', 'Talents'),
-            ('/weapons', 'weapons', 'Weapons'),
-            ('/starships', 'starships', 'Starships'),
-            ('/vehicles', 'vehicles', 'Vehicles')
+            ('/adversaries/', 'aversaries', 'Adversaries'),
+            ('/armor/', 'armor', 'Armor'),
+            ('/attachments/', 'attachments', 'Attachments'),
+            ('/books/', 'books', 'Books'),
+            ('/gear/', 'gear', 'Gear'),
+            ('/skills/', 'skills', 'Skills'),
+            ('/talents/', 'talents', 'Talents'),
+            ('/weapons/', 'weapons', 'Weapons'),
+            ('/starships/', 'starships', 'Starships'),
+            ('/vehicles/', 'vehicles', 'Vehicles')
     ]-%}
         <ul>
             {% for href, id, caption in nav %}
