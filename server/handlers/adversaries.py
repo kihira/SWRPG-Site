@@ -15,16 +15,15 @@ def process_items(items: list):
         for i in item["equipment"]["weapons"]:
             if type(i) == dict:
                 equipment += f'{i["quantity"]} '
-                print(i["id"])
-                i = db.weapons.find({"_id": i["id"]})[0]
+                i = db["weapons"].find_one({"_id": i["id"]})
             else:
-                i = db.weapons.find({"_id": i})[0]
+                i = db["weapons"].find_one({"_id": i})
             equipment += f'<a href="/weapons/{i["_id"]}">{i["name"]}</a>, '
         for i in item["equipment"]["armor"]:
-            i = db.armor.find({"_id": i})[0]
+            i = db["armor"].find_one({"_id": i}, {"name": True})
             equipment += f'<a href="/armor/{i["_id"]}">{i["name"]}</a>, '
         for i in item["equipment"]["gear"]:
-            i = db.gear.find({"_id": i})[0]
+            i = db["gear"].find_one({"_id": i}, {"name": True})
             equipment += f'<a href="/gear/{i["_id"]}">{i["name"]}</a>, '
         for i in item["equipment"]["other"]:
             equipment += i + ", "
