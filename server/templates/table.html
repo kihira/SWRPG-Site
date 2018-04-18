@@ -12,10 +12,11 @@
 
 {% block content %}
     <div class="filters">
+        <img src="/static/img/filter.svg" style="width: 20px; height: 20px;">
         {% if categories %}
             <label>
                 Group by Category
-                <input type="checkbox" id="categories" checked="checked">
+                <input type="checkbox" id="categories" checked="checked" style="float: left;">
             </label>
         {% endif %}
     </div>

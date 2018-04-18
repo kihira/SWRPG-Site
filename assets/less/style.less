@@ -13,14 +13,6 @@
 @ability: rgb(63, 172, 73);
 @proficiency: rgb(255, 241, 0);
 
-label {
-  display: block;
-}
-
-input {
-  font-family: @itc-symbol; // Have to do this otherwise browser uses default font
-}
-
 html {
   text-rendering: optimizeLegibility;
 }
@@ -425,12 +417,6 @@ table.talent {
   }
 }
 
-.section-header {
-  font-family: @elektra;
-  font-size: 24pt;
-  color: @darkgreen;
-}
-
 .planet-header {
   font-family: @elektra;
   font-size: 24pt;
@@ -441,6 +427,12 @@ table.talent {
   font-family: @elektra;
   font-size: 16pt;
   color: @darkred;
+}
+
+.section-header {
+  font-family: @elektra;
+  font-size: 24pt;
+  color: @darkgreen;
 }
 
 table.item-table {
@@ -493,4 +485,27 @@ table.item-table {
       }
     }
   }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+
+  div.filter {
+    font-size: 0.9em;
+    width: auto;
+    padding-left: 10px;
+
+    input {
+      margin-right: 4px;
+      width: 50px;
+      & ~ input {
+        margin-left: 5px;
+      }
+    }
+  }
+}
+
+input {
+  font-family: @itc-symbol; // Have to do this otherwise browser uses default font
 }

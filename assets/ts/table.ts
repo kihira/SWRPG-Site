@@ -48,16 +48,18 @@ function createNumberFilter(column: ColumnMethods) {
     // Create elements
     const name = column.header().textContent || "";
     const minElem = $("<input/>", {
-        class: "number-filter",
         id: name + "_min",
         max: data.max,
         min: data.min,
+        title: "Min",
+        type: "number",
         value: data.min,
     });
-    const maxElem = minElem.clone().attr("value", data.max).attr("id", name + "_max");
-    const div = $("<div/>").appendTo($(".filters")).text(name);
-    minElem.appendTo($("<label/>").text("Min").appendTo(div));
-    maxElem.appendTo($("<label/>").text("Max").appendTo(div));
+    const maxElem = minElem.clone().attr("value", data.max).attr("id", name + "_max").attr("title", "Max");
+    const div = $("<div/>", {class: "filter"}).appendTo($(".filters")).text(name).append("<br>");
+    minElem.appendTo(div);
+    div.append("-");
+    maxElem.appendTo(div);
 
     if (!numberFilters) { numberFilters = [{min: minElem, max: maxElem, dataField: column.dataSrc() as string}]; }
     else { numberFilters.push({min: minElem, max: maxElem, dataField: column.dataSrc() as string}); }
@@ -74,9 +76,11 @@ function createSelectFilter(column: ColumnMethods, options?: Array<Entry | strin
     }
 
     // Create the select and option elements
-    const select = $("<select>")
-        .attr("multiple", "multiple")
-        .appendTo($(column.footer()).text(""));
+    const name = column.header().textContent || "";
+    const select = $("<select>", {
+        multiple: "multiple",
+        title: name,
+    });
     options.sort().forEach((value) => {
         select.append($("<option>")
             .attr("value", typeof value === "string" ? value : value.value)
@@ -84,12 +88,11 @@ function createSelectFilter(column: ColumnMethods, options?: Array<Entry | strin
     });
 
     // Add filter to filters section
-    const label = $("<label>").text(column.header().textContent || "");
-    select.appendTo(label);
-    label.appendTo($(".filters"));
+    const div = $("<div/>", {class: "filter"}).appendTo($(".filters")).text(name).append("<br>");
+    select.appendTo(div);
 
     // Init chosen library on it and register handler for change
-    select.chosen({width: "30%"}).on("change", function(this: HTMLElement) {
+    select.chosen({width: "210px"}).on("change", function (this: HTMLElement) {
         column.search(($(this).val() as string[]).join(" ")).draw();
     });
 }
