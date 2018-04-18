@@ -24,7 +24,7 @@
     "csso": "^3.5.0",
     "fs-extra": "^5.0.0",
     "less": "^3.0.1",
-    "source-map": "^0.7.2",
+    "source-map": "^0.5.3",
     "svgo": "^1.0.5",
     "typescript": "^2.8.1",
     "uglify-js": "^3.3.21"

@@ -16,7 +16,7 @@ function writeFile(directory, fileName, data) {
 }
 
 function minifyCss(data, filename, sourceMap) {
-    const result = csso.minify(data, {filename: filename, sourceMap: true});
+    const result = csso.minify(data, {filename: filename, sourceMap: true, comments: false});
     if (sourceMap) {
         result.map.applySourceMap(new SourceMapConsumer(sourceMap), filename)
     }
@@ -36,7 +36,7 @@ watch('./assets/svg', {filter: /\.svg$/, recursive: true}, (evt, name) => {
                     console.error(result.error)
                 }
                 else {
-                    const basename = path.basename(name).split(".")[0];
+                    const basename = path.basename(name);
                     writeFile("static/img", basename, result.data);
                     console.log("Optimised " + basename);
                 }
