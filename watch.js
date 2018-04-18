@@ -5,7 +5,7 @@ const path = require("path");
 const less = require("less");
 const uglify = require("uglify-js");
 const csso = require("csso");
-const SourceMapConsumer = require("./node_modules/csso/node_modules/css-tree/node_modules/source-map/source-map").SourceMapConsumer;
+const SourceMapConsumer = require("source-map").SourceMapConsumer;
 
 const svgo = new SVGO();
 
@@ -98,4 +98,10 @@ watch(["./assets/js", "./static/js"], {filter: /(?<!\.min)\.js$/, recursive: tru
         writeFile("static/js", `${pathData.name}.min.js.map`, result.map);
         console.info(`Minified ${pathData.base}`)
     })
+});
+
+watch("./assets/images", {recursive: true}, (evt, name) => {
+    if (!fs.existsSync(name)) return;
+    const pathData = path.parse(name);
+    fs.copyFileSync(name, "./static/img/" + pathData.base);
 });

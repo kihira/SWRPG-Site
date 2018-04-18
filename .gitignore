@@ -10,5 +10,5 @@ users.json
 # Generated files
 static/css
 static/js/
-static/img/*.svg
+static/img/
 *.map
