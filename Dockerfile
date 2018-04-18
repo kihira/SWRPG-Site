@@ -1,13 +1,13 @@
-FROM node:9.8 as builder
+FROM node:9.11 as builder
 WORKDIR /usr/src/build
 
-COPY package*.json ./
-RUN npm install --production
+COPY package.json yarn.lock ./
+RUN yarn install --production
 
 COPY assets ./assets
 COPY tsconfig.json ./
 RUN mkdir -p ./static/img
-RUN npm run build
+RUN yarn run build
 
 
 FROM python:3.6

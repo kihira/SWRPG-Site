@@ -30,8 +30,8 @@
     "uglify-js": "^3.3.21"
   },
   "devDependencies": {
+    "@types/fs-extra": "^5.0.2",
     "@types/node": "^9.6.4",
-    "@types/uglify-js": "^3.0.2",
     "concurrently": "^3.5.1",
     "node-watch": "^0.5.8",
     "tslint": "^5.9.1"
