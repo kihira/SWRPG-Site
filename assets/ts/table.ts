@@ -1,6 +1,5 @@
 import ColumnSettings = DataTables.ColumnSettings;
 import ColumnMethods = DataTables.ColumnMethods;
-import CellMetaSettings = DataTables.CellMetaSettings;
 
 interface Query {
     search?: string;
@@ -38,6 +37,7 @@ function numberSearch(settings: DataTables.Api, searchData: any[], index: number
 
 function createNumberFilter(column: ColumnMethods) {
     // Find min/max values for column
+    // @ts-ignore: Bad typing definition for column.index()
     const data = {min: 0, max: 0, column: column.index() as number};
     column.data().each((value: string) => {
         const num = parseInt(value, 10);
