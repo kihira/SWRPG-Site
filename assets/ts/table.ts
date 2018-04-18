@@ -47,7 +47,8 @@ function createNumberFilter(column: ColumnMethods) {
 
     // Create elements
     const name = column.header().textContent || "";
-    const minElem = $("<input/>", {
+    const minElem = $("<input>", {
+        class: "number-filter",
         id: name + "_min",
         max: data.max,
         min: data.min,
