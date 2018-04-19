@@ -9,12 +9,14 @@ from server.model import Model
 
 class Endpoint:
     url: str
+    title: str
     model: Model
     collection: Collection
     objectid: bool = True
 
-    def __init__(self, url: str, model: Model, collection: Collection = None):
+    def __init__(self, url: str, title: str, model: Model, collection: Collection = None):
         self.url = url
+        self.title = title
         self.model = model
         self.collection = db[url] if collection is None else collection
 
@@ -24,7 +26,7 @@ class Endpoint:
         app.add_url_rule(f"/{url}/add", endpoint=f"add_{url}", view_func=self.add_item, methods=["GET", "POST"])
 
     def view_table(self):
-        return render_template("table-model.html", title="Attachments", name_header="Attachment", model=self.model,
+        return render_template("table-model.html", title=self.title, model=self.model,
                                entries=list(self.collection.find({})))
 
     def view_item(self, item: str):
