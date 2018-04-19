@@ -8,7 +8,6 @@ import pymongo
 
 def process_items(items: list):
     for item in items:
-        print(item)
         item["skills"] = filters.format_list(item["skills"], "skills")
         item["talents"] = filters.format_list(item["talents"], "talents")
         item["abilities"] = filters.format_list(item["abilities"], "abilities")
@@ -43,68 +42,57 @@ def all_adversaries():
         {"header": "Equipment", "field": "equipment", "filter": {"type": "select"}}
     ]
 
-    items = db.adversaries.aggregate([
-            {
-                "$unwind": "$equipment.weapons"
-            },
-            {
-                "$lookup":
+    items = db["adversaries"].aggregate([
+        {"$unwind": "$equipment.weapons"},
+        {
+            "$lookup":
                 {
                     "from": "weapons",
                     "localField": "equipment.weapons",
                     "foreignField": "_id",
                     "as": "weapons"
                 }
-            },
-            {
-                "$unwind": "$weapons"
-            },
-            {
-                "$unwind": "$equipment.gear"
-            },
-            {
-                "$lookup":
+        },
+        {"$unwind": "$weapons"},
+        {"$unwind": "$equipment.gear"},
+        {
+            "$lookup":
                 {
                     "from": "gear",
                     "localField": "equipment.gear",
                     "foreignField": "_id",
                     "as": "gear"
                 }
-            },
-            {
-                "$unwind": "$gear"
-            },
-            {
-                "$unwind": "$equipment.armor"
-            },
-            {
-                "$lookup":
+        },
+        {"$unwind": "$gear"},
+        {"$unwind": "$equipment.armor"},
+        {
+            "$lookup":
                 {
                     "from": "armor",
                     "localField": "equipment.armor",
                     "foreignField": "_id",
                     "as": "armor"
                 }
-            },
-            {
-                "$unwind": "$armor"
-            },
-            { 
-                "$group": 
-                { 
-                    "_id": "$_id", 
-                    "skills": {"$first": "$skills"}, 
-                    "talents": {"$first": "$talents"}, 
+        },
+        {"$unwind": "$armor"},
+        {
+            "$group":
+                {
+                    "_id": "$_id",
+                    "skills": {"$first": "$skills"},
+                    "talents": {"$first": "$talents"},
                     "abilities": {"$first": "$abilities"},
                     "other": {"$first": "$equipment.other"},
-                    "index": {"$first": "$index"}, 
-                    "name": {"$first": "$name"}, 
-                    "weapons": {"$push": "$weapons"}, 
-                    "armor": {"$push": "$armor"}, 
-                    "gear": {"$push": "$gear"}
-                } 
-            }
-        ])
+                    "index": {"$first": "$index"},
+                    "name": {"$first": "$name"},
+                    "weapons": {"$addToSet": "$weapons"},  # todo look into why things are duplicating?
+                    "armor": {"$addToSet": "$armor"},
+                    "gear": {"$addToSet": "$gear"}
+                }
+        },
+        {"$sort": {"name": 1}}
+    ])
 
     return render_template("table.html", title="Adversaries", categories=False, columns=columns,
                            entries=process_items(list(items)))
