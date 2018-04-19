@@ -13,17 +13,15 @@ def process_items(items: list):
         item["abilities"] = filters.format_list(item["abilities"], "abilities")
         equipment = ""
         for i in item["equipment"]["weapons"]:
-            if type(i) == dict:
-                equipment += f'{i["quantity"]} '
-                i = db["weapons"].find_one({"_id": i["id"]})
-            else:
-                i = db["weapons"].find_one({"_id": i})
+            # if type(i) == dict:
+            #    equipment += f'{i["quantity"]} '
+            #    i = db["weapons"].find_one({"_id": i["id"]})
+            # else:
+            #    i = db["weapons"].find_one({"_id": i})
             equipment += f'<a href="/weapons/{i["_id"]}">{i["name"]}</a>, '
         for i in item["equipment"]["armor"]:
-            i = db["armor"].find_one({"_id": i}, {"name": True})
             equipment += f'<a href="/armor/{i["_id"]}">{i["name"]}</a>, '
         for i in item["equipment"]["gear"]:
-            i = db["gear"].find_one({"_id": i}, {"name": True})
             equipment += f'<a href="/gear/{i["_id"]}">{i["name"]}</a>, '
         for i in item["equipment"]["other"]:
             equipment += i + ", "
@@ -44,8 +42,47 @@ def all_adversaries():
         {"header": "Equipment", "field": "equipment", "filter": {"type": "select"}}
     ]
 
+    items = db.adversaries.aggregate([
+            {
+                "$unwind": "$equipment.weapons"
+            },
+            {
+                "$unwind": "$equipment.gear"
+            },
+            {
+                "$unwind": "$equipment.armor"
+            },
+            {
+                "$lookup":
+                {
+                    "from": "weapons",
+                    "localField": "equipment.weapons",
+                    "foreignField": "_id",
+                    "as": "equipment.weapons"
+                }
+            },
+            {
+                "$lookup":
+                {
+                    "from": "gear",
+                    "localField": "equipment.gear",
+                    "foreignField": "_id",
+                    "as": "equipment.gear"
+                }
+            },
+            {
+                "$lookup":
+                {
+                    "from": "armor",
+                    "localField": "equipment.armor",
+                    "foreignField": "_id",
+                    "as": "equipment.armor"
+                }
+            }
+        ])
+
     return render_template("table.html", title="Adversaries", categories=False, columns=columns,
-                           entries=process_items(list(db["adversaries"].find({}).sort("name", pymongo.ASCENDING))))
+                           entries=process_items(list(items)))
 
 
 @app.route("/adversaries/imperials")
@@ -53,8 +90,10 @@ def all_adversaries():
 def get_imperials():
     # todo this should probably use a tag system instead of regex search
     return render_template("table.html", title="Adversaries - Imperials",
-                           headers=["Type", "Skills", "Talents", "Abilities", "Equipment"],
-                           fields=["level", "skills", "talents", "abilities", "equipment"],
+                           headers=["Type", "Skills", "Talents",
+                                    "Abilities", "Equipment"],
+                           fields=["level", "skills", "talents",
+                                   "abilities", "equipment"],
                            entries=process_items(list(db.adversaries
                                                       .find({"$or": [{"name": {"$regex": "Imperial"}},
                                                                      {"tags": "imperial"}]})
@@ -66,11 +105,14 @@ def get_imperials():
 def get_rebels():
     # todo this should probably use a tag system instead of regex search
     return render_template("table.html", title="Adversaries - Alliance",
-                           headers=["Type", "Skills", "Talents", "Abilities", "Equipment"],
-                           fields=["level", "skills", "talents", "abilities", "equipment"],
+                           headers=["Type", "Skills", "Talents",
+                                    "Abilities", "Equipment"],
+                           fields=["level", "skills", "talents",
+                                   "abilities", "equipment"],
                            entries=process_items(list(db.adversaries
                                                       .find({"$or": [{"name": {"$regex": "Rebel"}},
-                                                                     {"name": {"$regex": "Alliance"}},
+                                                                     {"name": {
+                                                                         "$regex": "Alliance"}},
                                                                      {"tags": "rebel"}]})
                                                       .sort("name", pymongo.ASCENDING))))
 
@@ -103,3 +145,4 @@ def get_adversary(item):
     item["name"] = f'{item["name"]} [{item["level"]}]'
 
     return render_template("adversary.html", item=item)
+    
