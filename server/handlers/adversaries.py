@@ -8,22 +8,23 @@ import pymongo
 
 def process_items(items: list):
     for item in items:
+        print(item)
         item["skills"] = filters.format_list(item["skills"], "skills")
         item["talents"] = filters.format_list(item["talents"], "talents")
         item["abilities"] = filters.format_list(item["abilities"], "abilities")
         equipment = ""
-        for i in item["equipment"]["weapons"]:
+        for i in item["weapons"]:
             # if type(i) == dict:
             #    equipment += f'{i["quantity"]} '
             #    i = db["weapons"].find_one({"_id": i["id"]})
             # else:
             #    i = db["weapons"].find_one({"_id": i})
             equipment += f'<a href="/weapons/{i["_id"]}">{i["name"]}</a>, '
-        for i in item["equipment"]["armor"]:
+        for i in item["armor"]:
             equipment += f'<a href="/armor/{i["_id"]}">{i["name"]}</a>, '
-        for i in item["equipment"]["gear"]:
+        for i in item["gear"]:
             equipment += f'<a href="/gear/{i["_id"]}">{i["name"]}</a>, '
-        for i in item["equipment"]["other"]:
+        for i in item["other"]:
             equipment += i + ", "
         item["equipment"] = equipment[:-2]
     return items
@@ -47,19 +48,19 @@ def all_adversaries():
                 "$unwind": "$equipment.weapons"
             },
             {
-                "$unwind": "$equipment.gear"
-            },
-            {
-                "$unwind": "$equipment.armor"
-            },
-            {
                 "$lookup":
                 {
                     "from": "weapons",
                     "localField": "equipment.weapons",
                     "foreignField": "_id",
-                    "as": "equipment.weapons"
+                    "as": "weapons"
                 }
+            },
+            {
+                "$unwind": "$weapons"
+            },
+            {
+                "$unwind": "$equipment.gear"
             },
             {
                 "$lookup":
@@ -67,8 +68,14 @@ def all_adversaries():
                     "from": "gear",
                     "localField": "equipment.gear",
                     "foreignField": "_id",
-                    "as": "equipment.gear"
+                    "as": "gear"
                 }
+            },
+            {
+                "$unwind": "$gear"
+            },
+            {
+                "$unwind": "$equipment.armor"
             },
             {
                 "$lookup":
@@ -76,8 +83,26 @@ def all_adversaries():
                     "from": "armor",
                     "localField": "equipment.armor",
                     "foreignField": "_id",
-                    "as": "equipment.armor"
+                    "as": "armor"
                 }
+            },
+            {
+                "$unwind": "$armor"
+            },
+            { 
+                "$group": 
+                { 
+                    "_id": "$_id", 
+                    "skills": {"$first": "$skills"}, 
+                    "talents": {"$first": "$talents"}, 
+                    "abilities": {"$first": "$abilities"},
+                    "other": {"$first": "$equipment.other"},
+                    "index": {"$first": "$index"}, 
+                    "name": {"$first": "$name"}, 
+                    "weapons": {"$push": "$weapons"}, 
+                    "armor": {"$push": "$armor"}, 
+                    "gear": {"$push": "$gear"}
+                } 
             }
         ])
 
