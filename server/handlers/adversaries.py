@@ -32,14 +32,14 @@ def process_items(items: list):
 @app.route("/adversaries/")
 def all_adversaries():
     columns = [
-        {"header": "Type", "field": "level"},
-        {"header": "Skills", "field": "skills",
+        {"header": "Type", "name": "level"},
+        {"header": "Skills", "name": "skills",
          "filter": {"type": "select", "data": [filters.title(x["_id"]) for x in list(db["skills"].find({}))]}},
-        {"header": "Talents", "field": "talents",
+        {"header": "Talents", "name": "talents",
          "filter": {"type": "select", "data": [filters.title(x["_id"]) for x in list(db["talents"].find({}))]}},
-        {"header": "Abilities", "field": "abilities",
+        {"header": "Abilities", "name": "abilities",
          "filter": {"type": "select", "data": [filters.title(x["_id"]) for x in list(db["abilities"].find({}))]}},
-        {"header": "Equipment", "field": "equipment", "filter": {"type": "select"}}
+        {"header": "Equipment", "name": "equipment", "filter": {"type": "select"}}
     ]
 
     items = db["adversaries"].aggregate([

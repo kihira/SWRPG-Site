@@ -34,7 +34,7 @@
                         <td>{{ entry["category"] }}</td>
                     {% endif %}
                     {% for column in columns %}
-                        <td>{{ entry[column["field"]] }}</td>
+                        <td>{{ entry[column["name"]] }}</td>
                     {% endfor %}
                     {% if has_index %}
                         <td>{{ entry["index"]|formatindex }}</td>

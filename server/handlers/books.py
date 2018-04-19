@@ -24,9 +24,9 @@ model = Model([
 @app.route("/books/")
 def all_books():
     columns = [
-        {"header": "System", "field": "system"},
-        {"header": "Key", "field": "key"},
-        {"header": "Initials", "field": "_id"},
+        {"header": "System", "name": "system"},
+        {"header": "Key", "name": "key"},
+        {"header": "Initials", "name": "_id"},
     ]
 
     return render_template("table.html", title="Books", name_header="Book", categories=False, has_index=False,

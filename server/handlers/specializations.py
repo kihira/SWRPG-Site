@@ -7,7 +7,7 @@ from flask import render_template
 @app.route("/specialisations/")
 @app.route("/specializations/")
 def all_specializations():
-    return render_template("table.html", title="Specializations", columns=[{"header": "Career", "field": "career"}],
+    return render_template("table.html", title="Specializations", columns=[{"header": "Career", "name": "career"}],
                            entries=db["specializations"].find({}).sort("_id", 1))
 
 

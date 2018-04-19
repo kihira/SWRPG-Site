@@ -11,10 +11,10 @@ def all_gear():
     items = list(db["gear"].find({"category": {"$not": re.compile("Adversary")}}))
 
     columns = [
-        {"header": "Price", "field": "price", "filter": {"type": "number"}},
-        {"header": "Restricted", "field": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
-        {"header": "Encumbrance", "field": "encumbrance", "filter": {"type": "number"}},
-        {"header": "Rarity", "field": "rarity", "filter": {"type": "number"}}
+        {"header": "Price", "name": "price", "filter": {"type": "number"}},
+        {"header": "Restricted", "name": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
+        {"header": "Encumbrance", "name": "encumbrance", "filter": {"type": "number"}},
+        {"header": "Rarity", "name": "rarity", "filter": {"type": "number"}}
     ]
 
     return render_template("table.html", title="Items", name_header="Item", columns=columns, entries=items)

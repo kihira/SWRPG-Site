@@ -29,10 +29,10 @@ def all_talents():
             item["short"] = filters.description(item["short"])
 
     columns = [
-        {"header": "Description", "field": "description"},
-        {"header": "Activation", "field": "activation", "filter": {"type": "select"}},
-        {"header": "Ranked", "field": "ranked"},
-        {"header": "Force Sensitive", "field": "force"}
+        {"header": "Description", "name": "description"},
+        {"header": "Activation", "name": "activation", "filter": {"type": "select"}},
+        {"header": "Ranked", "name": "ranked"},
+        {"header": "Force Sensitive", "name": "force"}
     ]
 
     return render_template("table.html", title="Talents", name_header="Talent", categories=False, columns=columns,

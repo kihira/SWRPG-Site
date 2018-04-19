@@ -17,7 +17,7 @@ def all_skills():
             items.append(skill)
 
     return render_template("table.html", title="Skills", name_header="Skill",
-                           columns=[{"header": "Characteristic", "field": "characteristic"}], entries=items)
+                           columns=[{"header": "Characteristic", "name": "characteristic"}], entries=items)
 
 
 @app.route("/skills/<item>")

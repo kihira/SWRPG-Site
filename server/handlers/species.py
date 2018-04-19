@@ -28,7 +28,7 @@ model = Model([
 @app.route("/species/")
 def all_species():
     return render_template("table.html", title="Species", name_header="Species", categories=False,
-                           columns=[{"header": "Player", "field": "player"}],
+                           columns=[{"header": "Player", "name": "player"}],
                            entries=list(db["species"].find({}).sort("_id", ASCENDING)))
 
 

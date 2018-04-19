@@ -18,17 +18,17 @@ def all_vehicles():
             items.append(vehicle)
 
     columns = [
-        {"header": "Silhouette", "field": "silhouette", "filter": {"type": "number"}},
-        {"header": "Speed", "field": "speed", "filter": {"type": "number"}},
-        {"header": "Handling", "field": "handling", "filter": {"type": "number"}},
-        {"header": "Crew", "field": "crew", "filter": {"type": "number"}},
-        {"header": "Encumbrance", "field": "encumbrance", "filter": {"type": "number"}},
-        {"header": "Passengers", "field": "passengers", "filter": {"type": "number"}},
-        {"header": "Price", "field": "price", "filter": {"type": "number"}},
-        {"header": "Restricted", "field": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
-        {"header": "Rarity", "field": "rarity", "filter": {"type": "number"}},
-        {"header": "HP", "field": "hardpoints", "filter": {"type": "number"}},
-        {"header": "Weapons", "field": "weapons", "filter": {"type": "number"}},
+        {"header": "Silhouette", "name": "silhouette", "filter": {"type": "number"}},
+        {"header": "Speed", "name": "speed", "filter": {"type": "number"}},
+        {"header": "Handling", "name": "handling", "filter": {"type": "number"}},
+        {"header": "Crew", "name": "crew", "filter": {"type": "number"}},
+        {"header": "Encumbrance", "name": "encumbrance", "filter": {"type": "number"}},
+        {"header": "Passengers", "name": "passengers", "filter": {"type": "number"}},
+        {"header": "Price", "name": "price", "filter": {"type": "number"}},
+        {"header": "Restricted", "name": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
+        {"header": "Rarity", "name": "rarity", "filter": {"type": "number"}},
+        {"header": "HP", "name": "hardpoints", "filter": {"type": "number"}},
+        {"header": "Weapons", "name": "weapons", "filter": {"type": "number"}},
     ]
 
     return render_template("table.html", title="Vehicles", columns=columns, entries=items)

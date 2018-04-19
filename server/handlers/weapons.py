@@ -14,15 +14,15 @@ def all_weapons():
         item["skill"] = Markup(f'<a href="/skills/{item["skill"]}">{item["skill"].replace("_", " ")}</a>')
 
     columns = [
-        {"header": "Skill", "field": "skill"},
-        {"header": "Dam", "field": "damage", "filter": {"type": "number"}},
-        {"header": "Crit", "field": "critical", "filter": {"type": "number"}},
-        {"header": "Range", "field": "range", "filter": {"type": "select"}},
-        {"header": "HP", "field": "hardpoints", "filter": {"type": "number"}},
-        {"header": "Price", "field": "price", "filter": {"type": "number"}},
-        {"header": "Restricted", "field": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
-        {"header": "Rarity", "field": "rarity", "filter": {"type": "number"}},
-        {"header": "Special", "field": "special", "filter": {"type": "select"}},
+        {"header": "Skill", "name": "skill"},
+        {"header": "Dam", "name": "damage", "filter": {"type": "number"}},
+        {"header": "Crit", "name": "critical", "filter": {"type": "number"}},
+        {"header": "Range", "name": "range", "filter": {"type": "select"}},
+        {"header": "HP", "name": "hardpoints", "filter": {"type": "number"}},
+        {"header": "Price", "name": "price", "filter": {"type": "number"}},
+        {"header": "Restricted", "name": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
+        {"header": "Rarity", "name": "rarity", "filter": {"type": "number"}},
+        {"header": "Special", "name": "special", "filter": {"type": "select"}},
     ]
 
     return render_template("table.html", title="Weapons", columns=columns, entries=items)

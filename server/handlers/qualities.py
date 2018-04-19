@@ -13,9 +13,9 @@ def all_qualities():
         quality["description"] = filters.description(quality["description"])
 
     columns = [
-        {"header": "Active", "field": "active", "filter": {"type": "select"}},
-        {"header": "Ranked", "field": "ranked"},
-        {"header": "Effect", "field": "description"}
+        {"header": "Active", "name": "active", "filter": {"type": "select"}},
+        {"header": "Ranked", "name": "ranked"},
+        {"header": "Effect", "name": "description"}
     ]
 
     return render_template("table.html", title="Qualities", name_header="Quality", categories=False,

@@ -15,11 +15,11 @@ def all_planets():
         item["routes"] = ", ".join(item["routes"])
 
     columns = [
-        {"header": "Government", "field": "government"},
-        {"header": "Languages", "field": "languages", "filter": {"type": "select"}},
-        {"header": "Imports", "field": "imports", "filter": {"type": "select"}},
-        {"header": "Exports", "field": "exports", "filter": {"type": "select"}},
-        {"header": "Routes", "field": "routes", "filter": {"type": "select"}},
+        {"header": "Government", "name": "government"},
+        {"header": "Languages", "name": "languages", "filter": {"type": "select"}},
+        {"header": "Imports", "name": "imports", "filter": {"type": "select"}},
+        {"header": "Exports", "name": "exports", "filter": {"type": "select"}},
+        {"header": "Routes", "name": "routes", "filter": {"type": "select"}},
     ]
 
     return render_template("table.html", title="Planets", name_header="Planet", columns=columns, entries=items)
