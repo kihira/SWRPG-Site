@@ -1,25 +1,14 @@
-from server.decorators import get_item
-from server.app import app
-from server.db import db
-from flask import render_template
+from server.endpoint import Endpoint
+from server.model import Model, ObjectIdField, Field, NumberField, CheckboxField, TextareaField, SelectField
 
-
-@app.route("/attachments/")
-def all_attachments():
-    items = list(db["attachments"].find({}))
-
-    columns = [
-        {"header": "Price", "field": "price", "filter": {"type": "number"}},
-        {"header": "Restricted", "field": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
-        {"header": "Encumbrance", "field": "encumbrance", "filter": {"type": "number"}},
-        {"header": "HP Required", "field": "hardpoints", "filter": {"type": "number"}},
-        {"header": "Rarity", "field": "rarity", "filter": {"type": "number"}}
-    ]
-
-    return render_template("table.html", title="Attachments", name_header="Attachment", columns=columns, entries=items)
-
-
-@app.route("/attachments/<item>")
-@get_item(db.attachments, True)
-def get_attachment(item):
-    return render_template("attachments.html", item=item)
+endpoint = Endpoint("attachments", Model([
+    ObjectIdField("_id", "ID", readonly=True),
+    Field("name", "Name"),
+    SelectField("category", "Category", ["Armor", "Lightsaber", "Weapon"]),
+    NumberField("price", "Price", max=100000),
+    CheckboxField("restricted", "Restricted"),
+    NumberField("encumbrance", "Encumbrance"),
+    NumberField("hardpoints", "HP Required"),
+    NumberField("rarity", "Rarity", max=10),
+    TextareaField("description", "Description")
+]))

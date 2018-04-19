@@ -8,8 +8,7 @@ interface Query {
 }
 
 interface Column {
-    header: string;
-    field: string;
+    name: string;
     filter?: { type: "select" | "number", data: string[] | Array<{ display: string, value: string }> };
     hidden?: boolean;
 }
@@ -93,12 +92,12 @@ function createSelectFilter(column: ColumnMethods, options?: Array<Entry | strin
     select.appendTo(div);
 
     // Init chosen library on it and register handler for change
-    select.chosen({width: "210px"}).on("change", function (this: HTMLElement) {
+    select.chosen({width: "210px"}).on("change", function(this: HTMLElement) {
         column.search(($(this).val() as string[]).join(" ")).draw();
     });
 }
 
-function init(columns: Column[], hasIndex: boolean, categories: boolean) {
+function init(model: {index: boolean, columns: Column[], categories: boolean}) {
     const params: Query = {};
     location.search.substr(1).split("&").forEach((value) => {
         const data = value.split("=");
@@ -127,7 +126,7 @@ function init(columns: Column[], hasIndex: boolean, categories: boolean) {
         },
     };
 
-    if (categories) {
+    if (model.categories) {
         columnSettings.push({name: "category", data: "category", visible: false});
         settings.orderFixed = {pre: [1, "asc"]};
         settings.rowGroup = {dataSrc: "category"};
@@ -141,9 +140,9 @@ function init(columns: Column[], hasIndex: boolean, categories: boolean) {
         });
     }
 
-    columns.forEach((value) => {
-        const cs: ColumnSettings = {name: value.field, data: value.field, visible: !value.hidden};
-        if (value.field === "price") {
+    model.columns.forEach((value) => {
+        const cs: ColumnSettings = {name: value.name, data: value.name, visible: !value.hidden};
+        if (value.name === "price") {
             cs.render = (data: string, type: any, row: any) => {
                 let out = "<td>";
                 if (row.restricted) {
@@ -156,7 +155,7 @@ function init(columns: Column[], hasIndex: boolean, categories: boolean) {
         }
         columnSettings.push(cs);
     });
-    if (hasIndex) {
+    if (model.index) {
         columnSettings.push({name: "index", data: "index"});
     }
 
@@ -210,14 +209,14 @@ function init(columns: Column[], hasIndex: boolean, categories: boolean) {
     table.on("search.dt", buildUrl);
 
     // Setup filters
-    columns.forEach((column) => {
+    model.columns.forEach((column) => {
         if (!column.filter) { return; }
         switch (column.filter.type) {
             case "select":
-                createSelectFilter(table.column(`${column.field}:name`), column.filter.data);
+                createSelectFilter(table.column(`${column.name}:name`), column.filter.data);
                 break;
             case "number":
-                createNumberFilter(table.column(`${column.field}:name`));
+                createNumberFilter(table.column(`${column.name}:name`));
                 break;
         }
     });

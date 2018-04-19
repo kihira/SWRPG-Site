@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% import "base.html" as base %}
 
-{% set categories = categories|default(True) %}
-{% set has_index = has_index|default(True) %}
-
 {% block head %}
     <link rel="stylesheet" type="text/css" href="/static/css/datatables.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/chosen.css"/>
@@ -13,7 +10,7 @@
 {% block content %}
     <div class="filters">
         <img src="/static/img/filter.svg" style="width: 20px; height: 20px;">
-        {% if categories %}
+        {% if model["category"] %}
             <label>
                 Group by Category
                 <input type="checkbox" id="categories" checked="checked" style="float: left;">
@@ -30,13 +27,13 @@
             {% for entry in entries %}
                 <tr>
                     <td><a href="./{{ entry._id }}">{{ render_name(entry) }}</a></td>
-                    {% if categories %}
+                    {% if model["category"] %}
                         <td>{{ entry["category"] }}</td>
                     {% endif %}
-                    {% for column in columns %}
-                        <td>{{ entry[column["field"]] }}</td>
+                    {% for field in model.get_table_fields() %}
+                        <td>{{ entry[field["mongo_name"]] }}</td>
                     {% endfor %}
-                    {% if has_index %}
+                    {% if model.index %}
                         <td>{{ entry["index"]|formatindex }}</td>
                     {% endif %}
                 </tr>
@@ -55,21 +52,27 @@
     <script src="/static/js/datatables.min.js" defer></script>
     <script src="/static/js/table.min.js" defer></script>
     <script>
+        console.log({{ model|modeltojson }});
         document.addEventListener("DOMContentLoaded", function (event) {
-            init({"columns": {{ columns|tojson }}, "index": {{ has_index|lower }}, "categories": {{ categories|lower }}});
+            init({{ model|modeltojson }});
         });
     </script>
 {% endblock %}
 
 {% macro render_header() %}
     <tr>
-        <td>{{ name_header|default("Name") }}</td>
-        {% if categories %}
-            <td>Category</td>{% endif %}
-        {% for column in columns %}
-            <td>{{ column["header"] }}</td>
+        {% if model["name"] %}
+            <td>{{ model["name"]["human_name"]|default("Name") }}</td>
+        {% else %}
+            <td>{{ model["_id"]["human_name"]|default("Name") }}</td>
+        {% endif %}
+        {% if model["category"] %}
+            <td>Category</td>
+        {% endif %}
+        {% for field in model.get_table_fields() %}
+            <td>{{ field["human_name"] }}</td>
         {% endfor %}
-        {% if has_index %}
+        {% if model.index %}
             <td>Index</td>
         {% endif %}
     </tr>

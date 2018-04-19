@@ -10,7 +10,7 @@ model = Model([
     NumberField("defense", "Defense", max=5),
     NumberField("soak", "Soak"),
     NumberField("hardpoints", "Hardpoints"),
-    NumberField("encumbrance", "encumbrance"),
+    NumberField("encumbrance", "Encumbrance"),
     NumberField("price", "Price", max=100000),
     CheckboxField("restricted", "Restricted"),
     NumberField("rarity", "Rarity", max=10),
@@ -21,8 +21,6 @@ model = Model([
 @app.route("/armour/")
 @app.route("/armor/")
 def all_armor():
-    items = list(db["armor"].find({}))
-
     columns = [
         {"header": "Defense", "field": "defense", "filter": {"type": "number"}},
         {"header": "Soak", "field": "soak", "filter": {"type": "number"}},
@@ -34,17 +32,16 @@ def all_armor():
     ]
 
     return render_template("table.html", title="Armor", name_header="Type", categories=False,
-                           columns=columns, entries=items)
+                           columns=columns, entries=list(db["armor"].find({})))
 
 
 @app.route("/armour/<item>")
 @app.route("/armor/<item>")
-@get_item(db.armor, True)
+@get_item(db["armor"], True)
 def get_armor(item):
     return render_template("armor.html", item=item)
 
 
-@app.route("/armour/add", methods=['GET', 'POST'])
 @app.route("/armor/add", methods=['GET', 'POST'])
 @login_required
 def add_armor():
@@ -55,10 +52,9 @@ def add_armor():
     return render_template("edit/add-edit.html", model=model)
 
 
-@app.route("/armour/<item>/edit", methods=['GET', 'POST'])
 @app.route("/armor/<item>/edit", methods=['GET', 'POST'])
 @login_required
-@get_item(db.armor, True)
+@get_item(db["armor"], True)
 def edit_armor(item):
     if request.method == "POST":
         item = model.from_form(request.form)

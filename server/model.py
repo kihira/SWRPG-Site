@@ -21,6 +21,23 @@ class Field:
     def get_value(self, form: MultiDict):
         return form.get(self.mongo_name, self.default)
 
+    def table_display(self):
+        return self.mongo_name != "_id" and self.mongo_name != "name" and self.mongo_name != "category" and self.mongo_name != "description"
+
+    def get_datatables_object(self):
+        """
+        Gets a dict that will be used for Datatables
+        :return:
+        """
+        return {"name": self.mongo_name, "filter": self.get_filter()}
+
+    def get_filter(self):
+        """
+        Gets filter object for use in Datatables
+        :return:
+        """
+        return {"type": self.html_type}
+
 
 class CheckboxField(Field):
     def __init__(self, mongo_name, human_name, default=False):
@@ -28,6 +45,10 @@ class CheckboxField(Field):
 
     def get_value(self, form: MultiDict):
         return self.mongo_name in form
+
+    def get_datatables_object(self):
+        # A bit hacky but this is most likely going to be the only case
+        return {"name": self.mongo_name, "filter": self.get_filter(), "hidden": self.mongo_name == "restricted"}
 
 
 class TextareaField(Field):
@@ -45,6 +66,9 @@ class SelectField(Field):
         super().__init__(mongo_name, human_name, html_type="select")
 
         self.options = options
+
+    def get_filter(self):
+        return {"type": self.html_type, "data": self.options}
 
 
 class NumberField(Field):
@@ -101,9 +125,27 @@ class FieldGroup(Field):
 
 class Model:
     fields: [Field]
+    index: bool
 
-    def __init__(self, fields: [Field]):
+    def __init__(self, fields: [Field], index=True):
         self.fields = fields
+        self.index = index
+
+    def __getitem__(self, item):
+        for field in self.fields:
+            if item == field.mongo_name:
+                return field
+
+    def get_table_fields(self):
+        """
+        Gets all the fields that should be displayed in the table when displaying them together
+        :return:
+        """
+        fields = []
+        for field in self.fields:
+            if field.table_display():
+                fields.append(field)
+        return fields
 
     def from_form(self, form: MultiDict):
         out = {}

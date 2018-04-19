@@ -50,8 +50,12 @@ def description(s: str):
     return s
 
 
-def to_json(fields: [object]):
-    return json.dumps([field.__dict__ for field in fields])
+def to_json(model: {}):
+    out = {"columns": [], "index": model.index, "categories": model["category"] is not None}
+    for field in model.fields:
+        if field.table_display():
+            out["columns"].append(field.get_datatables_object())
+    return json.dumps(out)
 
 
 def format_skill(skill):

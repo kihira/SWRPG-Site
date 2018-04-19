@@ -8,7 +8,7 @@ from server.db import db
 
 @app.route("/weapons/")
 def all_weapons():
-    items = list(db.weapons.find({}))
+    items = list(db["weapons"].find({}))
     for item in items:
         item["special"] = filters.format_list(item["special"], "qualities")
         item["skill"] = Markup(f'<a href="/skills/{item["skill"]}">{item["skill"].replace("_", " ")}</a>')
@@ -31,6 +31,6 @@ def all_weapons():
 @app.route("/weapons/<item>")
 @get_item(db.weapons, True)
 def get_weapon(item):
-    item["skill"] = Markup("<a href=\"/skills/{0}\">{1}</a>".format(item["skill"], item["skill"].replace("_", " ")))
+    item["skill"] = Markup(f"<a href=\"/skills/{item['skill']}\">{item['skill'].replace('_', ' ')}</a>")
 
     return render_template("weapon.html", item=item)
