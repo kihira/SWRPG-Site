@@ -43,7 +43,7 @@ def all_adversaries():
     ]
 
     items = db["adversaries"].aggregate([
-        {"$unwind": "$equipment.weapons"},
+        {"$unwind": {"path": "$equipment.weapons", "preserveNullAndEmptyArrays": True}},
         {
             "$lookup":
                 {
@@ -53,8 +53,8 @@ def all_adversaries():
                     "as": "weapons"
                 }
         },
-        {"$unwind": "$weapons"},
-        {"$unwind": "$equipment.gear"},
+        {"$unwind": {"path": "$weapons", "preserveNullAndEmptyArrays": True}},
+        {"$unwind": {"path": "$equipment.gear", "preserveNullAndEmptyArrays": True}},
         {
             "$lookup":
                 {
@@ -64,8 +64,8 @@ def all_adversaries():
                     "as": "gear"
                 }
         },
-        {"$unwind": "$gear"},
-        {"$unwind": "$equipment.armor"},
+        {"$unwind": {"path": "$gear", "preserveNullAndEmptyArrays": True}},
+        {"$unwind": {"path": "$equipment.armor", "preserveNullAndEmptyArrays": True}},
         {
             "$lookup":
                 {
@@ -75,7 +75,7 @@ def all_adversaries():
                     "as": "armor"
                 }
         },
-        {"$unwind": "$armor"},
+        {"$unwind": {"path": "$armor", "preserveNullAndEmptyArrays": True}},
         {
             "$group":
                 {
