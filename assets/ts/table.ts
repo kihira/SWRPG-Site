@@ -145,7 +145,7 @@ function init(model: {index: boolean, columns: Column[], categories: boolean}) {
         if (value.name === "price") {
             cs.render = (data: string, type: any, row: any) => {
                 let out = "<td>";
-                if (row.restricted) {
+                if (row.restricted === "True") {
                     out += "(R) ";
                 }
                 out += parseInt(data, 10).toLocaleString() + "</td>";
