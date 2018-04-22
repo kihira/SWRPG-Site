@@ -144,12 +144,16 @@ function init(model: {index: boolean, columns: Column[], categories: boolean}) {
         const cs: ColumnSettings = {name: value.name, data: value.name, visible: !value.hidden};
         if (value.name === "price") {
             cs.render = (data: string, type: any, row: any) => {
-                let out = "<td>";
-                if (row.restricted === "True") {
-                    out += "(R) ";
+                switch (type) {
+                    case "display":
+                        let out = "<td>";
+                        if (row.restricted === "True") { out += "(R) "; }
+                        out += parseInt(data, 10).toLocaleString() + "</td>";
+                        return out;
+                    case "filter":
+                    case "sort":
+                        return data;
                 }
-                out += parseInt(data, 10).toLocaleString() + "</td>";
-                return out;
             };
             cs.type = "num";
         }
@@ -204,6 +208,8 @@ function init(model: {index: boolean, columns: Column[], categories: boolean}) {
 
         window.history.pushState(null, "", url + $.param(newParams));
     };
+
+    console.log(table.column("order:name").data());
 
     table.on("order.dt", buildUrl);
     table.on("search.dt", buildUrl);
