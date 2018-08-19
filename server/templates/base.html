@@ -34,16 +34,20 @@
     {% block menu %}
         {% set nav = [
             ('/', 'index', 'Index'),
-            ('/adversaries/', 'aversaries', 'Adversaries'),
+            ('/abilities/', 'abilities', 'Abilities'),
+            ('/adversaries/', 'adversaries', 'Adversaries'),
             ('/armor/', 'armor', 'Armor'),
             ('/attachments/', 'attachments', 'Attachments'),
             ('/books/', 'books', 'Books'),
             ('/gear/', 'gear', 'Gear'),
+            ('/qualities/', 'qualities', 'Qualities'),
             ('/skills/', 'skills', 'Skills'),
+            ('/specializations/', 'specializations', 'Specializations'),
+            ('/species/', 'species', 'Species'),
             ('/talents/', 'talents', 'Talents'),
-            ('/weapons/', 'weapons', 'Weapons'),
             ('/starships/', 'starships', 'Starships'),
-            ('/vehicles/', 'vehicles', 'Vehicles')
+            ('/vehicles/', 'vehicles', 'Vehicles'),
+            ('/weapons/', 'weapons', 'Weapons')
     ]-%}
         <ul>
             {% for href, id, caption in nav %}
