@@ -209,8 +209,6 @@ function init(model: {index: boolean, columns: Column[], categories: boolean}) {
         window.history.pushState(null, "", url + $.param(newParams));
     };
 
-    console.log(table.column("order:name").data());
-
     table.on("order.dt", buildUrl);
     table.on("search.dt", buildUrl);
 
