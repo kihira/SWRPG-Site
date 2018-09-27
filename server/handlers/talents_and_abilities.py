@@ -79,9 +79,12 @@ def all_abilities():
     for item in items:
         item["description"] = filters.description(item["description"])
 
-    return render_template("table.html", title="Abilities", name_header="Ability", categories=False,
-                           headers=["Description"],
-                           fields=["description"], entries=items)
+    columns = [
+        {"header": "Description", "name": "description"},
+    ]
+
+    return render_template("table.html", title="Abilities", name_header="Ability", categories=False, columns=columns,
+                           entries=items)
 
 
 @app.route("/abilities/<item>")

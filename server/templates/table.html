@@ -51,11 +51,13 @@
 
 {% block scripts %}
     {{ super() }}
+    <script src="/static/js/jquery-3.3.1.min.js" defer></script>
+    <script src="/static/js/jquery-ui.min.js" defer></script>
     <script src="/static/js/chosen.jquery.min.js" defer></script>
     <script src="/static/js/datatables.min.js" defer></script>
     <script src="/static/js/table.min.js" defer></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function (event) {
+        document.addEventListener("DOMContentLoaded", function () {
             init({"columns": {{ columns|tojson }}, "index": {{ has_index|lower }}, "categories": {{ categories|lower }}});
         });
     </script>
