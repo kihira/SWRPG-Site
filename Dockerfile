@@ -1,4 +1,4 @@
-FROM node:9.11 as builder
+FROM node:10 as builder
 WORKDIR /usr/src/build
 
 COPY package.json yarn.lock ./
@@ -9,7 +9,7 @@ COPY tsconfig.json build.js ./
 RUN yarn run build
 
 
-FROM python:3.6
+FROM python:3
 WORKDIR /usr/src/app
 
 COPY requirements.txt ./
