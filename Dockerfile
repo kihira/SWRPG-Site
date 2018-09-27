@@ -1,4 +1,4 @@
-FROM node:10 as builder
+FROM node:10-alpine as builder
 WORKDIR /usr/src/build
 
 COPY package.json yarn.lock ./
@@ -9,7 +9,7 @@ COPY tsconfig.json build.js ./
 RUN yarn run build
 
 
-FROM python:3
+FROM python:3-alpine
 WORKDIR /usr/src/app
 
 COPY requirements.txt ./
