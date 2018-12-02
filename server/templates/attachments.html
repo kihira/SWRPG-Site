@@ -1,7 +1,6 @@
 {% extends "item.html" %}
 {% import "base.html" as base %}
 {% block item_block %}
-    {{ super() }}
     <p class="no-indent">
         <b>Base Modifications:</b> {% if item.modifiers %}{{ item.modifiers|description }}{% endif %}
         <br>
