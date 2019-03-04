@@ -10,3 +10,4 @@ users.json
 # Generated files
 static/
 *.map
+**/__pycache__/*

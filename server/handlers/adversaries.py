@@ -80,6 +80,7 @@ def all_adversaries():
             "$group":
                 {
                     "_id": "$_id",
+                    "level": {"$first": "$level"},
                     "skills": {"$first": "$skills"},
                     "talents": {"$first": "$talents"},
                     "abilities": {"$first": "$abilities"},
