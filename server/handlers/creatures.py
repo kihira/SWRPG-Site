@@ -3,7 +3,6 @@ from server.app import app
 from server.db import db
 from server import filters
 from flask import render_template
-import pymongo
 
 
 def process_items(items: list):
@@ -80,6 +79,7 @@ def all_creatures():
             "$group":
                 {
                     "_id": "$_id",
+                    "level": {"$first": "$level"},
                     "skills": {"$first": "$skills"},
                     "talents": {"$first": "$talents"},
                     "abilities": {"$first": "$abilities"},
