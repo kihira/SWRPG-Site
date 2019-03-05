@@ -16,32 +16,50 @@
             </ul>
         {% endif %}
     {% endwith %}
+
     <form method="post">
         {% block form %}
             {% for field in model.fields %}
-                {% if field.html_type == "array" %}
-                    <fieldset id="{{ field.mongo_name }}">
-                        {{ render_field(field.field, item) }}
-                    </fieldset>
-                {% else %}
-                    {{ render_field(field, item) }}
-                {% endif %}
+                <div>
+                    {% if field.html_type == "array" %}
+                        <fieldset id="{{ field.mongo_name }}">
+                            {{ render_field(field.field, item) }}
+                        </fieldset>
+                    {% else %}
+                        {{ render_field(field, item) }}
+                    {% endif %}
+                </div>
             {% endfor %}
         {% endblock %}
 
         {% block indexes %}
-            <fieldset id="index">
-                <label for="index_entry">Index:</label>
-                <input type="text" id="index_entry" name="index">
-            </fieldset>
+{#            {% for index in item["index"] %}#}
+{#                <fieldset id="index">#}
+{#                    <label for="index_entry">Index:</label>#}
+{#                    <input type="text" id="index_entry" name="index" value="{{ index }}">#}
+{#                </fieldset>#}
+{#            {% endfor %}#}
         {% endblock %}
         <input type="submit" value="Submit">
     </form>
+
+    <div id="repeatables">
+
+    </div>
+
+    {# Index template #}
+    <fieldset id="index" style="display: none">
+        <div>
+        <label for="index_entry">Index:</label>
+        <input type="text" id="index_entry" name="index" value="{{ index }}">
+    </div>
+    </fieldset>
 {% endblock %}
 
 {% block scripts %}
     {{ super() }}
-    <script src="{{ url_for("static", filename="js/edit.js") }}"></script>
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/edit.min.js"></script>
     <script>
         $(function() {
             repeatableSections["index"].addExisting({{ item.index|default([]) }});
