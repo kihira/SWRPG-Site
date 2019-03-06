@@ -1,0 +1,33 @@
+{% extends "item.html" %}
+{% block item_block %}
+    {{ super() }}
+    <div class="adversary">
+        <div class="characteristics">
+            <div class="block">{{ item.characteristics.brawn }}<div>BRAWN</div></div>
+            <div class="block">{{ item.characteristics.agility }}<div>AGILITY</div></div>
+            <div class="block">{{ item.characteristics.intellect }}<div>INTELLECT</div></div>
+            <div class="block">{{ item.characteristics.cunning }}<div>CUNNING</div></div>
+            <div class="block">{{ item.characteristics.willpower }}<div>WILLPOWER</div></div>
+            <div class="block">{{ item.characteristics.presence }}<div>PRESENCE</div></div>
+        </div>
+        <div class="stats">
+            <div class="block"><span>SOAK VALUE</span><div>{{ item.stats.soak }}</div></div>
+            <div class="block"><span>W. THRESHOLD</span><div>{{ item.stats.wounds }}</div></div>
+            {% if item.stats.strain %}
+                <div class="block"><span>S. THRESHOLD</span><div>{{ item.stats.strain }}</div></div>
+            {% endif %}
+            <div class="block"><span>M/R DEFENSE</span><div>{{ item.stats.melee_defense }}|{{ item.stats.ranged_defense }}</div></div>
+        </div>
+    </div>
+    <b>Skills{% if item.level == "Minion" %} (group only){% endif %}:</b> <span>{{ item.skills|link_list("skills") }}.</span><br>
+    <b>Talents:</b> {{ item.talents|link_list("talents") }}.<br>
+    <b>Abilities:</b> {{ item.abilities|link_list("abilities") }}.<br>
+    <b>Equipment:</b>
+    {% for i in item.equipment -%}
+            {% if i.quantity %}{{ i.quantity }} {% endif %}{{ i.name -}}
+            (<a href="/skills/{{- i.skill }}">{{- i.skill|title|replace("(", "[")|replace(")", "]") }}</a>;
+            Damage {{ i.damage }}; Critical {{ i.critical }}; Range [{{ i.range }}]; {% if i.special %}
+            {{ i.special|link_list("qualities") }}{% endif %})
+        {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}.<br>
+{% endblock %}

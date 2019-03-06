@@ -50,7 +50,6 @@ class RepeatableSection {
                 const newId = element.id + this.sectionsCount;
                 $(element).prev().attr("for", newId);
                 element.id = newId;
-                console.log("yay");
             })
             .end();
     }
