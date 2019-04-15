@@ -31,8 +31,8 @@ def all_talents():
     columns = [
         {"header": "Description", "name": "description"},
         {"header": "Activation", "name": "activation", "filter": {"type": "select"}},
-        {"header": "Ranked", "name": "ranked"},
-        {"header": "Force Sensitive", "name": "force"}
+        {"header": "Ranked", "name": "ranked", "filter": {"type": "select"}},
+        {"header": "Force Sensitive", "name": "force", "filter": {"type": "select"}}
     ]
 
     return render_template("table.html", title="Talents", name_header="Talent", categories=False, columns=columns,
