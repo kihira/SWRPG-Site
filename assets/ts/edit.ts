@@ -21,7 +21,6 @@ class RepeatableSection {
         for (const value of data) {
             const section = this.addNew();
             const input = section.find("input");
-            input.removeAttr("disabled");
             input.val(value);
         }
     }
@@ -34,6 +33,7 @@ class RepeatableSection {
         const clone = this.template.clone();
         // clone.removeUniqueId();
         clone.attr("id", null);
+        clone.find("input").removeAttr("disabled");
         clone.show().appendTo(this.container);
 
         return clone;

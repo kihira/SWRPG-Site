@@ -58,7 +58,7 @@ def get_talent(item):
 def add_talent():
     if request.method == "POST":
         item = model.from_form(request.form)
-        item["_id"] = db["talents"].insert_one(item)
+        db["talents"].insert_one(item)
         flash(f'Successfully added item. <a href="{item["_id"]}">View</a><a href="{item["_id"]}/edit">Edit</a>')
     return render_template("edit/add-edit.html", model=model)
 
