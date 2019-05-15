@@ -1,5 +1,5 @@
 from server.decorators import get_item, login_required
-from server.model import Model, Field, CheckboxField, TextareaField, SelectField
+from server.model import Model, Field, CheckboxField, TextareaField, SelectField, ArrayField
 from server.app import app
 from server.db import db
 from server import filters
@@ -17,7 +17,8 @@ model = Model([
         {"display": "Active (Incidental)", "value": "active_incidental"},
         {"display": "Active (Maneuver)", "value": "active_maneuver"},
         {"display": "Active (Out Of Turn)", "value": "active_oot"},
-    ])
+    ]),
+    ArrayField(Field("index", "Index"))
 ])
 
 
@@ -68,6 +69,8 @@ def add_talent():
 def edit_talent(item):
     if request.method == "POST":
         item = model.from_form(request.form)
+        print(request.form)
+        print(item)
         db["talents"].update_one({"_id": item["_id"]}, {"$set": item})
         flash(f'Successfully updated item.')
     return render_template("edit/add-edit.html", item=item, model=model)

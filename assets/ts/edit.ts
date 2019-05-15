@@ -5,7 +5,6 @@ interface KeyDict {
 class RepeatableSection {
     private readonly container: JQuery;
     private readonly template: JQuery;
-    private sectionsCount: number = 0;
 
     constructor(template: HTMLElement) {
         this.template = $(template);
@@ -18,25 +17,12 @@ class RepeatableSection {
     }
 
     // todo add support for more nested documents (specifically if something has 2 of the same weapon)
-    public addExisting(data: number[] | string[] | boolean[]) {
+    public addExisting(data: string[]) {
         for (const value of data) {
             const section = this.addNew();
-            const input = section.get()[0].querySelector("input") as HTMLInputElement;
-
-            switch (typeof value) {
-                case "number": {
-                    input.value = value.toString();
-                    break;
-                }
-                case "string": {
-                    input.value = value;
-                    break;
-                }
-                case "boolean": {
-                    input.checked = value;
-                    break;
-                }
-            }
+            const input = section.find("input");
+            input.removeAttr("disabled");
+            input.val(value);
         }
     }
 
@@ -45,18 +31,12 @@ class RepeatableSection {
     }
 
     private addNew = () => {
-        this.sectionsCount += 1;
-        return this.template
-            .clone()
-            .appendTo(this.container)
-            .show()
-            .find(":input")
-            .each((index, element) => {
-                const newId = element.id + this.sectionsCount;
-                $(element).prev().attr("for", newId);
-                element.id = newId;
-            })
-            .end();
+        const clone = this.template.clone();
+        // clone.removeUniqueId();
+        clone.attr("id", null);
+        clone.show().appendTo(this.container);
+
+        return clone;
     }
 }
 

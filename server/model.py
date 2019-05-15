@@ -105,7 +105,7 @@ class ArrayField(Field):
         self.field = field
 
     def get_value(self, form: MultiDict):
-        return form.getlist(self.mongo_name)
+        return form.getlist(self.mongo_name + "[]")
 
 
 class FieldGroup(Field):

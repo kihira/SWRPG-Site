@@ -21,13 +21,7 @@
         {% block form %}
             {% for field in model.fields %}
                 <div>
-                    {% if field.html_type == "array" %}
-                        <fieldset id="{{ field.mongo_name }}">
-                            {{ render_field(field.field, item) }}
-                        </fieldset>
-                    {% else %}
-                        {{ render_field(field, item) }}
-                    {% endif %}
+                    {{ render_field(field, item) }}
                 </div>
             {% endfor %}
         {% endblock %}
@@ -36,24 +30,8 @@
 
         </div>
 
-        {% block indexes %}
-{#            {% for index in item["index"] %}#}
-{#                <fieldset id="index">#}
-{#                    <label for="index_entry">Index:</label>#}
-{#                    <input type="text" id="index_entry" name="index" value="{{ index }}">#}
-{#                </fieldset>#}
-{#            {% endfor %}#}
-        {% endblock %}
         <input type="submit" value="Submit">
     </form>
-
-    {# Index template #}
-    <fieldset id="index" style="display: none">
-        <div>
-        <label for="index_entry">Index:</label>
-        <input type="text" id="index_entry" name="index" value="{{ index }}">
-    </div>
-    </fieldset>
 {% endblock %}
 
 {% block scripts %}
@@ -62,11 +40,9 @@
     <script src="/static/js/edit.min.js"></script>
     <script>
         $(function() {
-            repeatableSections["index"].addExisting({{ item.index|default([]) }});
-
             {% for field in model.fields %}
                 {% if field.html_type == "array" %}
-                    repeatableSections[{{ field.mongo_name }}].addExisting({{ item[field.mongo_name]|default([]) }});
+                    repeatableSections["{{ field.mongo_name }}"].addExisting({{ item[field.mongo_name]|default([]) }});
                 {% endif %}
             {% endfor %}
         });
@@ -105,7 +81,11 @@
 
 {% macro render_field(field, item) %}
     <label>{{ field.human_name }}
-        {% if field.html_type == "checkbox" %}
+        {% if field.html_type == "array" %}
+            <fieldset id="{{ field.mongo_name }}" style="display: none;">
+                <input name="{{ field.field.mongo_name }}[]" disabled="disabled" type="text">
+            </fieldset>
+        {% elif field.html_type == "checkbox" %}
             <input name="{{ field.mongo_name }}" type="checkbox" {% if item[field.mongo_name] %}checked{% endif %}>
         {% elif field.html_type == "number" %}
             <input name="{{ field.mongo_name }}" type="number" min="{{ field.min }}" max="{{ field.max }}"
