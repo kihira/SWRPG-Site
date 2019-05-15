@@ -23,14 +23,19 @@ class RepeatableSection {
             const section = this.addNew();
             const input = section.get()[0].querySelector("input") as HTMLInputElement;
 
-            if (typeof value === "number") {
-                input.value = value.toString();
-            }
-            else if (typeof value === "string") {
-                input.value = value;
-            }
-            else if (typeof value === "boolean") {
-                input.checked = value;
+            switch (typeof value) {
+                case "number": {
+                    input.value = value.toString();
+                    break;
+                }
+                case "string": {
+                    input.value = value;
+                    break;
+                }
+                case "boolean": {
+                    input.checked = value;
+                    break;
+                }
             }
         }
     }

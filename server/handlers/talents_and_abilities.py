@@ -8,6 +8,7 @@ from flask import render_template, request, flash
 model = Model([
     Field("_id", "ID"),
     CheckboxField("ranked", "Ranked"),
+    CheckboxField("force", "Force"),
     TextareaField("short", "Short Description"),
     TextareaField("description", "Long Description"),
     SelectField("activation", "Activation", options=[

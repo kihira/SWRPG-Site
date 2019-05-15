@@ -32,6 +32,10 @@
             {% endfor %}
         {% endblock %}
 
+        <div id="repeatables">
+
+        </div>
+
         {% block indexes %}
 {#            {% for index in item["index"] %}#}
 {#                <fieldset id="index">#}
@@ -42,10 +46,6 @@
         {% endblock %}
         <input type="submit" value="Submit">
     </form>
-
-    <div id="repeatables">
-
-    </div>
 
     {# Index template #}
     <fieldset id="index" style="display: none">
