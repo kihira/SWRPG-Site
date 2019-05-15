@@ -70,7 +70,6 @@ def edit_talent(item):
         item = model.from_form(request.form)
         db["talents"].update_one({"_id": item["_id"]}, {"$set": item})
         flash(f'Successfully updated item.')
-    item["activation"] = activation(item["activation"])
     return render_template("edit/add-edit.html", item=item, model=model)
 
 
@@ -95,6 +94,12 @@ def get_ability(item):
 
 
 def activation(value):
+    if value == "passive":
+        return "Passive"
+    if value == "active_action":
+        return "Active (Action)"
+    if value == "active_incidental":
+        return "Active (Incidental)"
     if not value:
         return "Passive"
     elif type(value) == dict:

@@ -116,9 +116,9 @@
             <select name="{{ field.mongo_name }}">
                 {% for option in field.options %}
                     {% if option.value %}
-                        <option value="{{ option.value }}">{{ option.display }}</option>
+                        <option value="{{ option.value }}" {% if item[field.mongo_name] == option.value %}selected{% endif %} >{{ option.display }}</option>
                     {% else %}
-                        <option>{{ option }}</option>
+                        <option {% if item[field.mongo_name] == option %}selected{% endif %} >{{ option }}</option>
                     {% endif %}
                 {% endfor %}
             </select>
