@@ -2,6 +2,17 @@ interface KeyDict {
     [key: string]: any;
 }
 
+function insertText(symbol: string)
+{
+    if (lastActiveElement == null) { return; }
+    const selected = $(lastActiveElement as HTMLInputElement).get(0);
+    const caret = selected.selectionStart as number;
+    const text = selected.value;
+
+    selected.value = text.substr(0, caret) + symbol + text.substr(caret);
+    (lastActiveElement as HTMLElement).focus();
+}
+
 class RepeatableSection {
     private readonly container: JQuery;
     private readonly template: JQuery;
@@ -41,10 +52,16 @@ class RepeatableSection {
 }
 
 const repeatableSections: { [key: string]: RepeatableSection } = {};
+let lastActiveElement: Element | null = null;
 
 $(() => {
     $("fieldset")
         .each(function(this: HTMLElement) {
             repeatableSections[this.id] = new RepeatableSection(this as HTMLElement);
+        });
+
+    $("textarea")
+        .each(function(this: HTMLElement) {
+            this.onmousedown = () => lastActiveElement = this;
         });
 });

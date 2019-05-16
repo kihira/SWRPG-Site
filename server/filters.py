@@ -40,6 +40,7 @@ diff_regex = re.compile(r"\[DIFF:([A-Z]+)\]")
 skill_regex = re.compile(r"\[SKILL:([a-zA-Z()_]+)\]")
 talent_regex = re.compile(r"\[TALENT:([a-zA-Z()_]+)\]")
 characteristic_regex = re.compile(r"\[CHARACTERISTIC:([a-zA-Z()_]+)\]")
+quality_regex = re.compile(r"\[QUALITY:([a-zA-Z()_]+)\]")
 
 
 def description(s: str):
@@ -49,6 +50,7 @@ def description(s: str):
         s = s.replace(f"[{key}]", f'<span class="symbol {value}"></span>')
     s = re.sub(talent_regex, lambda match: f'{match.group(1)}', s)  # todo implement this
     s = re.sub(characteristic_regex, lambda match: f'{match.group(1)}', s)  # todo implement this
+    s = re.sub(quality_regex, lambda match: f'{match.group(1)}', s)  # todo implement this
     s = re.sub(skill_regex, lambda match: f'{format_skill(match.group(1))}', s)
     s = re.sub(check_regex, lambda match: f"<b>{diff[match.group(1)]} {format_skill(match.group(2))} check</b>", s)
     s = re.sub(diff_regex, lambda match: f'<b>{diff[match.group(1)]}</b>', s)
