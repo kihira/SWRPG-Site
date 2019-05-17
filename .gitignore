@@ -11,3 +11,8 @@ users.json
 static/
 *.map
 **/__pycache__/*
+
+data/
+edit.js
+filters.js
+table.js
