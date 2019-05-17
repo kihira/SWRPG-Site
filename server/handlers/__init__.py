@@ -1,7 +1,7 @@
 __all__ = []
 
 from server.endpoint import Endpoint
-from server.model import ObjectIdField, Field, SelectField, NumberField, CheckboxField, Model, TextareaField
+from server.model import ObjectIdField, Field, SelectField, NumberField, CheckboxField, Model, TextareaField, ArrayField
 
 import pkgutil
 import inspect
@@ -26,7 +26,8 @@ attachments = Endpoint("attachments", "Attachments", Model([
     NumberField("encumbrance", "Encumbrance"),
     NumberField("hardpoints", "HP Required"),
     NumberField("rarity", "Rarity", max=10),
-    TextareaField("description", "Description")
+    TextareaField("description", "Description"),
+    ArrayField(Field("index", "Index"), table=False)
 ]))
 
 armor = Endpoint("armor", "Armor", Model([
@@ -39,5 +40,6 @@ armor = Endpoint("armor", "Armor", Model([
     NumberField("price", "Price", max=100000),
     CheckboxField("restricted", "Restricted"),
     NumberField("rarity", "Rarity", max=10),
-    TextareaField("description", "Description")
+    TextareaField("description", "Description"),
+    ArrayField(Field("index", "Index"), table=False)
 ]))

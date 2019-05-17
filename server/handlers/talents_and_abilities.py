@@ -13,7 +13,7 @@ model = Model([
     TextareaField("description", "Long Description"),
     SelectField("activation", "Activation", options=[
         {"display": "Passive", "value": "passive"},
-        {"display": "Active (Action)", "value": "active_action"},  # todo this isn't compat with current model
+        {"display": "Active (Action)", "value": "active_action"},
         {"display": "Active (Incidental)", "value": "active_incidental"},
         {"display": "Active (Maneuver)", "value": "active_maneuver"},
         {"display": "Active (Out Of Turn)", "value": "active_oot"},

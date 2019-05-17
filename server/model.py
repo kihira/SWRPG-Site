@@ -9,20 +9,25 @@ class Field:
     default: object
     readonly: bool
     required: bool
+    table: bool
 
-    def __init__(self, mongo_name, human_name, html_type="text", default=None, readonly=False, required=True):
+    def __init__(self, mongo_name, human_name, html_type="text", default=None, readonly=False, required=True, table=True):
         self.mongo_name = mongo_name
         self.human_name = human_name
         self.html_type = html_type
         self.default = default
         self.readonly = readonly
         self.required = required
+        self.table = table
+
+        if self.mongo_name == "_id" or self.mongo_name == "name" or self.mongo_name == "category" or self.mongo_name == "description":
+            self.table = False
 
     def get_value(self, form: MultiDict):
         return form.get(self.mongo_name, self.default)
 
     def table_display(self):
-        return self.mongo_name != "_id" and self.mongo_name != "name" and self.mongo_name != "category" and self.mongo_name != "description"
+        return self.table
 
     def get_datatables_object(self):
         """
@@ -40,8 +45,8 @@ class Field:
 
 
 class CheckboxField(Field):
-    def __init__(self, mongo_name, human_name, default=False):
-        super().__init__(mongo_name, human_name, html_type="checkbox", default=default)
+    def __init__(self, mongo_name, human_name, default=False, readonly=False, required=True, table=True):
+        super().__init__(mongo_name, human_name, html_type="checkbox", default=default, readonly=readonly, required=required, table=table)
 
     def get_value(self, form: MultiDict):
         return self.mongo_name in form
@@ -52,8 +57,8 @@ class CheckboxField(Field):
 
 
 class TextareaField(Field):
-    def __init__(self, mongo_name, human_name):
-        super().__init__(mongo_name, human_name, html_type="textarea")
+    def __init__(self, mongo_name, human_name, readonly=False, required=True, table=True):
+        super().__init__(mongo_name, human_name, html_type="textarea", readonly=readonly, required=required, table=table)
 
     def get_value(self, form: MultiDict):
         return super().get_value(form).replace("\r\n", " ").replace("\n", " ")
@@ -62,8 +67,8 @@ class TextareaField(Field):
 class SelectField(Field):
     options = []
 
-    def __init__(self, mongo_name, human_name, options: []):
-        super().__init__(mongo_name, human_name, html_type="select")
+    def __init__(self, mongo_name, human_name, options: [], readonly=False, required=True, table=True):
+        super().__init__(mongo_name, human_name, html_type="select", readonly=readonly, required=required, table=table)
 
         self.options = options
 
@@ -92,15 +97,17 @@ class ObjectIdField(Field):
         super().__init__(mongo_name, human_name, readonly=readonly)
 
     def get_value(self, form: MultiDict):
-        print(form)
-        return ObjectId(form.get(self.mongo_name, ""))
+        val = form.get(self.mongo_name, "")
+        if len(val) == 0:
+            return ObjectId()
+        return ObjectId(val)
 
 
 class ArrayField(Field):
     field: Field
 
-    def __init__(self, field: Field):
-        super().__init__(field.mongo_name, field.human_name, html_type="array")
+    def __init__(self, field: Field, readonly=False, required=True, table=True):
+        super().__init__(field.mongo_name, field.human_name, html_type="array", readonly=readonly, required=required, table=table)
 
         self.field = field
 
