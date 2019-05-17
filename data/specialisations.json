@@ -1,0 +1,358 @@
+[
+  {
+    "_id": "Republic_Navy_Officer",
+    "career": "Universal",
+    "skills": [
+      "Astrogation",
+      "Discipline",
+      "Knowledge_(Warfare)",
+      "Leadership"
+    ],
+    "tree": [
+      [
+        {
+          "talent": "Grit"
+        },
+        {
+          "talent": "Command",
+          "down": true
+        },
+        {
+          "talent": "Commanding_Presence",
+          "down": true
+        },
+        {
+          "talent": "Galaxy_Mapper",
+          "down": true
+        }
+      ],
+      [
+        {
+          "talent": "Command",
+          "right": true
+        },
+        {
+          "talent": "Commanding_Presence",
+          "up": true,
+          "left": true,
+          "down": true
+        },
+        {
+          "talent": "Grit",
+          "up": true,
+          "down": true
+        },
+        {
+          "talent": "Known_Schematic",
+          "up": true,
+          "down": true
+        }
+      ],
+      [
+        {
+          "talent": "Ordnance_Saturation",
+          "down": true
+        },
+        {
+          "talent": "Steely_Nerves",
+          "up": true,
+          "right": true,
+          "down": true
+        },
+        {
+          "talent": "Confidence",
+          "up": true,
+          "left": true,
+          "down": true,
+          "right": true
+        },
+        {
+          "talent": "Toughened",
+          "up": true,
+          "left": true
+        }
+      ],
+      [
+        {
+          "talent": "Fire_When_Ready",
+          "up": true,
+          "right": true
+        },
+        {
+          "talent": "On_My_Order",
+          "up": true,
+          "left": true
+        },
+        {
+          "talent": "Galaxy_Mapper",
+          "up": true,
+          "down": true
+        },
+        {
+          "talent": "Hyperspace_Assault",
+          "down": true
+        }
+      ],
+      [
+        {
+          "talent": "Natural_Leader",
+          "right": true
+        },
+        {
+          "talent": "Dedication",
+          "left": true,
+          "right": true
+        },
+        {
+          "talent": "Careful_Planning",
+          "up": true,
+          "left": true,
+          "right": true
+        },
+        {
+          "talent": "Outmaneuver",
+          "left": true,
+          "up": true
+        }
+      ]
+    ]
+  },
+  {
+    "_id": "Republic_Representative",
+    "career": "Universal",
+    "skills": [
+      "Charm",
+      "Cool",
+      "Knowledge_((choose only one))",
+      "Negotiation"
+    ],
+    "tree": [
+      [
+        {
+          "talent": "Grit"
+        },
+        {
+          "talent": "Leverage"
+        },
+        {
+          "talent": "Kill_With_Kindness",
+          "down": true
+        },
+        {
+          "talent": "Respected_Delegate",
+          "down": true
+        }
+      ],
+      [
+        {
+          "talent": "Nobody's_Fool",
+          "left": true,
+          "down": true
+        },
+        {
+          "talent": "Kill_With_Kindness",
+          "right": true,
+          "left": true,
+          "down": true
+        },
+        {
+          "talent": "Respected_Delegate",
+          "up": true,
+          "left": true,
+          "right": true
+        },
+        {
+          "talent": "Smooth_Talker",
+          "up": true,
+          "left": true,
+          "down": true
+        }
+      ],
+      [
+        {
+          "talent": "Translation_Error",
+          "up": true,
+          "right": true,
+          "down": true
+        },
+        {
+          "talent": "Leverage",
+          "up": true,
+          "left": true,
+          "down": true
+        },
+        {
+          "talent": "Smooth_Talker",
+          "down": true
+        },
+        {
+          "talent": "Nobody's_Fool",
+          "up": true,
+          "down": true
+        }
+      ],
+      [
+        {
+          "talent": "Consider_Our_Options",
+          "up": true,
+          "down": true
+        },
+        {
+          "talent": "Steely_Nerves",
+          "up": true,
+          "right": true,
+          "down": true
+        },
+        {
+          "talent": "Intense_Presence",
+          "up": true,
+          "left": true,
+          "right": true
+        },
+        {
+          "talent": "Leverage",
+          "up": true,
+          "left": true,
+          "down": true
+        }
+      ],
+      [
+        {
+          "talent": "Improved_Consider_Our_Options",
+          "up": true
+        },
+        {
+          "talent": "Natural_Negotiation",
+          "up": true,
+          "right": true
+        },
+        {
+          "talent": "Dedication",
+          "left": true,
+          "right": true
+        },
+        {
+          "talent": "Backroom_Deal",
+          "left": true,
+          "up": true
+        }
+      ]
+    ]
+  },
+  {
+    "_id": "Scavenger",
+    "career": "Universal",
+    "skills": [
+      "Mechanics",
+      "Perception",
+      "Streetwise",
+      "Survival"
+    ],
+    "tree": [
+      [
+        {
+          "talent": "Grit"
+        },
+        {
+          "talent": "Forager",
+          "down": true
+        },
+        {
+          "talent": "Utinni!",
+          "down": true
+        },
+        {
+          "talent": "Street_Smarts",
+          "down": true
+        }
+      ],
+      [
+        {
+          "talent": "Grit",
+          "right": true,
+          "down": true
+        },
+        {
+          "talent": "Rapid_Reaction",
+          "up": true,
+          "left": true
+        },
+        {
+          "talent": "Tinkerer",
+          "up": true,
+          "down": true
+        },
+        {
+          "talent": "Utinni!",
+          "up": true,
+          "down": true
+        }
+      ],
+      [
+        {
+          "talent": "Rapid_Reactions",
+          "up": true,
+          "down": true
+        },
+        {
+          "talent": "Jury_Rigged",
+          "right": true
+        },
+        {
+          "talent": "Exceed_Specifications",
+          "up": true,
+          "left": true,
+          "down": true,
+          "right": true
+        },
+        {
+          "talent": "One_Person's_Trash",
+          "up": true,
+          "left": true,
+          "down": true
+        }
+      ],
+      [
+        {
+          "talent": "Sixth_Sense",
+          "up": true
+        },
+        {
+          "talent": "Supreme_Exceed_Specifications",
+          "down": true
+        },
+        {
+          "talent": "Improved_Exceed_Specifications",
+          "up": true,
+          "down": true
+        },
+        {
+          "talent": "Another's_Treasure",
+          "up": true
+        }
+      ],
+      [
+        {
+          "talent": "Improved_Utility_Belt",
+          "right": true
+        },
+        {
+          "talent": "Utility_Belt",
+          "up": true,
+          "left": true,
+          "right": true
+        },
+        {
+          "talent": "Dedication",
+          "left": true,
+          "up": true,
+          "right": true
+        },
+        {
+          "talent": "Contraption",
+          "left": true
+        }
+      ]
+    ]
+  }
+]

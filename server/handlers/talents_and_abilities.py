@@ -1,5 +1,5 @@
 from server.decorators import get_item, login_required
-from server.model import Model, Field, CheckboxField, TextareaField, SelectField
+from server.model import Model, Field, CheckboxField, TextareaField, SelectField, ArrayField
 from server.app import app
 from server.db import db
 from server import filters
@@ -8,15 +8,17 @@ from flask import render_template, request, flash
 model = Model([
     Field("_id", "ID"),
     CheckboxField("ranked", "Ranked"),
+    CheckboxField("force", "Force"),
     TextareaField("short", "Short Description"),
     TextareaField("description", "Long Description"),
     SelectField("activation", "Activation", options=[
         {"display": "Passive", "value": "passive"},
-        {"display": "Active (Action)", "value": "active_action"},  # todo this isn't compat with current model
+        {"display": "Active (Action)", "value": "active_action"},
         {"display": "Active (Incidental)", "value": "active_incidental"},
         {"display": "Active (Maneuver)", "value": "active_maneuver"},
         {"display": "Active (Out Of Turn)", "value": "active_oot"},
-    ])
+    ]),
+    ArrayField(Field("index", "Index"))
 ])
 
 
@@ -56,7 +58,7 @@ def get_talent(item):
 def add_talent():
     if request.method == "POST":
         item = model.from_form(request.form)
-        item["_id"] = db["talents"].insert_one(item)
+        db["talents"].insert_one(item)
         flash(f'Successfully added item. <a href="{item["_id"]}">View</a><a href="{item["_id"]}/edit">Edit</a>')
     return render_template("edit/add-edit.html", model=model)
 
@@ -67,9 +69,10 @@ def add_talent():
 def edit_talent(item):
     if request.method == "POST":
         item = model.from_form(request.form)
+        print(request.form)
+        print(item)
         db["talents"].update_one({"_id": item["_id"]}, {"$set": item})
         flash(f'Successfully updated item.')
-    item["activation"] = activation(item["activation"])
     return render_template("edit/add-edit.html", item=item, model=model)
 
 
@@ -94,6 +97,12 @@ def get_ability(item):
 
 
 def activation(value):
+    if value == "passive":
+        return "Passive"
+    if value == "active_action":
+        return "Active (Action)"
+    if value == "active_incidental":
+        return "Active (Incidental)"
     if not value:
         return "Passive"
     elif type(value) == dict:

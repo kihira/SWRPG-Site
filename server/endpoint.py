@@ -39,7 +39,7 @@ class Endpoint:
         if request.method == "POST":
             item = self.model.from_form(request.form)
             item["_id"] = self.collection.insert_one(item).inserted_id
-            flash(f'Successfully added item. <a href="{item["_id"]}">View</a><a href="{item["_id"]}/edit">Edit</a>')
+            flash(f'Successfully added item. <a href="{item["_id"]}">View</a> <a href="{item["_id"]}/edit">Edit</a>')
         return render_template("edit/add-edit.html", model=self.model)
 
     @login_required

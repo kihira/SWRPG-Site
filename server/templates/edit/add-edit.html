@@ -7,53 +7,118 @@
 {% endblock %}
 
 {% block content %}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class=flashes>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+    <div style="display: grid; grid-template-columns: 50% 50%;">
+        <div style="grid-column: 1 / 2">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class=flashes>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
 
-    <form method="post">
-        {% block form %}
-            {% for field in model.fields %}
-                <div>
-                    {% if field.html_type == "array" %}
-                        <fieldset id="{{ field.mongo_name }}">
-                            {{ render_field(field.field, item) }}
-                        </fieldset>
-                    {% else %}
-                        {{ render_field(field, item) }}
-                    {% endif %}
+            <form method="post">
+                {% block form %}
+                    {% for field in model.fields %}
+                        <div>
+                            {{ render_field(field, item) }}
+                        </div>
+                    {% endfor %}
+                {% endblock %}
+
+                <div id="repeatables">
+
                 </div>
-            {% endfor %}
-        {% endblock %}
 
-        {% block indexes %}
-{#            {% for index in item["index"] %}#}
-{#                <fieldset id="index">#}
-{#                    <label for="index_entry">Index:</label>#}
-{#                    <input type="text" id="index_entry" name="index" value="{{ index }}">#}
-{#                </fieldset>#}
-{#            {% endfor %}#}
-        {% endblock %}
-        <input type="submit" value="Submit">
-    </form>
-
-    <div id="repeatables">
-
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <div style="grid-column: 2 / 3">
+            <div>
+                <button onclick="insertText('[BOOST]')"><span class="symbol boost"></span></button>
+                <button onclick="insertText('[SETBACK]')"><span class="symbol setback"></span></button>
+                <button onclick="insertText('[ABILITY]')"><span class="symbol ability"></span></button>
+                <button onclick="insertText('[PROFICIENCY]')"><span class="symbol proficiency"></span></button>
+                <button onclick="insertText('[DIFFICULTY]')"><span class="symbol difficulty"></span></button>
+                <button onclick="insertText('[CHALLENGE]')"><span class="symbol challenge"></span></button>
+                <button onclick="insertText('[SUCCESS]')"><span class="symbol success"></span></button>
+                <button onclick="insertText('[ADVANTAGE]')"><span class="symbol advantage"></span></button>
+                <button onclick="insertText('[TRIUMPH]')"><span class="symbol triumph"></span></button>
+                <button onclick="insertText('[FAILURE]')"><span class="symbol failure"></span></button>
+                <button onclick="insertText('[THREAT]')"><span class="symbol threat"></span></button>
+                <button onclick="insertText('[DESPAIR]')"><span class="symbol despair"></span></button>
+                <button onclick="insertText('[FORCE]')"><span class="symbol force"></span></button>
+                <button onclick="insertText('[FORCE POINT]')"><span class="symbol force-pip"></span></button>
+                <button onclick="insertText('[LIGHT]')"><span class="symbol force-light"></span></button>
+                <button onclick="insertText('[DARK]')"><span class="symbol force-dark"></span></button>
+            </div>
+            <div style="padding-top: 15px;">
+                <label for="skill-insert">Skill</label>
+                <select id="skill-insert">
+                    <optgroup label="General">
+                        <option>Astrogation</option>
+                        <option>Athletics</option>
+                        <option>Charm</option>
+                        <option>Coercion</option>
+                        <option>Computers</option>
+                        <option>Cool</option>
+                        <option>Coordination</option>
+                        <option>Cybernetics</option>
+                        <option>Deception</option>
+                        <option>Discipline</option>
+                        <option>Leadership</option>
+                        <option>Mechanics</option>
+                        <option>Medicine</option>
+                        <option>Negotiation</option>
+                        <option>Perception</option>
+                        <option>Piloting</option>
+                        <option value="Piloting_(Planetary)">Piloting (Planetary)</option>
+                        <option value="Piloting_(Space)">Piloting (Space)</option>
+                        <option>Resilience</option>
+                        <option>Skullduggery</option>
+                        <option>Stealth</option>
+                        <option>Streetwise</option>
+                        <option>Survival</option>
+                        <option>Vigilance</option>
+                    </optgroup>
+                    <optgroup label="Combat">
+                        <option>Brawl</option>
+                        <option>Gunnery</option>
+                        <option>Lightsaber</option>
+                        <option>Melee</option>
+                        <option value="Ranged_(Heavy)">Ranged (Heavy)</option>
+                        <option value="Ranged_(Light)">Ranged (Light)</option>
+                    </optgroup>
+                    <optgroup label="Knowledge">
+                        <option>Knowledge</option>
+                        <option value="Knowledge_(Core_Worlds)">Knowledge (Core Worlds)</option>
+                        <option value="Knowledge_(Education)">Knowledge (Education)</option>
+                        <option value="Knowledge_(Outer_Rim)">Knowledge (Outer Rim)</option>
+                        <option value="Knowledge_(Underworld)">Knowledge (Underworld)</option>
+                        <option value="Knowledge_(Warfare)">Knowledge (Warfare)</option>
+                        <option value="Knowledge_(Xenology)">Knowledge (Xenology)</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div>
+                <label for="diff-insert">Difficulty</label>
+                <select id="diff-insert">
+                    <option>Simple</option>
+                    <option>Easy</option>
+                    <option>Average</option>
+                    <option>Hard</option>
+                    <option>Daunting</option>
+                    <option>Formidable</option>
+                </select>
+            </div>
+            <div>
+                <button onclick="insertText(`[SKILL:${$('#skill-insert').val()}]`)">Insert Skill</button>
+                <button onclick="insertText(`[CHECK:${$('#diff-insert').val().toUpperCase()}:${$('#skill-insert').val()}]`)">Insert Check</button>
+            </div>
+        </div>
     </div>
-
-    {# Index template #}
-    <fieldset id="index" style="display: none">
-        <div>
-        <label for="index_entry">Index:</label>
-        <input type="text" id="index_entry" name="index" value="{{ index }}">
-    </div>
-    </fieldset>
 {% endblock %}
 
 {% block scripts %}
@@ -62,11 +127,9 @@
     <script src="/static/js/edit.min.js"></script>
     <script>
         $(function() {
-            repeatableSections["index"].addExisting({{ item.index|default([]) }});
-
             {% for field in model.fields %}
                 {% if field.html_type == "array" %}
-                    repeatableSections[{{ field.mongo_name }}].addExisting({{ item[field.mongo_name]|default([]) }});
+                    repeatableSections["{{ field.mongo_name }}"].addExisting({{ item[field.mongo_name]|default([]) }});
                 {% endif %}
             {% endfor %}
         });
@@ -105,7 +168,11 @@
 
 {% macro render_field(field, item) %}
     <label>{{ field.human_name }}
-        {% if field.html_type == "checkbox" %}
+        {% if field.html_type == "array" %}
+            <fieldset id="{{ field.mongo_name }}" style="display: none;">
+                <input name="{{ field.field.mongo_name }}[]" disabled="disabled" type="text">
+            </fieldset>
+        {% elif field.html_type == "checkbox" %}
             <input name="{{ field.mongo_name }}" type="checkbox" {% if item[field.mongo_name] %}checked{% endif %}>
         {% elif field.html_type == "number" %}
             <input name="{{ field.mongo_name }}" type="number" min="{{ field.min }}" max="{{ field.max }}"
@@ -116,9 +183,9 @@
             <select name="{{ field.mongo_name }}">
                 {% for option in field.options %}
                     {% if option.value %}
-                        <option value="{{ option.value }}">{{ option.display }}</option>
+                        <option value="{{ option.value }}" {% if item[field.mongo_name] == option.value %}selected{% endif %} >{{ option.display }}</option>
                     {% else %}
-                        <option>{{ option }}</option>
+                        <option {% if item[field.mongo_name] == option %}selected{% endif %} >{{ option }}</option>
                     {% endif %}
                 {% endfor %}
             </select>
