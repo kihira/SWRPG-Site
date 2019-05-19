@@ -2,7 +2,7 @@ import re
 
 from flask import json
 
-__all__ = ["format_price_table", "format_number", "format_altitude", "format_index", "format_none",
+__all__ = ["format_price", "format_number", "format_altitude", "format_index", "format_none",
            "format_list", "title", "description"]
 
 symbols = {
@@ -48,9 +48,9 @@ def description(s: str):
     for (key, value) in symbols.items():
         # todo optimise? use something similar to re.sub
         s = s.replace(f"[{key}]", f'<span class="symbol {value}"></span>')
-    s = re.sub(talent_regex, lambda match: f'{match.group(1)}', s)  # todo implement this
+    s = re.sub(talent_regex, lambda match: f'{format_talent(match.group(1))}', s)
     s = re.sub(characteristic_regex, lambda match: f'{match.group(1)}', s)  # todo implement this
-    s = re.sub(quality_regex, lambda match: f'{match.group(1)}', s)  # todo implement this
+    s = re.sub(quality_regex, lambda match: f'{format_quality(match.group(1))}', s)
     s = re.sub(skill_regex, lambda match: f'{format_skill(match.group(1))}', s)
     s = re.sub(check_regex, lambda match: f"<b>{diff[match.group(1)]} {format_skill(match.group(2))} check</b>", s)
     s = re.sub(diff_regex, lambda match: f'<b>{diff[match.group(1)]}</b>', s)
@@ -70,11 +70,19 @@ def format_skill(skill):
     return f'<a href="/skills/{skill}">{title(skill)}</a>'
 
 
+def format_talent(talent):
+    return f'<a href="/talents/{talent}">{title(talent)}</a>'
+
+
+def format_quality(quality):
+    return f'<a href="/qualities/{quality}">{title(quality)}</a>'
+
+
 def format_number(s):
     return "{:,}".format(s)
 
 
-def format_price_table(price, restricted):
+def format_price(price, restricted):
     s = ""
     if restricted:
         s += "(R) "
@@ -126,7 +134,7 @@ def title(s: str):
 
 def register(FILTERS: dict):
     FILTERS["formatnum"] = format_number
-    FILTERS["formatprice"] = format_price_table
+    FILTERS["price"] = format_price
     FILTERS["formatindex"] = format_index
     FILTERS["link_list"] = format_list
     FILTERS["none"] = format_none
@@ -134,3 +142,6 @@ def register(FILTERS: dict):
     FILTERS["title"] = title
     FILTERS["description"] = description
     FILTERS["modeltojson"] = to_json
+    FILTERS["skill"] = format_skill
+    FILTERS["talent"] = format_talent
+    FILTERS["quality"] = format_quality

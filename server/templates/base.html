@@ -64,7 +64,7 @@
 
 {% macro list(values) -%}
     {% for value in values %}
-        {{ value }}{% if loop.last %}.{% else %}, {% endif %}
+        {{ caller(value) }}{% if loop.last %}.{% else %}, {% endif %}
     {% endfor %}
 {%- endmacro %}
 

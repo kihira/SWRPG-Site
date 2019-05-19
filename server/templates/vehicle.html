@@ -55,7 +55,7 @@
     {% if item.consumables %}
         <b>Consumables:</b> {{ item.consumables }}<br>
     {% endif %}
-    <b>Cost/Rarity:</b> {{ item.price|formatprice(item.restricted) }}/{{ item.rarity }}<br>
+    <b>Cost/Rarity:</b> {{ item.price|price(item.restricted) }}/{{ item.rarity }}<br>
     <b>Customization Hard Points:</b> {{ item.hardpoints }}<br>
     <b>Weapons:</b> {{ item.weapons|none }}<br>
 {% endblock %}

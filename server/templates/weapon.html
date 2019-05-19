@@ -18,7 +18,7 @@
         <b>Range:</b> {{ item.range }}<br>
         <b>Special:</b> {{ item.special|link_list("qualities") }}.<br>
         <b>Encumbrance:</b> {{ item.encumbrance }}<br>
-        <b>Price:</b> {{ item.price|formatprice(item.restricted) }}<br>
+        <b>Price:</b> {{ item.price|price(item.restricted) }}<br>
         <b>Rarity:</b> {{ item.rarity }}<br>
     </p>
 {% endblock %}

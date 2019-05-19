@@ -16,7 +16,7 @@
     {{ super() }}
     <div style="padding-top: 5px">
         <b>Encumbrance:</b> {{ item.encumbrance }}<br>
-        <b>Price:</b> {{ item.price|formatprice(item.restricted) }}<br>
+        <b>Price:</b> {{ item.price|price(item.restricted) }}<br>
         <b>Rarity:</b> {{ item.rarity }}<br>
     </div>
 {% endblock %}

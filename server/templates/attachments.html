@@ -4,9 +4,25 @@
     <p class="no-indent">
         <b>Base Modifications:</b> {% if item.modifiers %}{{ item.modifiers|description }}{% endif %}
         <br>
-        <b>Modification Options:</b> {{ base.list(item.modification_options) }}
+        <b>Modification Options:</b>
+        {% call(mod) base.list(item.modifications) -%}
+            {{ mod.max }}
+            {%- if mod.type == "damage" %}
+                Damage {{ mod.value -}}
+            {%- elif mod.type == "weapon_quality" %}
+                Weapon Quality ({{ mod.quality|quality }} {{ mod.value }})
+            {%- elif mod.type == "talent" %}
+                Innate Talent ({{ mod.talent|talent }} {{ mod.value }})
+            {%- elif mod.type == "skill" %}
+                Skill ({{ mod.skill|skill }} {{ mod.value }})
+            {%- elif mod.type == "characteristic" %}
+                Skill ({{ mod.characteristic }} {{ mod.value }})
+            {%- elif mod.type == "other" %}
+                {{ mod.value }}
+            {%- endif %}
+        {%- endcall %}
     </p>
     <b>Hard Points Required:</b> {{ item.hardpoints }}<br>
-    <b>Price:</b> {{ item.price|formatprice(item.restricted) }}<br>
+    <b>Price:</b> {{ item.price|price(item.restricted) }}<br>
     <b>Rarity:</b> {{ item.rarity }}<br>
 {% endblock %}

@@ -1,7 +1,8 @@
 __all__ = []
 
 from server.endpoint import Endpoint
-from server.model import ObjectIdField, Field, SelectField, NumberField, CheckboxField, Model, TextareaField, ArrayField
+from server.model import ObjectIdField, Field, SelectField, NumberField, CheckboxField, Model, TextareaField, \
+    ArrayField, FieldGroup
 
 import pkgutil
 import inspect
@@ -27,6 +28,18 @@ attachments = Endpoint("attachments", "Attachments", Model([
     NumberField("hardpoints", "HP Required"),
     NumberField("rarity", "Rarity", max=10),
     TextareaField("description", "Description"),
+    ArrayField(
+        FieldGroup("modification", "Modification", [
+            NumberField("number", "Number", min=1),
+            SelectField("type", "Type", [
+                {"display": "Damage", "value": "damage"},
+                {"display": "Weapon Quality", "value": "weapon_quality"},
+                {"display": "Innate Talent", "value": "innate_talent"},
+                {"display": "Skill", "value": "skill"},
+                {"display": "Characteristic", "value": "characteristic"},
+                {"display": "Additional", "value": "additional"}
+            ])
+        ]), table=False),
     ArrayField(Field("index", "Index"), table=False)
 ]))
 

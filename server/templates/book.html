@@ -10,7 +10,7 @@
                 <b>ISBN:</b> {{ item.isbn }}<br>
             {%  endif %}
             {% if item.ffg_url %}
-                <b>FFG:</b> <a href="{{ item.ffg_url }}">Product Page</a><br>
+                <b>FFG:</b> <a href="{{ item.ffg_url }}" rel="noreferrer">Product Page</a><br>
             {% endif %}
         {% endblock %}
     </div>
