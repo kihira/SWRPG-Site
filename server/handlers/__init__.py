@@ -27,19 +27,26 @@ attachments = Endpoint("attachments", "Attachments", Model([
     NumberField("encumbrance", "Encumbrance"),
     NumberField("hardpoints", "HP Required"),
     NumberField("rarity", "Rarity", max=10),
-    TextareaField("description", "Description"),
+    ArrayField(Field("models", "Model")),
+    Field("modifiers", "Base Modifier"),
     ArrayField(
         FieldGroup("modification", "Modification", [
-            NumberField("number", "Number", min=1),
+            NumberField("max", "Max", min=1),
             SelectField("type", "Type", [
                 {"display": "Damage", "value": "damage"},
                 {"display": "Weapon Quality", "value": "weapon_quality"},
-                {"display": "Innate Talent", "value": "innate_talent"},
+                {"display": "Innate Talent", "value": "talent"},
                 {"display": "Skill", "value": "skill"},
                 {"display": "Characteristic", "value": "characteristic"},
-                {"display": "Additional", "value": "additional"}
-            ])
+                {"display": "Additional", "value": "other"},
+            ]),
+            Field("value", "Value"),
+            Field("quality", "Weapon Quality", required=False),
+            Field("talent", "Talent", required=False),
+            Field("skill", "Skill", required=False),
+            Field("characteristic", "Characteristic", required=False),
         ]), table=False),
+    TextareaField("description", "Description"),
     ArrayField(Field("index", "Index"), table=False)
 ]))
 

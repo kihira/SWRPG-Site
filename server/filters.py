@@ -115,7 +115,7 @@ def format_list(arr, url):
 
 
 def format_none(s):
-    if type(s) == int and s == 0:
+    if (type(s) == int and s == 0) or (type(s) == list and len(s) == 0):
         return "None"
     return s
 
