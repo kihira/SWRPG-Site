@@ -49,7 +49,7 @@
         <b>Navicomputer:</b> {{ item.navicomputer }}<br>
     {% endif %}
     <b>Sensor Range:</b> {{ item.sensor }}<br>
-    <b>Crew:</b> {{ base.list(item.crew) }}<br>
+    <b>Crew:</b> {% call(crew) base.list(item.crew) %}crew{% endcall %}<br>
     <b>Encumbrance Capacity:</b> {{ item.encumbrance }}<br>
     <b>Passenger Capacity:</b> {{ item.passengers }}<br>
     {% if item.consumables %}

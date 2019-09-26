@@ -1,12 +1,14 @@
 import json
-
 from flask import request, session, render_template
-
 from server import app
 
+users = {}
 
-data = open("users.json").read()
-users = json.loads(data)
+try:
+    data = open("users.json").read()
+    users = json.loads(data)
+except:
+    print("Failed to load users file, you won't be able to login")
 
 
 @app.route("/login", methods=["GET", "POST"])
