@@ -74,8 +74,12 @@ def format_talent(talent):
     return f'<a href="/talents/{talent}">{title(talent)}</a>'
 
 
-def format_quality(quality):
-    return f'<a href="/qualities/{quality}">{title(quality)}</a>'
+def format_quality_object(quality: dict):
+    return format_quality(quality["id"], quality["value"])
+
+
+def format_quality(quality: str, rating: int):
+    return f'<a href="/qualities/{quality}">{title(quality)}{f" {str(rating)}" if rating != 0 else ""}</a>'
 
 
 def format_number(s):

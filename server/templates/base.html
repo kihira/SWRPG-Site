@@ -67,12 +67,8 @@
         None
     {% else %}
         {% for value in values %}
-            {% if caller %}
-                {{ caller(value) }}
-            {% else %}
-                {{ value }}
-            {% endif %}
-            {% if loop.last %}.{% else %}, {% endif %}
+            {% if caller %}{{ caller(value) }}{% else %}{{ value }}{% endif %}
+            {%- if loop.last %}.{%- else %}, {% endif %}
         {% endfor %}
     {% endif %}
 {%- endmacro %}

@@ -1,5 +1,6 @@
 from bson import ObjectId
 from werkzeug.datastructures import MultiDict
+from typing import Callable
 
 
 class Field:
@@ -26,10 +27,10 @@ class Field:
     def get_value(self, form: MultiDict):
         return form.get(self.mongo_name, self.default)
 
-    def table_display(self):
+    def table_display(self) -> bool:
         return self.table
 
-    def get_datatables_object(self):
+    def get_datatables_object(self) -> object:
         """
         Gets a dict that will be used for Datatables
         :return:
@@ -42,6 +43,12 @@ class Field:
         :return:
         """
         return {"type": self.html_type}
+
+    def render(self, value) -> str:
+        """
+        Render the value to display on the items page or in a table
+        """
+        return str(value)
 
 
 class CheckboxField(Field):
@@ -66,23 +73,29 @@ class TextareaField(Field):
 
 class SelectField(Field):
     options = []
+    render_method: Callable[[object], str]
 
-    def __init__(self, mongo_name, human_name, options: [], readonly=False, required=True, table=True):
+    def __init__(self, mongo_name, human_name, options: [], readonly=False, required=True, table=True, render=None):
         super().__init__(mongo_name, human_name, html_type="select", readonly=readonly, required=required, table=table)
 
         self.options = options
+        # todo can we just directly overwrite a method with an assign?
+        self.render_method = render
 
     def get_filter(self):
         return {"type": self.html_type, "data": self.options}
 
+
+    def render(self, value) -> str:
+        return self.render_method(value) if callable(self.render_method) else str(value)
 
 class NumberField(Field):
     min: int
     max: int
     step: int
 
-    def __init__(self, mongo_name, human_name, min=0, max=100, default=0, step=1, required=True):
-        super().__init__(mongo_name, human_name, html_type="number", default=default, required=required)
+    def __init__(self, mongo_name, human_name, min=0, max=100, default=0, step=1, required=True, table=True):
+        super().__init__(mongo_name, human_name, html_type="number", default=default, required=required, table=table)
 
         self.min = min
         self.max = max
@@ -114,20 +127,33 @@ class ArrayField(Field):
     def get_value(self, form: MultiDict):
         return form.getlist(self.mongo_name + "[]")
 
+    def render(self, value) -> str:
+        out = ""
+        for i in value:
+            out += f'{self.field.render(i)}, '
+        return out[:-2]
+
 
 class FieldGroup(Field):
     fields: [Field]
+    render_method: Callable[[object], str]
 
-    def __init__(self, group_name, human_name, fields: [Field]):
+    def __init__(self, group_name: str, human_name: str, fields: [Field], render_method: Callable[[object], str]=None):
         super().__init__(group_name, human_name, html_type="group")
 
         self.fields = fields
+        self.render_method = render_method
 
     def get_value(self, form: MultiDict):
         values = {}
         for field in self.fields:
             values[field.mongo_name] = field.get_value(form)
         return values
+
+    def render(self, value) -> str:
+        if callable(self.render_method):
+            return self.render_method(value)
+        return str(value)
 
 
 class Model:

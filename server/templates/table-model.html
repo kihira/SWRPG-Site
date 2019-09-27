@@ -31,7 +31,7 @@
                         <td>{{ entry["category"] }}</td>
                     {% endif %}
                     {% for field in model.get_table_fields() %}
-                        <td>{{ entry[field["mongo_name"]] }}</td>
+                        <td>{{ field.render(entry[field["mongo_name"]]) }}</td>
                     {% endfor %}
                     {% if model.index %}
                         <td>{{ entry["index"]|formatindex }}</td>

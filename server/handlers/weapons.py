@@ -1,36 +1,50 @@
 from flask import Markup, render_template
 
+from server.endpoint import Endpoint
+from server.model import Model, Field, CheckboxField, TextareaField, SelectField, ArrayField, NumberField, FieldGroup
 from server.decorators import get_item
 from server import filters
 from server.app import app
 from server.db import db
+from server.filters import format_quality_object, format_skill
 
-
-@app.route("/weapons/")
-def all_weapons():
-    items = list(db["weapons"].find({}))
-    for item in items:
-        item["special"] = filters.format_list(item["special"], "qualities")
-        item["skill"] = Markup(f'<a href="/skills/{item["skill"]}">{item["skill"].replace("_", " ")}</a>')
-
-    columns = [
-        {"header": "Skill", "name": "skill"},
-        {"header": "Dam", "name": "damage", "filter": {"type": "number"}},
-        {"header": "Crit", "name": "critical", "filter": {"type": "number"}},
-        {"header": "Range", "name": "range", "filter": {"type": "select"}},
-        {"header": "HP", "name": "hardpoints", "filter": {"type": "number"}},
-        {"header": "Price", "name": "price", "filter": {"type": "number"}},
-        {"header": "Restricted", "name": "restricted", "filter": {"type": "checkbox"}, "hidden": True},
-        {"header": "Rarity", "name": "rarity", "filter": {"type": "number"}},
-        {"header": "Special", "name": "special", "filter": {"type": "select"}},
-    ]
-
-    return render_template("table.html", title="Weapons", columns=columns, entries=items)
-
-
-@app.route("/weapons/<item>")
-@get_item(db.weapons, True)
-def get_weapon(item):
-    item["skill"] = Markup(f"<a href=\"/skills/{item['skill']}\">{item['skill'].replace('_', ' ')}</a>")
-
-    return render_template("weapon.html", item=item)
+weapons_endpoint = Endpoint("weapons", "Weapons", Model([
+    Field("_id", "ID"),
+    SelectField("category", "Category", options=[
+        "Brawl",
+        "Energy",
+        "Explosives",
+        "Grenades",
+        "Lightsaber Hilts",
+        "Melee",
+        "Micro-Rockets",
+        "Other",
+        "Portable Missiles",
+        "Slugthrowers",
+        "Thrown"
+    ]),
+    SelectField("skill", "Skill", options=[
+        {"display": "Brawl", "value": "brawl"},
+        {"display": "Melee", "value": "melee"},
+        {"display": "Lightsaber", "value": "lightsaber"},
+        {"display": "Ranged (Light)", "value": "ranged_light"},
+        {"display": "Ranged (Heavy)", "value": "ranged_heavy"},
+        {"display": "Gunnery", "value": "gunnery"},
+    ], render=format_skill),
+    Field("damage", "Damage", default=0),
+    Field("critical", "Critical", default="-"),
+    SelectField("range", "Range", options=["Engaged", "Short", "Medium", "Long", "Extreme"]),
+    NumberField("hardpoints", "Hardpoints"),
+    NumberField("price", "Price", max=100000),
+    CheckboxField("restricted", "Restricted"),
+    NumberField("rarity", "Rarity", max=10),
+    NumberField("encumbrance", "Encumbrance", table=False),
+    ArrayField(
+        FieldGroup("qualities", "Special", [
+            Field("id", "Quality ID"),
+            NumberField("value", "Rating"),
+        ], format_quality_object)),
+    TextareaField("short", "Short Description", table=False),
+    TextareaField("description", "Long Description"),
+    ArrayField(Field("index", "Index"), table=False),
+]))

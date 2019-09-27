@@ -14,7 +14,7 @@
     </div>
     {{ super() }}
     <p>
-        <b>Skill:</b> {{ item.skill }}<br>
+        <b>Skill:</b> {{ item.skill|skill }}<br>
         <b>Range:</b> {{ item.range }}<br>
         <b>Special:</b> {{ item.special|link_list("qualities") }}.<br>
         <b>Encumbrance:</b> {{ item.encumbrance }}<br>
