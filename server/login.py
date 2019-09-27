@@ -13,10 +13,12 @@ except:
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    status = None
     if request.method == "POST":
         username = request.form.get("username", "")
-        print(request.form)
         if username in users and request.form.get("password", "") == users[username]:
             session["username"] = request.form["username"]
-            print("Logged in")
-    return render_template("login.html")
+            status = "success"
+        else:
+            status = "failed"
+    return render_template("login.html", status=status)

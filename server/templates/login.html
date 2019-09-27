@@ -2,6 +2,15 @@
 {% set title = "Login" %}
 
 {% block content %}
+{% if status == "success" %}
+<div style="width: 100%; text-align: center; font-size: 6em; background-color: green;">
+Logged in!
+</div>
+{% elif status == "failed" %}
+<div style="width: 100%; text-align: center; font-size: 6em; background-color: red;">
+Failed to login
+</div>
+{% endif %}
 <form method="post">
     <label>
         Username:
