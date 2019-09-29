@@ -12,13 +12,14 @@ class Endpoint:
     title: str
     model: Model
     collection: Collection
-    objectid: bool = True
+    objectid: bool
 
-    def __init__(self, url: str, title: str, model: Model, collection: Collection = None):
+    def __init__(self, url: str, title: str, model: Model, collection: Collection = None, objectid: bool = True):
         self.url = url
         self.title = title
         self.model = model
         self.collection = db[url] if collection is None else collection
+        self.objectid = objectid
 
         app.add_url_rule(f"/{url}/", endpoint=f"table_{url}", view_func=self.view_table)
         app.add_url_rule(f"/{url}/<item>", endpoint=f"item_{url}", view_func=self.view_item)

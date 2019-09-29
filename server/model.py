@@ -11,8 +11,9 @@ class Field:
     readonly: bool
     required: bool
     table: bool
+    render_method: Callable[[any], str] = str
 
-    def __init__(self, mongo_name, human_name, html_type="text", default=None, readonly=False, required=True, table=True):
+    def __init__(self, mongo_name, human_name, html_type="text", default=None, readonly=False, required=True, table=True, render=None):
         self.mongo_name = mongo_name
         self.human_name = human_name
         self.html_type = html_type
@@ -21,8 +22,8 @@ class Field:
         self.required = required
         self.table = table
 
-        if self.mongo_name == "_id" or self.mongo_name == "name" or self.mongo_name == "category" or self.mongo_name == "description":
-            self.table = False
+        if render is not None:
+            self.render_method = render
 
     def get_value(self, form: MultiDict):
         return form.get(self.mongo_name, self.default)
@@ -48,12 +49,12 @@ class Field:
         """
         Render the value to display on the items page or in a table
         """
-        return str(value)
+        return self.render_method(value)
 
 
 class CheckboxField(Field):
-    def __init__(self, mongo_name, human_name, default=False, readonly=False, required=True, table=True):
-        super().__init__(mongo_name, human_name, html_type="checkbox", default=default, readonly=readonly, required=required, table=table)
+    def __init__(self, mongo_name, human_name, default=False, readonly=False, required=True, table=True, render=None):
+        super().__init__(mongo_name, human_name, html_type="checkbox", default=default, readonly=readonly, required=required, table=table, render=render)
 
     def get_value(self, form: MultiDict):
         return self.mongo_name in form
@@ -64,8 +65,8 @@ class CheckboxField(Field):
 
 
 class TextareaField(Field):
-    def __init__(self, mongo_name, human_name, readonly=False, required=True, table=True):
-        super().__init__(mongo_name, human_name, html_type="textarea", readonly=readonly, required=required, table=table)
+    def __init__(self, mongo_name, human_name, readonly=False, required=True, table=True, render=None):
+        super().__init__(mongo_name, human_name, html_type="textarea", readonly=readonly, required=required, table=table, render=render)
 
     def get_value(self, form: MultiDict):
         return super().get_value(form).replace("\r\n", " ").replace("\n", " ")
@@ -73,21 +74,15 @@ class TextareaField(Field):
 
 class SelectField(Field):
     options = []
-    render_method: Callable[[object], str]
 
     def __init__(self, mongo_name, human_name, options: [], readonly=False, required=True, table=True, render=None):
-        super().__init__(mongo_name, human_name, html_type="select", readonly=readonly, required=required, table=table)
+        super().__init__(mongo_name, human_name, html_type="select", readonly=readonly, required=required, table=table, render=render)
 
         self.options = options
-        # todo can we just directly overwrite a method with an assign?
-        self.render_method = render
 
     def get_filter(self):
         return {"type": self.html_type, "data": self.options}
 
-
-    def render(self, value) -> str:
-        return self.render_method(value) if callable(self.render_method) else str(value)
 
 class NumberField(Field):
     min: int
@@ -136,24 +131,18 @@ class ArrayField(Field):
 
 class FieldGroup(Field):
     fields: [Field]
-    render_method: Callable[[object], str]
 
-    def __init__(self, group_name: str, human_name: str, fields: [Field], render_method: Callable[[object], str]=None):
-        super().__init__(group_name, human_name, html_type="group")
+    def __init__(self, group_name: str, human_name: str, fields: [Field], render: Callable[[any], str]=None):
+        super().__init__(group_name, human_name, html_type="group", render=render)
 
         self.fields = fields
-        self.render_method = render_method
+        self.render_method = render
 
     def get_value(self, form: MultiDict):
         values = {}
         for field in self.fields:
             values[field.mongo_name] = field.get_value(form)
         return values
-
-    def render(self, value) -> str:
-        if callable(self.render_method):
-            return self.render_method(value)
-        return str(value)
 
 
 class Model:

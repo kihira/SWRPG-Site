@@ -43,7 +43,7 @@ characteristic_regex = re.compile(r"\[CHARACTERISTIC:([a-zA-Z()_]+)\]")
 quality_regex = re.compile(r"\[QUALITY:([a-zA-Z()_]+)\]")
 
 
-def description(s: str):
+def description(s: str) -> str:
     """Simple function that does all the filtering it needs to for most descriptions"""
     for (key, value) in symbols.items():
         # todo optimise? use something similar to re.sub
@@ -66,24 +66,28 @@ def to_json(model: {}):
     return json.dumps(out)
 
 
-def format_skill(skill):
+def format_skill(skill: str) -> str:
     return f'<a href="/skills/{skill}">{title(skill)}</a>'
 
 
-def format_talent(talent):
+def format_talent(talent: str) -> str:
     return f'<a href="/talents/{talent}">{title(talent)}</a>'
 
 
-def format_quality_object(quality: dict):
+def format_quality_object(quality: dict) -> str:
     return format_quality(quality["id"], quality["value"])
 
 
-def format_quality(quality: str, rating: int):
+def format_quality(quality: str, rating: int) -> str:
     return f'<a href="/qualities/{quality}">{title(quality)}{f" {str(rating)}" if rating != 0 else ""}</a>'
 
 
-def format_number(s):
+def format_number(s) -> str:
     return "{:,}".format(s)
+
+
+def format_yes_no(value: bool) -> str:
+    return "Yes" if value else "No"
 
 
 def format_price(price, restricted):
