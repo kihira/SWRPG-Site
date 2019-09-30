@@ -1,13 +1,7 @@
-from flask import Markup, render_template
-
+from server import filters
 from server.endpoint import Endpoint
 from server.model import Model, Field, CheckboxField, TextareaField, SelectField, ArrayField, NumberField, FieldGroup, \
     ObjectIdField
-from server.decorators import get_item
-from server import filters
-from server.app import app
-from server.db import db
-from server.filters import format_quality_object, format_skill
 
 weapons_endpoint = Endpoint("weapons", "Weapons", Model([
     ObjectIdField("_id", "ID"),
@@ -32,7 +26,7 @@ weapons_endpoint = Endpoint("weapons", "Weapons", Model([
         {"display": "Ranged (Light)", "value": "ranged_light"},
         {"display": "Ranged (Heavy)", "value": "ranged_heavy"},
         {"display": "Gunnery", "value": "gunnery"},
-    ], render=format_skill),
+    ], render=filters.format_skill),
     Field("damage", "Damage", default=0),
     Field("critical", "Critical", default="-"),
     SelectField("range", "Range", options=["Engaged", "Short", "Medium", "Long", "Extreme"]),
@@ -45,7 +39,7 @@ weapons_endpoint = Endpoint("weapons", "Weapons", Model([
         FieldGroup("qualities", "Special", [
             Field("id", "Quality ID"),
             NumberField("value", "Rating"),
-        ], format_quality_object)),
+        ], filters.format_quality_object)),
     TextareaField("short", "Short Description", table=False),
     TextareaField("description", "Long Description", table=False),
     ArrayField(Field("index", "Index"), table=False),

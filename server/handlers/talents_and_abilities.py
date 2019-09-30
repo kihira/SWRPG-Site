@@ -1,10 +1,6 @@
-from server.decorators import get_item, login_required
 from server.endpoint import Endpoint
 from server.model import Model, Field, CheckboxField, TextareaField, SelectField, ArrayField
-from server.app import app
-from server.db import db
 from server import filters
-from flask import render_template, request, flash
 
 talents_endpoint = Endpoint("talents", "Talents", Model([
     Field("_id", "Talent", table=False),
