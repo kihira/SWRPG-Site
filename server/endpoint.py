@@ -13,6 +13,7 @@ class Endpoint:
     model: Model
     collection: Collection
     objectid: bool
+    table_query: object = {}
 
     def __init__(self, url: str, title: str, model: Model, collection: Collection = None, objectid: bool = True):
         self.url = url
@@ -28,7 +29,7 @@ class Endpoint:
 
     def view_table(self):
         return render_template("table-model.html", title=self.title, model=self.model,
-                               entries=list(self.collection.find({})))
+                               entries=list(self.collection.find(self.table_query)))
 
     def view_item(self, item: str):
         item = self.get_item(item)

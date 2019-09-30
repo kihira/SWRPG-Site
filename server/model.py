@@ -102,7 +102,7 @@ class NumberField(Field):
 
 class ObjectIdField(Field):
     def __init__(self, mongo_name, human_name, readonly=False):
-        super().__init__(mongo_name, human_name, readonly=readonly)
+        super().__init__(mongo_name, human_name, readonly=readonly, table=False)
 
     def get_value(self, form: MultiDict):
         val = form.get(self.mongo_name, "")
