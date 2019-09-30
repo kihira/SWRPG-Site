@@ -20,8 +20,8 @@ for loader, name, is_pkg in pkgutil.walk_packages(__path__):
 
 attachments = Endpoint("attachments", "Attachments", Model([
     ObjectIdField("_id", "ID", readonly=True),
-    Field("name", "Name"),
-    SelectField("category", "Category", ["Armor", "Lightsaber", "Weapon"]),
+    Field("name", "Name", table=False),
+    SelectField("category", "Category", ["Armor", "Lightsaber", "Weapon"], table=False),
     NumberField("price", "Price", max=100000),
     CheckboxField("restricted", "Restricted"),
     NumberField("encumbrance", "Encumbrance"),
@@ -52,14 +52,14 @@ attachments = Endpoint("attachments", "Attachments", Model([
 
 armor = Endpoint("armor", "Armor", Model([
     ObjectIdField("_id", "ID", readonly=True),
-    Field("name", "Name"),
+    Field("name", "Name", table=False),
     NumberField("defense", "Defense", max=5),
     NumberField("soak", "Soak"),
-    NumberField("hardpoints", "Hardpoints"),
-    NumberField("encumbrance", "Encumbrance"),
     NumberField("price", "Price", max=100000),
     CheckboxField("restricted", "Restricted"),
+    NumberField("encumbrance", "Encumbrance"),
+    NumberField("hardpoints", "Hardpoints"),
     NumberField("rarity", "Rarity", max=10),
-    TextareaField("description", "Description"),
+    TextareaField("description", "Description", table=False),
     ArrayField(Field("index", "Index"), table=False)
 ]))

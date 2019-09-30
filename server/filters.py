@@ -50,7 +50,7 @@ def description(s: str) -> str:
         s = s.replace(f"[{key}]", f'<span class="symbol {value}"></span>')
     s = re.sub(talent_regex, lambda match: f'{format_talent(match.group(1))}', s)
     s = re.sub(characteristic_regex, lambda match: f'{match.group(1)}', s)  # todo implement this
-    s = re.sub(quality_regex, lambda match: f'{format_quality(match.group(1))}', s)
+    s = re.sub(quality_regex, lambda match: f'{format_quality_object(match.group(1))}', s)
     s = re.sub(skill_regex, lambda match: f'{format_skill(match.group(1))}', s)
     s = re.sub(check_regex, lambda match: f"<b>{diff[match.group(1)]} {format_skill(match.group(2))} check</b>", s)
     s = re.sub(diff_regex, lambda match: f'<b>{diff[match.group(1)]}</b>', s)
@@ -74,8 +74,10 @@ def format_talent(talent: str) -> str:
     return f'<a href="/talents/{talent}">{title(talent)}</a>'
 
 
-def format_quality_object(quality: dict) -> str:
-    return format_quality(quality["id"], quality["value"])
+def format_quality_object(quality: any) -> str:
+    if type(quality) is dict:
+        return format_quality(quality["id"], quality["value"])
+    return format_quality(quality, 0)
 
 
 def format_quality(quality: str, rating: int) -> str:

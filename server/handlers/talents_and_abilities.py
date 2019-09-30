@@ -1,99 +1,34 @@
 from server.decorators import get_item, login_required
+from server.endpoint import Endpoint
 from server.model import Model, Field, CheckboxField, TextareaField, SelectField, ArrayField
 from server.app import app
 from server.db import db
 from server import filters
 from flask import render_template, request, flash
 
-model = Model([
-    Field("_id", "ID"),
-    CheckboxField("ranked", "Ranked"),
-    CheckboxField("force", "Force"),
-    TextareaField("short", "Short Description"),
-    TextareaField("description", "Long Description"),
+talents_endpoint = Endpoint("talents", "Talents", Model([
+    Field("_id", "Talent", table=False),
+    TextareaField("short", "Description", render=filters.description),
+    TextareaField("description", "Long Description", table=False),
     SelectField("activation", "Activation", options=[
         {"display": "Passive", "value": "passive"},
         {"display": "Active (Action)", "value": "active_action"},
         {"display": "Active (Incidental)", "value": "active_incidental"},
         {"display": "Active (Maneuver)", "value": "active_maneuver"},
         {"display": "Active (Out Of Turn)", "value": "active_oot"},
-    ]),
-    ArrayField(Field("index", "Index"))
-])
+    ], render=lambda x: activation(x)),
+    CheckboxField("ranked", "Ranked"),
+    CheckboxField("force", "Force Sensitive"),
+    ArrayField(Field("index", "Index"), table=False)
+]))
+talents_endpoint.table_sort = {"key": "_id", "dir": 1}
 
-
-@app.route("/talents/")
-def all_talents():
-    items = list(db["talents"].find({}).sort("_id", 1))
-    for item in items:
-        item["activation"] = activation(item["activation"])
-        if "short" in item:
-            item["short"] = filters.description(item["short"])
-
-    columns = [
-        {"header": "Description", "name": "description"},
-        {"header": "Activation", "name": "activation", "filter": {"type": "select"}},
-        {"header": "Ranked", "name": "ranked", "filter": {"type": "select"}},
-        {"header": "Force Sensitive", "name": "force", "filter": {"type": "select"}}
-    ]
-
-    return render_template("table.html", title="Talents", name_header="Talent", categories=False, columns=columns,
-                           entries=items)
-
-
-@app.route("/talents/<item>")
-@get_item(db.talents)
-def get_talent(item):
-    item["activation"] = activation(item["activation"])
-
-    # todo is there a better way to do this? seems messy
-    item["trees"] = [s["_id"].replace("_", " ") for s in db.specializations.find(
-        {"tree.talents": {"$elemMatch": {"$elemMatch": {"$in": [item]}}}}, {"_id": 1})]
-
-    return render_template("talent.html", title=item["_id"].replace("_", " "), item=item)
-
-
-@app.route("/talents/add", methods=['GET', 'POST'])
-@login_required
-def add_talent():
-    if request.method == "POST":
-        item = model.from_form(request.form)
-        db["talents"].insert_one(item)
-        flash(f'Successfully added item. <a href="{item["_id"]}">View</a><a href="{item["_id"]}/edit">Edit</a>')
-    return render_template("edit/add-edit.html", model=model)
-
-
-@app.route("/talents/<item>/edit", methods=['GET', 'POST'])
-@login_required
-@get_item(db.talents)
-def edit_talent(item):
-    if request.method == "POST":
-        item = model.from_form(request.form)
-        print(request.form)
-        print(item)
-        db["talents"].update_one({"_id": item["_id"]}, {"$set": item})
-        flash(f'Successfully updated item.')
-    return render_template("edit/add-edit.html", item=item, model=model)
-
-
-@app.route("/abilities/")
-def all_abilities():
-    items = list(db["abilities"].find({}).sort("_id", 1))
-    for item in items:
-        item["description"] = filters.description(item["description"])
-
-    columns = [
-        {"header": "Description", "name": "description"},
-    ]
-
-    return render_template("table.html", title="Abilities", name_header="Ability", categories=False, columns=columns,
-                           entries=items)
-
-
-@app.route("/abilities/<item>")
-@get_item(db.abilities)
-def get_ability(item):
-    return render_template("item.html", item=item)
+abilities_endpoint = Endpoint("abilities", "Abilities", Model([
+    Field("_id", "Ability", table=False),
+    TextareaField("description", "Description", render=filters.description),
+    ArrayField(Field("index", "Index"), table=False)
+]))
+abilities_endpoint.table_sort = {"key": "_id", "dir": 1}
 
 
 def activation(value):

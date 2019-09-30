@@ -14,6 +14,7 @@ class Endpoint:
     collection: Collection
     objectid: bool
     table_query: object = {}
+    table_sort: object = None
 
     def __init__(self, url: str, title: str, model: Model, collection: Collection = None, objectid: bool = True):
         self.url = url
@@ -28,8 +29,11 @@ class Endpoint:
         app.add_url_rule(f"/{url}/add", endpoint=f"add_{url}", view_func=self.add_item, methods=["GET", "POST"])
 
     def view_table(self):
-        return render_template("table-model.html", title=self.title, model=self.model,
-                               entries=list(self.collection.find(self.table_query)))
+        items = self.collection.find(self.table_query)
+        if self.table_sort is not None:
+            items.sort(self.table_sort["key"], self.table_sort["dir"])
+
+        return render_template("table-model.html", title=self.title, model=self.model, entries=list(items))
 
     def view_item(self, item: str):
         item = self.get_item(item)
