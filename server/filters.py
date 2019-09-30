@@ -66,12 +66,22 @@ def to_json(model: {}):
     return json.dumps(out)
 
 
-def format_skill(skill: str) -> str:
+def format_skill(skill) -> str:
+    if type(skill) is dict:
+        return f'<a href="/skills/{skill["id"]}">{title(skill["id"])}</a> {skill["value"]}'
     return f'<a href="/skills/{skill}">{title(skill)}</a>'
 
 
-def format_talent(talent: str) -> str:
+def format_talent(talent) -> str:
+    if type(talent) is dict:
+        return f'<a href="/talents/{talent["id"]}">{title(talent["id"])}</a> {talent["value"]}'
     return f'<a href="/talents/{talent}">{title(talent)}</a>'
+
+
+def format_ability(ability) -> str:
+    if type(ability) is dict:
+        return f'<a href="/abilities/{ability["id"]}">{title(ability["id"])}</a> {ability["value"]}'
+    return f'<a href="/abilities/{ability}">{title(ability)}</a>'
 
 
 def format_quality_object(quality: any) -> str:

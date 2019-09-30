@@ -132,8 +132,8 @@ class ArrayField(Field):
 class FieldGroup(Field):
     fields: [Field]
 
-    def __init__(self, group_name: str, human_name: str, fields: [Field], render: Callable[[any], str]=None):
-        super().__init__(group_name, human_name, html_type="group", render=render)
+    def __init__(self, group_name: str, human_name: str, fields: [Field], render: Callable[[any], str]=None, table=False):
+        super().__init__(group_name, human_name, html_type="group", render=render, table=table)
 
         self.fields = fields
 

@@ -1,8 +1,33 @@
-from server.decorators import get_item
-from server.app import app
-from server.db import db
 from server import filters
-from flask import render_template
+
+from server.endpoint import Endpoint
+from server.model import Model, Field, ObjectIdField, SelectField, ArrayField, FieldGroup, NumberField
+
+creatures_endpoint = Endpoint("creatures", "Creatures", Model([
+    ObjectIdField("_id", "ID", readonly=True),
+    Field("name", "Name", table=False),
+    SelectField("level", "Type", ["Minion", "Rival", "Nemesis"]),
+    FieldGroup("characteristics", "Characteristics", [
+        NumberField("brawn", "Brawn", 1, 5, default=1),
+        NumberField("agility", "Agility", 1, 5, default=1),
+        NumberField("intellect", "Intellect", 1, 5, default=1),
+        NumberField("cunning", "Cunning", 1, 5, default=1),
+        NumberField("willpower", "Willpower", 1, 5, default=1),
+        NumberField("presence", "Presence", 1, 5, default=1),
+    ], table=False),
+    NumberField("soak", "Soak", table=False),
+    NumberField("wound", "Wound Threshold", table=False),
+    NumberField("strain", "Strain Threshold", table=False),
+    ArrayField(
+        FieldGroup("skills", "Skills", [
+            Field("id", "Skill"),
+            NumberField("value", "Value")
+        ], render=filters.format_skill)),
+    ArrayField(Field("talents", "Talents", render=filters.format_talent)),
+    ArrayField(Field("abilities", "Abilities", render=filters.format_ability)),
+    ArrayField(Field("equipment", "Equipment")),
+    ArrayField(Field("index", "Index", table=False))
+]))
 
 
 def process_items(items: list):
@@ -15,30 +40,3 @@ def process_items(items: list):
             equipment += f'{i["name"]}, '
         item["equipment"] = equipment[:-2]
     return items
-
-
-@app.route("/creatures/")
-def all_creatures():
-    columns = [
-        {"header": "Type", "name": "level"},
-        {"header": "Skills", "name": "skills",
-         "filter": {"type": "select", "data": [filters.title(x["_id"]) for x in list(db["skills"].find({}))]}},
-        {"header": "Talents", "name": "talents",
-         "filter": {"type": "select", "data": [filters.title(x["_id"]) for x in list(db["talents"].find({}))]}},
-        {"header": "Abilities", "name": "abilities",
-         "filter": {"type": "select", "data": [filters.title(x["_id"]) for x in list(db["abilities"].find({}))]}},
-        {"header": "Equipment", "name": "equipment", "filter": {"type": "select"}}
-    ]
-
-    items = db["creatures"].find({})
-
-    return render_template("table.html", title="Creatures", categories=False, columns=columns,
-                           entries=process_items(list(items)))
-
-
-@app.route("/creatures/<item>")
-@get_item(db.creatures, True)
-def get_creature(item):
-    item["name"] = f'{item["name"]} [{item["level"]}]'
-
-    return render_template("creature.html", item=item)
