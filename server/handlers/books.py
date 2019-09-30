@@ -2,7 +2,6 @@ from server.endpoint import Endpoint
 from server.model import Model, Field, TextareaField, SelectField
 
 book_endpoint = Endpoint("books", "Books", Model([
-    Field("_id", "Index", table=False),  # todo need to show this on the page as well
     Field("name", "Name", table=False),
     SelectField("system", "System", [
         "Edge of the Empire",
@@ -11,6 +10,7 @@ book_endpoint = Endpoint("books", "Books", Model([
         "Star Wars Roleplaying"
     ]),
     Field("key", "SKU"),
+    Field("_id", "Initials"),  # todo should allow specifying custom order for table display
     Field("isbn", "ISBN", table=False),
     Field("ffg_url", "Product Page", html_type="url", table=False),
     Field("release_date", "Release Date", html_type="date", table=False),

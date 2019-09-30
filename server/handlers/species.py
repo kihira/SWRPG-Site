@@ -5,7 +5,7 @@ from pymongo import ASCENDING
 
 
 species_endpoint = Endpoint("species", "Species", Model([
-    Field("_id", "Name"),
+    Field("_id", "Name", table=False),
     CheckboxField("player", "Player"),
     FieldGroup("characteristics", "Characteristics", [
         NumberField("brawn", "Brawn", 1, 5, default=1),

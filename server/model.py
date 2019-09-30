@@ -136,7 +136,6 @@ class FieldGroup(Field):
         super().__init__(group_name, human_name, html_type="group", render=render)
 
         self.fields = fields
-        self.render_method = render
 
     def get_value(self, form: MultiDict):
         values = {}
