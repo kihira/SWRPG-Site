@@ -123,6 +123,9 @@ class ArrayField(Field):
         return form.getlist(self.mongo_name + "[]")
 
     def render(self, value) -> str:
+        if len(value) == 0:
+            return "None"
+
         out = ""
         for i in value:
             out += f'{self.field.render(i)}, '
