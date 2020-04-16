@@ -8,10 +8,11 @@ talents_endpoint = Endpoint("talents", "Talents", Model([
     TextareaField("description", "Long Description", table=False),
     SelectField("activation", "Activation", options=[
         {"display": "Passive", "value": "passive"},
+        {"display": "Active", "value": "active"},
         {"display": "Active (Action)", "value": "active_action"},
         {"display": "Active (Incidental)", "value": "active_incidental"},
+        {"display": "Active (Incidental, Out Of Turn)", "value": "active_incidental_oot"},
         {"display": "Active (Maneuver)", "value": "active_maneuver"},
-        {"display": "Active (Out Of Turn)", "value": "active_oot"},
     ], render=lambda x: activation(x)),
     CheckboxField("ranked", "Ranked"),
     CheckboxField("force", "Force Sensitive"),
@@ -30,16 +31,18 @@ abilities_endpoint.table_sort = {"key": "_id", "dir": 1}
 def activation(value):
     if value == "passive":
         return "Passive"
-    if value == "active_action":
-        return "Active (Action)"
-    if value == "active_incidental":
-        return "Active (Incidental)"
-    if not value:
-        return "Passive"
-    elif type(value) == dict:
-        return "Active (" + to_list(value) + ")"
-    else:
+    elif value == "active":
         return "Active"
+    elif value == "active_action":
+        return "Active (Action)"
+    elif value == "active_incidental":
+        return "Active (Incidental)"
+    elif value == "active_incidental_oot":
+        return "Active (Incidental, Out Of Turn)"
+    elif value == "active_maneuver":
+        return "Active (Maneuver)"
+    else:
+        return "Unknown"
 
 
 def to_list(dic):
