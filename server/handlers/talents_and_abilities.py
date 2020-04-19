@@ -17,7 +17,7 @@ talents_endpoint = Endpoint("talents", "Talents", Model([
     CheckboxField("ranked", "Ranked"),
     CheckboxField("force", "Force Sensitive"),
     ArrayField(Field("index", "Index"), table=False)
-]))
+]), objectid=False)
 talents_endpoint.table_sort = {"key": "_id", "dir": 1}
 
 abilities_endpoint = Endpoint("abilities", "Abilities", Model([
