@@ -11,8 +11,6 @@ users.json
 static/
 *.map
 **/__pycache__/*
+yarn-error.log
 
 data/
-edit.js
-filters.js
-table.js
