@@ -4,19 +4,24 @@ const svgo = require("gulp-svgo");
 const less = require("gulp-less");
 const uglify = require('gulp-uglify');
 const ts = require("gulp-typescript");
+const sourcemaps = require('gulp-sourcemaps');
 
 const tsProject = ts.createProject('tsconfig.json');
 
 function tsCompile() {
     return src("assets/ts/**/*.ts")
+        .pipe(sourcemaps.init())
         .pipe(tsProject())
         .pipe(uglify())
+        .pipe(sourcemaps.write())
         .pipe(dest("static/js"));
 }
 
 function jsMinify() {
     return src("assets/js/**/*.js")
+        .pipe(sourcemaps.init())
         .pipe(uglify())
+        .pipe(sourcemaps.write())
         .pipe(dest("static/js"));
 }
 
