@@ -4,8 +4,27 @@ input:disabled {
   border: gray;
 }
 
-label, input, textarea, select {
-  display: block;
+form {
+  display: grid;
+  grid-template-columns: 0.9fr;
+}
+
+div.form-fields {
+  display: grid;
+  grid-template-columns: 200px 0.95fr;
+}
+
+table.talent tr td {
+  text-align: center;
+  vertical-align: middle !important;
+}
+
+input, textarea, select, .chosen-container {
+  margin-bottom: 1rem;
+}
+
+input[type=checkbox] {
+  width: 15px;
 }
 
 div.group {

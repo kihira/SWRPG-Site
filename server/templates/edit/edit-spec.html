@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% import "base.html" as base %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="/static/css/chosen.css"/>
+    <link href="{{ url_for("static", filename="css/edit.css") }}" rel="stylesheet">
+    {{ super() }}
+
+    <style>
+        table {
+            margin-top: 1rem;
+        }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="/static/js/jquery-3.3.1.js"></script>
+    <script src="/static/js/chosen.jquery.js"></script>
+    <script src="/static/js/edit.js"></script>
+    <script>
+        $(function () {
+            $(".chosen-select").chosen();
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <div class="form-fields">
+            <label for="name">Name:</label>
+            <input id="name" name="name" type="text" required>
+
+            <label for="career">Career:</label>
+            <input id="career" name="career" type="text">
+
+            <label for="universal">Universal:</label>
+            <input id="universal" name="universal" type="checkbox">
+
+            <label for="skills">Skills:</label>
+            <select id="skills" name="skills" class="chosen-select" multiple data-placeholder="Choose bonus skills">
+                {% for skill in skills %}
+                    <option value="{{ skill._id }}">{{ skill._id|title }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+
+        <table class="talent">
+            {% for row in range(0,5) %}
+                <tr>
+                    <td>{{ talent_select(row, 1) }}</td>
+                    <td>{{ spec_hoz_connection(row, 0) }}</td>
+                    <td>{{ talent_select(row, 2) }}</td>
+                    <td>{{ spec_hoz_connection(row, 1) }}</td>
+                    <td>{{ talent_select(row, 3) }}</td>
+                    <td>{{ spec_hoz_connection(row, 2) }}</td>
+                    <td>{{ talent_select(row, 4) }}</td>
+                </tr>
+                {% if row != 4 %}
+                <tr>
+                    <td>{{ spec_vert_connection(row, 0) }}</td>
+                    <td></td>
+                    <td>{{ spec_vert_connection(row, 1) }}</td>
+                    <td></td>
+                    <td>{{ spec_vert_connection(row, 2) }}</td>
+                    <td></td>
+                    <td>{{ spec_vert_connection(row, 3) }}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+        <fieldset id="index" style="display: none;">
+            <input name="index[]" disabled="disabled" type="text">
+        </fieldset>
+        <label>Index</label>
+        <div id="repeatables">
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
+
+{% macro spec_vert_connection(row, column) %}
+    <input type="checkbox" name="talent_vert_{{ row }}_{{ column }}" checked>
+{% endmacro %}
+
+{% macro spec_hoz_connection(row, column) %}
+    <input type="checkbox" name="talent_hoz_{{ row }}_{{ column }}" checked>
+{% endmacro %}
+
+{% macro talent_select(row, column) %}
+    <select name="talent" class="chosen-select">
+        {% for talent in talents %}
+            <option value="{{ talent._id }}">{{ talent._id|title }}</option>
+        {% endfor %}
+    </select>
+{% endmacro %}

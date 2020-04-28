@@ -1,28 +1,44 @@
 {% extends "base.html" %}
 {% import "base.html" as base %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+        table {
+            border-spacing: 0;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
     <table class="talent">
-        {% for row in item.tree.talents %}
+        {% for row_index in range(0, 5) %}
             <tr>
                 {% set cost = 5 * loop.index %}
-                {% for entry in row %}
-                    <td>{{ talent(entry.name|title, entry.description|default(""), cost) }}</td>
+                {% for col_index in range(0, 4) %}
+                    {{ talent(row_index, col_index, cost) }}
                 {% endfor %}
             </tr>
         {% endfor %}
     </table>
 {% endblock %}
 
-{% macro talent(name, content, cost) %}
-    <div class="inner">
-        <div class="header">
-            <span>{{ name }}</span>
+{% macro talent(row_index, col_index, cost) %}
+    {% set entry = item.tree.talents[row_index][col_index] %}
+    {% set vert = entry.vert == True %}
+    {% set hoz_left = entry.hoz_left == True %}
+    {% set hoz_right = entry.hoz_right == True %}
+    <td class="talent{% if vert %}{{ "-vert" }}{% endif %}{% if hoz_left %}{{ "-left" }}{% endif %}{% if hoz_right %}{{ "-right" }}{% endif %}">
+        <div class="inner">
+            <div class="header {% if entry.activation != "passive" %}{{ "active" }}{% endif %}">
+                <span><a href="/talents/{{ entry._id }}">{{ entry.name }}</a></span>
+            </div>
+            <div class="content">
+                {{ entry.description|default("")|description }}
+            </div>
         </div>
-        <div class="content">
-            {{ content|description }}
+        <div class="cost {% if entry.activation != "passive" %}{{ "active" }}{% endif %}">
+            Cost {{ cost }}
         </div>
-    </div>
-    <div class="cost">
-        Cost {{ cost }}
-    </div>
-{%  endmacro %}
+    </td>
+{% endmacro %}

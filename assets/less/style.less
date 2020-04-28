@@ -26,6 +26,7 @@ body {
 a {
   color: inherit;
   text-decoration: inherit;
+
   &:hover {
     text-decoration: underline;
   }
@@ -62,6 +63,7 @@ h3 {
 h2 {
   font-size: 2.1em;
   color: @darkgreen;
+
   + p::first-letter {
     font-size: 2.1em;
     font-weight: bold;
@@ -79,6 +81,7 @@ h1 {
 
 ul {
   list-style: none;
+
   & li:not(.search-choice)::before {
     content: "•";
     color: @darkred;
@@ -91,6 +94,7 @@ ul {
 table.talent {
   margin-left: auto;
   margin-right: auto;
+
   tr td {
     width: 200px;
     vertical-align: top;
@@ -106,15 +110,18 @@ table.talent {
         top: -13px;
         left: -13px;
         width: 99%;
-        height: 7px;
+        // height: 7px;
 
         border: 13px solid;
         .border-image("/static/img/characteristic-header.svg", 13, 13);
 
+        &.active {
+          .border-image("/static/img/talent-active-header.svg", 13, 13);
+        }
+
         span {
           position: relative;
           top: -8px;
-          left: 20px;
 
           font-family: @teuton-normal;
           font-weight: bold;
@@ -135,6 +142,7 @@ table.talent {
         .hyphens();
       }
     }
+
     .cost {
       float: right;
       position: relative;
@@ -149,6 +157,10 @@ table.talent {
       font-family: @teuton-normal;
       text-transform: uppercase;
       font-size: 0.9em;
+
+      &.active {
+        .background("/static/img/talent-active-cost.svg");
+      }
     }
   }
 }
@@ -165,6 +177,7 @@ table.talent {
     + p {
       text-indent: 15px;
     }
+
     &.no-indent {
       // todo not keen on this method, put more stuff in divs?
       text-indent: 0 !important;
@@ -188,6 +201,7 @@ table.talent {
       text-transform: uppercase;
       color: white;
     }
+
     &:last-of-type {
       height: 60%;
       padding-top: 7px;
@@ -222,6 +236,7 @@ table.talent {
       }
     }
   }
+
   .stats {
     display: flex;
     justify-content: space-evenly;
@@ -264,9 +279,11 @@ table.talent {
   &-attr {
     float: left;
     width: 55%;
+
     &-defense {
       width: 63% !important;
       font-size: 0;
+
       &-stat {
         position: relative;
         display: inline-block;
@@ -275,6 +292,7 @@ table.talent {
         font-size: 20px;
       }
     }
+
     &-stat {
       height: 9.6vw;
       max-height: 39px;
@@ -283,24 +301,29 @@ table.talent {
       float: left;
       width: 36%;
     }
+
     &-title {
       font-style: italic;
       top: 1%;
       font-size: 8.5px !important;
     }
+
     &-value {
       .absolute-width();
       bottom: 13%;
       font-size: 20px;
     }
+
     &-armor {
       float: right !important;
       width: 36%;
     }
+
     &-strain {
       float: right !important;
       margin-top: 1%;
     }
+
     &-hull {
       margin-top: 1%;
       margin-left: 17.5%;
@@ -323,6 +346,7 @@ table.talent {
         font-size: 25px;
         text-align: center;
       }
+
       &-title {
         bottom: 0;
       }
@@ -353,64 +377,80 @@ table.talent {
   &.threat::before {
     content: "t";
   }
+
   &.advantage::before {
     content: "a";
   }
+
   &.success::before {
     content: "s";
   }
+
   &.triumph::before {
     content: "x";
   }
+
   &.failure::before {
     content: "f";
   }
+
   &.despair::before {
     content: "y";
   }
+
   &.force-pip::before {
     content: "Y";
   }
+
   &.force-dark::before {
     content: "z";
   }
+
   &.force-light::before {
     content: "z";
     color: white;
     -webkit-text-stroke: 1px black;
   }
+
   &.boost::before {
     content: "b";
     color: @boost;
     -webkit-text-stroke: 1px black;
   }
+
   &.ability::before {
     content: "d";
     color: @ability;
     -webkit-text-stroke: 1px black;
   }
+
   &.proficiency::before {
     content: "c";
     color: @proficiency;
     -webkit-text-stroke: 1px black;
   }
+
   &.setback::before {
     content: "b";
     color: black;
     -webkit-text-stroke: 1px black;
   }
+
   &.difficulty {
     &:empty::before {
       content: "d";
     }
+
     color: @difficulty;
     -webkit-text-stroke: 1px black;
   }
+
   &.challenge::before {
     content: "c";
     color: @challenge;
     -webkit-text-stroke: 1px black;
   }
+
   &.force::before {
     content: "c";
     color: white;
@@ -473,12 +513,15 @@ table.item-table {
       &:nth-child(even) {
         background: @even-row;
       }
+
       &:nth-child(odd) {
         background: @odd-row;
       }
+
       td:not(:first-child) {
         text-align: right;
       }
+
       &.group td {
         background: black;
         color: white;
@@ -500,6 +543,7 @@ table.item-table {
     input {
       margin-right: 4px;
       width: 50px;
+
       & ~ input {
         margin-left: 5px;
       }
@@ -509,4 +553,46 @@ table.item-table {
 
 input {
   font-family: @itc-symbol; // Have to do this otherwise browser uses default font
+}
+
+.talent-vert {
+  background-image+: url('/static/img/talent-connection.svg');
+  background-repeat+: repeat-y;
+  background-position+: center bottom;
+  background-size+: 10px auto;
+}
+
+.talent-right {
+  background-image+: url('/static/img/talent-connection-hoz.svg');
+  background-repeat+: no-repeat;
+  background-position+: 100% 25px;
+  background-size+: auto 10px;
+}
+
+.talent-left {
+  background-image+: url('/static/img/talent-connection-hoz.svg');
+  background-repeat+: no-repeat;
+  background-position+: 0 25px;
+  background-size+: auto 10px;
+}
+
+.talent-vert-left {
+  .talent-vert();
+  .talent-left();
+}
+
+.talent-vert-right {
+  .talent-vert();
+  .talent-right();
+}
+
+.talent-vert-left-right {
+  .talent-vert();
+  .talent-left();
+  .talent-right();
+}
+
+.talent-left-right {
+  .talent-left();
+  .talent-right();
 }

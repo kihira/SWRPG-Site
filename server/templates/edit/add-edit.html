@@ -2,13 +2,13 @@
 {% set item = item|default({}) %}
 
 {% block head %}
-    <link href="{{ url_for("static", filename="edit.css") }}" rel="stylesheet">
+    <link href="{{ url_for("static", filename="css/edit.css") }}" rel="stylesheet">
     {{ super() }}
 {% endblock %}
 
 {% block content %}
-    <div style="display: grid; grid-template-columns: 50% 50%;">
-        <div style="grid-column: 1 / 2">
+    <div style="display: grid; grid-template-columns: 70% 30%;">
+        <div>
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     <ul class=flashes>
@@ -22,9 +22,7 @@
             <form method="post">
                 {% block form %}
                     {% for field in model.fields %}
-                        <div>
-                            {{ render_field(field, item) }}
-                        </div>
+                        {{ render_field(field, item) }}
                     {% endfor %}
                 {% endblock %}
 
@@ -35,7 +33,7 @@
                 <input type="submit" value="Submit">
             </form>
         </div>
-        <div style="grid-column: 2 / 3">
+        <div>
             <div>
                 <button onclick="insertText('[BOOST]')"><span class="symbol boost"></span></button>
                 <button onclick="insertText('[SETBACK]')"><span class="symbol setback"></span></button>
@@ -123,8 +121,8 @@
 
 {% block scripts %}
     {{ super() }}
-    <script src="/static/js/jquery-3.3.1.min.js"></script>
-    <script src="/static/js/edit.min.js"></script>
+    <script src="/static/js/jquery-3.3.1.js"></script>
+    <script src="/static/js/edit.js"></script>
     <script>
         $(function() {
             {% for field in model.fields %}
@@ -167,20 +165,20 @@
 {% endblock %}
 
 {% macro render_field(field, item) %}
-    <label>{{ field.human_name }}
+    <label for="{{ field.mongo_name }}">{{ field.human_name }}</label>
         {% if field.html_type == "array" %}
             <fieldset id="{{ field.mongo_name }}" style="display: none;">
                 <input name="{{ field.field.mongo_name }}[]" disabled="disabled" type="text">
             </fieldset>
         {% elif field.html_type == "checkbox" %}
-            <input name="{{ field.mongo_name }}" type="checkbox" {% if item[field.mongo_name] %}checked{% endif %}>
+            <input id="{{ field.mongo_name }}" name="{{ field.mongo_name }}" type="checkbox" {% if item[field.mongo_name] %}checked{% endif %}>
         {% elif field.html_type == "number" %}
-            <input name="{{ field.mongo_name }}" type="number" min="{{ field.min }}" max="{{ field.max }}"
+            <input id="{{ field.mongo_name }}" name="{{ field.mongo_name }}" type="number" min="{{ field.min }}" max="{{ field.max }}"
                    step="{{ field.step }}" value="{{ item[field.mongo_name]|default(0) }}">
         {% elif field.html_type == "textarea" %}
-            <textarea name="{{ field.mongo_name }}" cols="50" rows="5">{{ item[field.mongo_name]|default("") }}</textarea>
+            <textarea id="{{ field.mongo_name }}" name="{{ field.mongo_name }}">{{ item[field.mongo_name]|default("") }}</textarea>
         {% elif field.html_type == "select" %}
-            <select name="{{ field.mongo_name }}">
+            <select id="{{ field.mongo_name }}" name="{{ field.mongo_name }}">
                 {% for option in field.options %}
                     {% if option.value %}
                         <option value="{{ option.value }}" {% if item[field.mongo_name] == option.value %}selected{% endif %} >{{ option.display }}</option>
@@ -196,10 +194,9 @@
                 {% endfor %}
             </div>
         {% else %}
-            <input name="{{ field.mongo_name }}" type="{{ field.html_type }}"
+            <input id="{{ field.mongo_name }}" name="{{ field.mongo_name }}" type="{{ field.html_type }}"
                    value="{{ item[field.mongo_name]|default("") }}" {% if field.readonly %}readonly{% endif %}>
         {% endif %}
-    </label>
     {% if field.autocomplete %}
         <input type="hidden" id="{{ field.mongo_name }}-data">
     {% endif %}

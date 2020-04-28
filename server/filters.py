@@ -152,6 +152,10 @@ def title(s: str):
     return s.replace("_", " ")
 
 
+def to_id(s: str):
+    return s.replace(" ", "_")
+
+
 def register(FILTERS: dict):
     FILTERS["formatnum"] = format_number
     FILTERS["price"] = format_price
