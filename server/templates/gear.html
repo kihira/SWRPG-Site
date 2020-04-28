@@ -1,0 +1,10 @@
+{% extends "item.html" %}
+{% block item_block %}
+    {{ super() }}
+    <p class="no-indent" >
+        <b>Category:</b> {{ item.category }}<br>
+        <b>Encumbrance:</b> {{ item.encumbrance }}<br>
+        <b>Price:</b> {{ item.price|price(item.restricted) }}<br>
+        <b>Rarity:</b> {{ item.rarity }}<br>
+    </p>
+{% endblock %}
