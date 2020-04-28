@@ -8,8 +8,8 @@
   "private": true,
   "homepage": "https://swrpg.foxes.rocks",
   "scripts": {
-    "build": "tsc && node build.js",
-    "watch": "concurrently --kill-others \"tsc -p tsconfig.json --watch\" \"node watch.js\""
+    "build": "gulp build",
+    "watch": "gulp watch"
   },
   "dependencies": {
     "csso": "^4.0.3",
