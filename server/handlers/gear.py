@@ -4,7 +4,7 @@ from server.endpoint import Endpoint
 from server.model import Model, Field, CheckboxField, TextareaField, SelectField, ArrayField, NumberField, ObjectIdField
 
 gear_endpoint = Endpoint("gear", "Items", Model([
-    ObjectIdField("_id", "ID"),
+    ObjectIdField("_id", "ID", readonly=True),
     Field("name", "Item", table=False),
     NumberField("price", "Price"),
     NumberField("encumbrance", "Encumbrance"),
