@@ -5,7 +5,7 @@ COPY package.json yarn.lock ./
 RUN yarn install
 
 COPY assets ./assets
-COPY tsconfig.json ./
+COPY tsconfig.json gulpfile.js ./
 RUN yarn run build
 
 
