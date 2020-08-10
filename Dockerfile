@@ -2,7 +2,7 @@ FROM node:10-alpine as builder
 WORKDIR /usr/src/build
 
 COPY package.json yarn.lock ./
-RUN yarn install --production
+RUN yarn install
 
 COPY assets ./assets
 COPY tsconfig.json ./
