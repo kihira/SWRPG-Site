@@ -14,14 +14,14 @@ creatures_endpoint = Endpoint("creatures", "Creatures", Model([
         NumberField("cunning", "Cunning", 1, 5, default=1),
         NumberField("willpower", "Willpower", 1, 5, default=1),
         NumberField("presence", "Presence", 1, 5, default=1),
-    ], table=False),
+    ]),
     NumberField("soak", "Soak", table=False),
     NumberField("wound", "Wound Threshold", table=False),
     NumberField("strain", "Strain Threshold", table=False),
     ArrayField(FieldGroup("skills", "Skills", [
         Field("id", "Skill"),
         NumberField("value", "Value")
-    ], render=filters.format_skill)),
+    ], render_method=filters.format_skill)),
     ArrayField(Field("talents", "Talents", render=filters.format_talent)),
     ArrayField(Field("abilities", "Abilities", render=filters.format_ability)),
     ArrayField(FieldGroup("equipment", "Weapons", [
@@ -34,7 +34,7 @@ creatures_endpoint = Endpoint("creatures", "Creatures", Model([
             Field("id", "Quality ID"),
             NumberField("value", "Value"),
         ]))
-    ], render=lambda x: x["name"])),
+    ], render_method=lambda x: x["name"])),
     ArrayField(Field("index", "Index"), table=False)
 ]))
 

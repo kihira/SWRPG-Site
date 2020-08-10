@@ -1,17 +1,18 @@
 from bson import ObjectId
 from werkzeug.datastructures import MultiDict
 from typing import Callable
+from server import filters
 
 
 class Field:
-    mongo_name: str
-    human_name: str
-    html_type: str
-    default: object
-    readonly: bool
-    required: bool
-    table: bool
-    render_method: Callable[[any], str] = str
+    mongo_name: str = ""
+    human_name: str = ""
+    html_type: str = "text"
+    default: object = None
+    readonly: bool = False
+    required: bool = True
+    table: bool = True
+    render_method: Callable[[object], str] = lambda self, input: str(input)
 
     def __init__(self, mongo_name, human_name, html_type="text", default=None, readonly=False, required=True, table=True, render=None):
         self.mongo_name = mongo_name
@@ -22,10 +23,16 @@ class Field:
         self.required = required
         self.table = table
 
-        if render is not None:
+        if render != None:
             self.render_method = render
 
+        if self.mongo_name == "_id" or self.mongo_name == "name" or self.mongo_name == "category" or self.mongo_name == "description":
+            self.table = False
+
     def get_value(self, form: MultiDict):
+        """
+        Gets the value of the field from the provided form
+        """
         return form.get(self.mongo_name, self.default)
 
     def table_display(self) -> bool:
@@ -49,12 +56,14 @@ class Field:
         """
         Render the value to display on the items page or in a table
         """
-        return self.render_method(value)
+        return render_method(value)
 
 
 class CheckboxField(Field):
     def __init__(self, mongo_name, human_name, default=False, readonly=False, required=True, table=True, render=None):
-        super().__init__(mongo_name, human_name, html_type="checkbox", default=default, readonly=readonly, required=required, table=table, render=render)
+        if render == None:
+            render = filters.format_yes_no
+        super().__init__(mongo_name, human_name, html_type="checkbox", default=default, readonly=readonly, required=required, table=table, render=None)
 
     def get_value(self, form: MultiDict):
         return self.mongo_name in form
@@ -89,8 +98,8 @@ class NumberField(Field):
     max: int
     step: int
 
-    def __init__(self, mongo_name, human_name, min=0, max=100, default=0, step=1, required=True, table=True):
-        super().__init__(mongo_name, human_name, html_type="number", default=default, required=required, table=table)
+    def __init__(self, mongo_name, human_name, min=0, max=100, default=0, step=1, required=True, table=True, render=None):
+        super().__init__(mongo_name, human_name, html_type="number", default=default, required=required, table=table, render=render)
 
         self.min = min
         self.max = max
@@ -135,8 +144,8 @@ class ArrayField(Field):
 class FieldGroup(Field):
     fields: [Field]
 
-    def __init__(self, group_name: str, human_name: str, fields: [Field], render: Callable[[any], str]=None, table=False):
-        super().__init__(group_name, human_name, html_type="group", render=render, table=table)
+    def __init__(self, group_name: str, human_name: str, fields: [Field], render_method: Callable[[object], str]=None):
+        super().__init__(group_name, human_name, html_type="group", render=render_method)
 
         self.fields = fields
 

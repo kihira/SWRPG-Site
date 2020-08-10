@@ -12,5 +12,9 @@ static/
 *.map
 **/__pycache__/*
 yarn-error.log
+edit.js
+filters.js
+table.js
+.vscode/
 
 data/
